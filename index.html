@@ -1224,7 +1224,45 @@
                 <div class="analysis-container" id="analysisContainer">
                     <!-- Analysis cards will be inserted here -->
                 </div>
-
+<!-- Email Capture Section -->
+<div class="email-capture" id="emailCapture" style="display: none;">
+    <div style="background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep)); padding: 50px 30px; border-radius: 24px; text-align: center; color: white; margin: 40px 0; position: relative; overflow: hidden;">
+        
+        <!-- Floating otter animation -->
+        <div style="position: absolute; top: 20px; right: 30px; font-size: 3rem; animation: float 3s ease-in-out infinite;">🦦</div>
+        
+        <h3 style="font-size: 2rem; margin-bottom: 15px; font-weight: 700;">
+            🌊 Dive Deeper with SEOtter!
+        </h3>
+        
+        <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; max-width: 500px; margin-left: auto; margin-right: auto;">
+            Get weekly otter-approved SEO tips, website optimization tricks, and early access to new features!
+        </p>
+        
+        <div style="display: flex; gap: 12px; max-width: 450px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
+            <input 
+                type="email" 
+                id="emailInput"
+                placeholder="your@email.com" 
+                style="flex: 1; min-width: 250px; padding: 18px 20px; border-radius: 12px; border: none; font-size: 16px; font-family: 'Inter', sans-serif;"
+                onkeypress="if(event.key==='Enter') captureEmail()"
+            >
+            <button 
+                onclick="captureEmail()" 
+                id="emailBtn"
+                style="padding: 18px 30px; background: white; color: var(--water-blue); border: none; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s ease; font-family: 'Inter', sans-serif;"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'"
+                onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='none'"
+            >
+                🏊‍♀️ Dive In!
+            </button>
+        </div>
+        
+        <p style="font-size: 0.9rem; margin-top: 20px; opacity: 0.8;">
+            No spam, just helpful SEO tips from your favorite otter! 🦦✨
+        </p>
+    </div>
+</div>
                 <div class="cta-section">
                     <div class="cta-title">Ready to Rule the SEO Seas? 🌊</div>
                     <div class="cta-subtitle">Join thousands of happy website owners who've made SEOtter their trusty SEO sidekick for consistent organic growth</div>
