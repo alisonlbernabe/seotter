@@ -1133,11 +1133,11 @@
         <div class="main-card">
             <div class="input-header">
                 <div class="input-title">Let's Dive Into Your SEO!</div>
-                <div class="input-subtitle">Pop in your URL and watch our clever otter uncover the secrets to swimming to the top of search results</div>
+                <div class="input-subtitle">Pop in any website URL (like apple.com or yoursite.com) and watch our clever otter uncover the secrets to swimming to the top of search results</div>
             </div>
             
             <div class="input-container">
-                <input type="url" class="url-input" placeholder="https://yourwebsite.com" id="urlInput">
+              <input type="url" class="url-input" placeholder="yourwebsite.com (we'll add https for you!)" id="urlInput">
                 <button class="analyze-btn" onclick="startAnalysis()" id="analyzeBtn">
                     🦦 Start Diving
                 </button>
@@ -1288,22 +1288,56 @@
             { icon: '📊', name: 'Wise Otter', action: 'Putting together your personalized SEO action plan...' }
         ];
 
-        async function startAnalysis() {
-            const url = document.getElementById('urlInput').value.trim();
-            
-            if (!url) {
-                showOtterAlert('Oops! Please enter a website URL so I can dive in! 🦦', 'info');
-                return;
-            }
+      async function startAnalysis() {
+    // Step 1: Get what the user typed
+    let url = document.getElementById('urlInput').value.trim();
+    
+    // Step 2: Check if they typed anything
+    if (!url) {
+        showOtterAlert('Oops! Please enter a website URL so I can dive in! 🦦', 'info');
+        return;
+    }
 
-            if (!isValidUrl(url)) {
-                showOtterAlert('Hmm, that doesn\'t look like a valid URL. Try something like https://yourwebsite.com 🌊', 'warning');
-                return;
-            }
+    // Step 3: Fix the URL automatically (this is the new magic!)
+    url = fixUrl(url);
+    
+    // Step 4: Check if it's valid after fixing
+    if (!isValidUrl(url)) {
+        showOtterAlert('Hmm, that doesn\'t look like a valid website. Try something like "apple.com" or "yoursite.com" 🌊', 'warning');
+        return;
+    }
 
-            showLoading();
-            await performOtterAnalysis(url);
-        }
+    // Step 5: Show the user what we fixed their URL to
+    document.getElementById('urlInput').value = url;
+    
+    // Step 6: Start the analysis (same as before)
+    showLoading();
+    await performOtterAnalysis(url);
+}
+
+// This is the NEW function that does the URL fixing magic
+function fixUrl(url) {
+    // Remove any extra spaces
+    url = url.trim();
+    
+    // If they already typed https:// or http://, don't change it
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url; // Keep it exactly as they typed
+    }
+    
+    // If they typed www.something.com, add https:// in front
+    if (url.startsWith('www.')) {
+        return `https://${url}`;
+    }
+    
+    // If they just typed something.com, add https:// in front
+    if (url.includes('.')) {
+        return `https://${url}`;
+    }
+    
+    // If none of the above, return what they typed (probably invalid)
+    return url;
+}
 
         function showOtterAlert(message, type) {
             // Could be enhanced with custom otter-themed modal
