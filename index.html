@@ -1083,7 +1083,271 @@
             .score-text { font-size: 2.5rem; }
             .input-subtitle::after { display: none; }
         }
-    </style>
+    /* Authentication Styles */
+.auth-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.auth-btn {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+}
+
+.login-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.login-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.signup-btn {
+    background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+    color: white;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+}
+
+.signup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.6);
+}
+
+.user-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    min-width: 250px;
+}
+
+.user-welcome {
+    color: var(--text);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.usage-display {
+    margin: 10px 0;
+    padding: 10px;
+    background: var(--surface-light);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.logout-btn {
+    background: transparent;
+    color: var(--gray);
+    border: 1px solid var(--border);
+    font-size: 0.8rem;
+    padding: 8px 16px;
+}
+
+.logout-btn:hover {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray);
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    color: var(--danger);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--water-blue);
+}
+
+.signup-benefits {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(16, 185, 129, 0.1));
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.benefit {
+    margin-bottom: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.auth-btn.primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+    color: white;
+    padding: 15px;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.auth-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+}
+
+.modal-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.modal-footer a {
+    color: var(--water-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.modal-footer a:hover {
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Usage Limit Modal */
+.limit-content {
+    text-align: center;
+}
+
+.upgrade-benefits {
+    background: var(--surface-light);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.upgrade-benefits h4 {
+    margin: 0 0 15px 0;
+    color: var(--text);
+}
+
+.price {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--water-blue);
+    margin: 20px 0;
+}
+
+.price span {
+    font-size: 1rem;
+    color: var(--gray);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-container,
+    .user-container {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 20px;
+    }
+    
+    .modal-content {
+        margin: 20px;
+        width: calc(100% - 40px);
+    }
+</style>
 </head>
 <body>
     <div class="bg-container">
@@ -1096,7 +1360,115 @@
     </div>
     
     <div class="container">
-        <div class="header">
+        <div class="header"><!-- User Authentication Section -->
+<div id="authSection" class="auth-container">
+    <div class="auth-buttons">
+        <button onclick="showLoginModal()" class="auth-btn login-btn">
+            🦦 Sign In
+        </button>
+        <button onclick="showSignupModal()" class="auth-btn signup-btn">
+            ✨ Start Free
+        </button>
+    </div>
+</div>
+
+<div id="userSection" class="user-container hidden">
+    <div class="user-info">
+        <span class="user-welcome">Welcome back, <span id="userEmail"></span>! 🦦</span>
+        <div id="usageDisplay" class="usage-display"></div>
+        <button onclick="handleSignOut()" class="auth-btn logout-btn">Sign Out</button>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🦦 Welcome Back to SEOtter!</h3>
+            <button onclick="closeModal('loginModal')" class="close-btn">&times;</button>
+        </div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="loginEmail" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="loginPassword" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="auth-btn primary">
+                🌊 Dive In!
+            </button>
+        </form>
+        <p class="modal-footer">
+            Don't have an account? <a href="#" onclick="showSignupModal(); closeModal('loginModal')">Sign up free!</a>
+        </p>
+    </div>
+</div>
+
+<!-- Signup Modal -->
+<div id="signupModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✨ Join the SEOtter Family!</h3>
+            <button onclick="closeModal('signupModal')" class="close-btn">&times;</button>
+        </div>
+        <div class="signup-benefits">
+            <div class="benefit">🆓 3 free analyses daily</div>
+            <div class="benefit">📊 Save your SEO history</div>
+            <div class="benefit">🚀 Upgrade anytime for unlimited</div>
+        </div>
+        <form id="signupForm" onsubmit="handleSignup(event)">
+            <div class="form-group">
+                <label>Full Name:</label>
+                <input type="text" id="signupName" required placeholder="Your Name">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="signupEmail" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="signupPassword" required placeholder="••••••••" minlength="6">
+            </div>
+            <button type="submit" class="auth-btn primary">
+                🦦 Create My Account
+            </button>
+        </form>
+        <p class="modal-footer">
+            Already have an account? <a href="#" onclick="showLoginModal(); closeModal('signupModal')">Sign in!</a>
+        </p>
+    </div>
+</div>
+
+<!-- Usage Limit Modal -->
+<div id="usageLimitModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🦦 Daily Limit Reached!</h3>
+            <button onclick="closeModal('usageLimitModal')" class="close-btn">&times;</button>
+        </div>
+        <div class="limit-content">
+            <p>You've used all 3 free analyses today! 🌊</p>
+            <div class="upgrade-benefits">
+                <h4>Upgrade to SEOtter Pro for:</h4>
+                <div class="benefit">✨ Unlimited daily analyses</div>
+                <div class="benefit">📄 PDF report exports</div>
+                <div class="benefit">📧 Email monitoring alerts</div>
+                <div class="benefit">🎯 Priority support</div>
+            </div>
+            <div class="upgrade-pricing">
+                <div class="price">$19<span>/month</span></div>
+            </div>
+            <button onclick="showUpgradeModal()" class="auth-btn primary">
+                🚀 Upgrade Now
+            </button>
+        </div>
+        <p class="modal-footer">
+            Or come back tomorrow for 3 more free analyses!
+        </p>
+    </div>
+</div>
             <div class="logo-container">
                 <div class="logo-icon">🦦</div>
                 <div class="logo-text">SEOtter</div>
@@ -1275,7 +1647,91 @@
         </div>
     </div>
 
-    <script>
+    <script>// Import authentication
+import { 
+    initAuth, 
+    signUp, 
+    signIn, 
+    signOut, 
+    canUserAnalyze, 
+    recordAnalysis,
+    getCurrentUser,
+    getUserProfile 
+} from './auth.js'
+
+// Initialize authentication when page loads
+document.addEventListener('DOMContentLoaded', initAuth)
+
+// Authentication functions
+async function handleSignup(event) {
+    event.preventDefault()
+    
+    const name = document.getElementById('signupName').value
+    const email = document.getElementById('signupEmail').value
+    const password = document.getElementById('signupPassword').value
+    
+    try {
+        await signUp(email, password, name)
+        closeModal('signupModal')
+        showOtterAlert('Welcome to SEOtter! Check your email to verify your account! 🦦', 'success')
+    } catch (error) {
+        showOtterAlert(`Oops! ${error.message} 🦦`, 'error')
+    }
+}
+
+async function handleLogin(event) {
+    event.preventDefault()
+    
+    const email = document.getElementById('loginEmail').value
+    const password = document.getElementById('loginPassword').value
+    
+    try {
+        await signIn(email, password)
+        closeModal('loginModal')
+        showOtterAlert('Welcome back to SEOtter! 🦦', 'success')
+    } catch (error) {
+        showOtterAlert(`Hmm, ${error.message} 🦦`, 'error')
+    }
+}
+
+async function handleSignOut() {
+    try {
+        await signOut()
+        showOtterAlert('See you later, otter! 🦦', 'info')
+    } catch (error) {
+        showOtterAlert(`Error signing out: ${error.message}`, 'error')
+    }
+}
+
+// Modal functions
+function showLoginModal() {
+    document.getElementById('loginModal').classList.remove('hidden')
+}
+
+function showSignupModal() {
+    document.getElementById('signupModal').classList.remove('hidden')
+}
+
+function showUsageLimitModal() {
+    document.getElementById('usageLimitModal').classList.remove('hidden')
+}
+
+function showUpgradeModal() {
+    closeModal('usageLimitModal')
+    // TODO: Add Stripe checkout
+    showOtterAlert('Stripe integration coming next! 💳', 'info')
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden')
+}
+
+// Close modals when clicking outside
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+        e.target.classList.add('hidden')
+    }
+})
         let analysisData = {};
         let currentMode = 'beginner';
         
