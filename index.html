@@ -1345,7 +1345,14 @@
 
             // Generate otter-style analysis
             analysisData = await generateOtterAnalysis(url);
-            showResults();
+            showResults();// Show email capture after analysis
+setTimeout(() => {
+    document.getElementById('emailCapture').style.display = 'block';
+    document.getElementById('emailCapture').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+    });
+}, 2000); // Wait 2 seconds after results show
         }
 
         async function generateOtterAnalysis(url) {
@@ -1623,6 +1630,53 @@
                 startAnalysis();
             }
         });
-    </script>
+    // Email capture functionality
+async function captureEmail() {
+    const emailInput = document.getElementById('emailInput');
+    const emailBtn = document.getElementById('emailBtn');
+    const email = emailInput.value.trim();
+    
+    // Validate email
+    if (!email || !email.includes('@')) {
+        emailInput.style.border = '2px solid #ef4444';
+        emailInput.placeholder = 'Please enter a valid email! 🦦';
+        setTimeout(() => {
+            emailInput.style.border = 'none';
+            emailInput.placeholder = 'your@email.com';
+        }, 3000);
+        return;
+    }
+    
+    // Show loading state
+    emailBtn.innerHTML = '🌊 Swimming...';
+    emailBtn.disabled = true;
+    
+    try {
+        // For now, just simulate success (we'll add real email service later)
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Success state
+        emailBtn.innerHTML = '🎉 Welcome to the Otter Pack!';
+        emailInput.value = '';
+        
+        // Show success message
+        const emailCapture = document.getElementById('emailCapture');
+        emailCapture.innerHTML = `
+            <div style="background: linear-gradient(135deg, var(--secondary), #059669); padding: 50px 30px; border-radius: 24px; text-align: center; color: white; margin: 40px 0;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🦦🎉</div>
+                <h3 style="font-size: 2rem; margin-bottom: 15px;">Welcome to the SEOtter Family!</h3>
+                <p style="font-size: 1.2rem; opacity: 0.9;">You'll receive your first SEO tip within 24 hours. Keep swimming! 🌊</p>
+            </div>
+        `;
+        
+        // Track this success (you can add analytics later)
+        console.log('Email captured:', email);
+        
+    } catch (error) {
+        // Error state
+        emailBtn.innerHTML = '❌ Oops! Try again';
+        emailBtn.disabled = false;
+    }
+}</script>
 </body>
 </html>
