@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEOtter 🦦 - Your Playful SEO Sidekick</title>
-    <meta name="description" content="Get instant SEO analysis for any website. SEOtter provides professional SEO insights with adorable otter charm - perfect for beginners and experts alike!">
+    <title>SEOtter 🦦 - Professional SEO Analysis Tool</title>
+    <meta name="description" content="Professional SEO analysis with actionable insights. Free tier available, Pro features for serious marketers.">
     
     <!-- Optimized Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
     
     <style>
         :root {
@@ -35,6 +38,8 @@
             --success: #10b981;
             --warning: #f59e0b;
             --error: #ef4444;
+            --premium: #8b5cf6;
+            --premium-light: #a78bfa;
         }
 
         * {
@@ -67,7 +72,6 @@
             background: linear-gradient(45deg, var(--water-blue), var(--sea-foam));
             opacity: 0.08;
             animation: float-gentle 25s infinite ease-in-out;
-            backdrop-filter: blur(1px);
         }
 
         .bubble-1 { width: 200px; height: 200px; top: 10%; left: 5%; animation-delay: 0s; }
@@ -90,274 +94,669 @@
             z-index: 1;
         }
 
-        /* Improved Header */
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            padding: 60px 0;
+        /* Navigation Header */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
         }
 
-        .logo-container {
+        .nav-logo {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 30px;
-            animation: slideDown 0.8s ease-out;
+            gap: 15px;
         }
 
-        .logo-icon {
-            width: 90px;
-            height: 90px;
+        .nav-logo-icon {
+            width: 50px;
+            height: 50px;
             background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            border-radius: 24px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 42px;
-            box-shadow: 
-                0 20px 40px rgba(6, 182, 212, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-            animation: gentle-bounce 3s infinite;
-            position: relative;
+            font-size: 24px;
+            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
         }
 
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--sea-foam), var(--water-blue), var(--ocean-deep));
-            border-radius: 26px;
-            z-index: -1;
-            opacity: 0.5;
-            animation: rotate-border 8s linear infinite;
-        }
-
-        @keyframes rotate-border {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes gentle-bounce {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .logo-text {
-            font-size: 4.5rem;
+        .nav-logo-text {
+            font-size: 1.8rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep), var(--primary));
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -3px;
-            position: relative;
         }
 
-        .tagline {
-            font-size: 2rem;
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            display: none;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--water-blue), var(--sea-foam));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-light);
-            animation: slideDown 0.8s ease-out 0.2s both;
-            background: linear-gradient(135deg, var(--text-light), var(--water-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .subtitle {
-            font-size: 1.3rem;
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .user-plan {
+            font-size: 0.8rem;
             color: var(--gray);
-            max-width: 800px;
-            margin: 0 auto 40px;
-            animation: slideDown 0.8s ease-out 0.4s both;
-            line-height: 1.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* Enhanced Trust Stats */
-        .trust-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            animation: slideUp 0.8s ease-out 0.6s both;
-            background: var(--surface);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(6, 182, 212, 0.1);
-            border: 2px solid transparent;
-            background-image: linear-gradient(var(--surface), var(--surface)), 
-                             linear-gradient(135deg, var(--water-blue), var(--sea-foam));
-            background-origin: border-box;
-            background-clip: content-box, border-box;
-            max-width: 900px;
-            margin: 0 auto;
+        .plan-free { color: var(--gray); }
+        .plan-pro { color: var(--water-blue); font-weight: 600; }
+        .plan-agency { color: var(--premium); font-weight: 600; }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-login:hover {
+            border-color: var(--water-blue);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-upgrade {
+            background: linear-gradient(135deg, var(--premium), var(--premium-light));
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .trust-stats::before {
-            content: '';
+        .btn-upgrade::before {
+            content: '✨';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.05), transparent);
-            animation: shimmer 4s infinite;
+            left: 8px;
+            animation: sparkle 2s infinite;
         }
 
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            padding: 20px;
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .btn-upgrade:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Usage Indicator */
+        .usage-indicator {
+            background: var(--surface);
+            border: 2px solid var(--border);
             border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .usage-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .usage-icon {
+            font-size: 1.5rem;
+        }
+
+        .usage-text {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .usage-limit {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .usage-progress {
+            flex: 1;
+            margin: 0 20px;
+            height: 8px;
+            background: var(--surface-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .usage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--water-blue));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .usage-warning {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .usage-danger {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* Pricing Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pricing-modal {
+            background: var(--surface);
+            border-radius: 24px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .pricing-modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 40px 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--surface-light);
+            color: var(--text);
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--text), var(--water-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .pricing-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            background: var(--surface-light);
+            border-radius: 12px;
+            padding: 8px;
+            margin: 0 40px;
+        }
+
+        .pricing-tab {
+            padding: 12px 24px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .pricing-tab.active {
+            background: var(--surface);
+            color: var(--water-blue);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .pricing-plan {
+            background: var(--surface-light);
+            border: 3px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
             transition: all 0.3s ease;
             position: relative;
         }
 
-        .stat-item:hover {
-            transform: translateY(-5px);
-            background: rgba(6, 182, 212, 0.05);
+        .pricing-plan:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
         }
 
-        .stat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        .plan-popular {
+            border-color: var(--water-blue);
+            background: var(--surface);
+            transform: scale(1.05);
         }
 
-        .stat-number {
-            font-size: 2.8rem;
+        .plan-popular::before {
+            content: '🔥 Most Popular';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .plan-premium {
+            border-color: var(--premium);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(167, 139, 250, 0.05));
+        }
+
+        .plan-premium::before {
+            content: '👑 Premium';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--premium), var(--premium-light));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .plan-price {
+            font-size: 3rem;
             font-weight: 700;
             color: var(--water-blue);
             font-family: 'JetBrains Mono', monospace;
-            text-shadow: 0 2px 4px rgba(6, 182, 212, 0.2);
+            margin-bottom: 5px;
         }
 
-        .stat-label {
-            font-size: 0.95rem;
+        .plan-premium .plan-price {
+            color: var(--premium);
+        }
+
+        .plan-period {
             color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            text-align: center;
-            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
         }
 
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
         }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-40px); }
-            to { opacity: 1; transform: translateY(0); }
+        .plan-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 8px 0;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
         }
 
-        /* Enhanced Analysis Card */
-        .analysis-card {
-            background: var(--surface);
-            border: 2px solid transparent;
-            border-radius: 32px;
-            padding: 60px;
-            box-shadow: 
-                0 32px 64px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(6, 182, 212, 0.1) inset;
-            position: relative;
-            overflow: hidden;
-            animation: slideUp 0.8s ease-out 0.8s both;
-            background-image: linear-gradient(var(--surface), var(--surface)), 
-                             linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(16, 185, 129, 0.1));
-            background-origin: border-box;
-            background-clip: content-box, border-box;
+        .feature-disabled .feature-icon {
+            background: var(--gray-light);
         }
 
-        .analysis-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .feature-disabled {
+            color: var(--gray-light);
+            text-decoration: line-through;
+        }
+
+        .plan-button {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.08), transparent);
-            animation: shimmer 6s infinite;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Improved Input Section */
+        .btn-plan-free {
+            background: var(--surface-light);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-plan-free:hover {
+            border-color: var(--water-blue);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .btn-plan-pro {
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-plan-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-plan-premium {
+            background: linear-gradient(135deg, var(--premium), var(--premium-light));
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-plan-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Payment Form */
+        .payment-form {
+            display: none;
+            padding: 40px;
+            border-top: 2px solid var(--border);
+            background: var(--surface-light);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .payment-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .payment-summary {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-top: 2px solid var(--border);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .card-element {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .payment-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .payment-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .payment-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Feature Limitations */
+        .feature-locked {
+            position: relative;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .feature-locked::after {
+            content: '🔒 Pro Feature';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .upgrade-banner {
+            background: linear-gradient(135deg, var(--premium), var(--premium-light));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .upgrade-banner h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .upgrade-banner p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .upgrade-banner button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upgrade-banner button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Enhanced Input Section */
         .input-section {
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         .input-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .input-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--text), var(--water-blue), var(--ocean-deep));
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--text), var(--water-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 1.2;
         }
 
         .input-subtitle {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--text-light);
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
-            line-height: 1.6;
         }
 
         .url-container {
             position: relative;
-            max-width: 800px;
-            margin: 0 auto 40px;
+            max-width: 700px;
+            margin: 0 auto 30px;
         }
 
         .url-input {
             width: 100%;
-            padding: 28px 200px 28px 28px;
+            padding: 24px 180px 24px 24px;
             background: var(--surface-light);
             border: 3px solid var(--border);
-            border-radius: 24px;
-            font-size: 18px;
+            border-radius: 20px;
+            font-size: 16px;
             color: var(--text);
             font-family: 'JetBrains Mono', monospace;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 8px 32px rgba(6, 182, 212, 0.08),
-                0 0 0 0 rgba(6, 182, 212, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1);
         }
 
         .url-input:focus {
             outline: none;
             border-color: var(--water-blue);
-            box-shadow: 
-                0 8px 32px rgba(6, 182, 212, 0.15),
-                0 0 0 4px rgba(6, 182, 212, 0.15);
-            transform: translateY(-3px);
-            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.2), 0 8px 30px rgba(6, 182, 212, 0.2);
+            transform: translateY(-2px);
         }
 
         .url-input::placeholder {
-            color: var(--gray-light);
-            font-weight: 400;
+            color: var(--gray);
         }
 
         .analyze-btn {
@@ -365,43 +764,22 @@
             right: 8px;
             top: 50%;
             transform: translateY(-50%);
-            padding: 22px 32px;
+            padding: 18px 28px;
             background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
             border: none;
-            border-radius: 20px;
+            border-radius: 16px;
             font-size: 16px;
             font-weight: 600;
             color: white;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 8px 25px rgba(6, 182, 212, 0.4),
-                0 0 0 0 rgba(255, 255, 255, 0.2) inset;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
             font-family: 'Inter', sans-serif;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .analyze-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .analyze-btn:hover::before {
-            left: 100%;
         }
 
         .analyze-btn:hover {
             transform: translateY(-50%) scale(1.05);
-            box-shadow: 
-                0 12px 35px rgba(6, 182, 212, 0.6),
-                0 0 0 2px rgba(255, 255, 255, 0.3) inset;
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.6);
         }
 
         .analyze-btn:disabled {
@@ -410,992 +788,109 @@
             transform: translateY(-50%);
         }
 
-        /* Enhanced Examples Section */
-        .examples-section {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .examples-label {
-            color: var(--gray);
-            font-size: 1rem;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .example-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .example-btn {
-            padding: 14px 24px;
-            background: var(--surface-light);
-            border: 2px solid var(--border);
-            border-radius: 24px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Inter', sans-serif;
-            color: var(--text);
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .example-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--water-blue), var(--sea-foam));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .example-btn:hover::before {
-            opacity: 1;
-        }
-
-        .example-btn:hover {
-            color: white;
-            border-color: var(--water-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.25);
-        }
-
-        .example-btn span {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Enhanced Feature Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-
-        .feature-card {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam));
-            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .feature-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.03), rgba(16, 185, 129, 0.03));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .feature-card:hover::before {
-            left: 0;
-        }
-
-        .feature-card:hover::after {
-            opacity: 1;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-12px);
-            border-color: var(--water-blue);
-            box-shadow: 0 24px 48px rgba(6, 182, 212, 0.15);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 25px;
-            background: linear-gradient(135deg, var(--water-blue), var(--sea-foam));
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 
-                0 16px 32px rgba(6, 182, 212, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover .feature-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .feature-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--text);
-            position: relative;
-            z-index: 1;
-        }
-
-        .feature-desc {
-            color: var(--text-light);
-            line-height: 1.7;
-            font-size: 1.05rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Enhanced Loading */
-        .loading {
-            text-align: center;
-            padding: 100px 40px;
-            display: none;
-        }
-
-        .loading-animation {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 50px;
-        }
-
-        .loading-ring {
-            position: absolute;
-            width: 140px;
-            height: 140px;
-            border: 4px solid var(--border);
-            border-top: 4px solid var(--water-blue);
-            border-radius: 50%;
-            animation: spin 1.2s linear infinite;
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
-        }
-
-        .loading-otter {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 42px;
-            animation: bounce 1.8s infinite;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.15); }
-        }
-
-        .loading-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--text);
-            background: linear-gradient(135deg, var(--text), var(--water-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .loading-subtitle {
-            color: var(--text-light);
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            font-weight: 500;
-        }
-
-        .progress-container {
-            max-width: 500px;
-            margin: 0 auto 30px;
-            background: var(--surface-light);
-            border-radius: 16px;
-            height: 12px;
-            overflow: hidden;
-            border: 2px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam));
-            border-radius: 16px;
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 0%;
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
-            position: relative;
-        }
-
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: progress-shimmer 1.5s infinite;
-        }
-
-        @keyframes progress-shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .otter-status {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .status-icon {
-            font-size: 28px;
-            animation: work 2s infinite;
-        }
-
-        @keyframes work {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.1) rotate(5deg); }
-            75% { transform: scale(1.05) rotate(-5deg); }
-        }
-
-        /* Results Section Improvements */
+        /* Results Section */
         .results {
             display: none;
-            animation: fadeInUp 1s ease-out;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .score-hero {
             background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            border-radius: 32px;
-            padding: 80px 50px;
+            border-radius: 24px;
+            padding: 60px 40px;
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
             color: white;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 24px 48px rgba(6, 182, 212, 0.3);
-        }
-
-        .score-hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate-slow 30s linear infinite;
-        }
-
-        @keyframes rotate-slow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .score-content {
-            position: relative;
-            z-index: 1;
         }
 
         .score-display {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 60px;
-            margin-bottom: 40px;
+            gap: 50px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
 
         .score-visual {
             position: relative;
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
         }
 
         .score-circle {
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             background: conic-gradient(
                 from 0deg,
                 var(--sea-foam) 0deg,
                 white var(--score-angle, 180deg),
-                rgba(255, 255, 255, 0.25) var(--score-angle, 180deg)
+                rgba(255, 255, 255, 0.3) var(--score-angle, 180deg)
             );
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            animation: scoreReveal 2.5s ease-out;
-            box-shadow: 
-                0 0 40px rgba(255, 255, 255, 0.3),
-                0 0 0 8px rgba(255, 255, 255, 0.1);
         }
 
         .score-circle::before {
             content: '';
             position: absolute;
-            width: 140px;
-            height: 140px;
+            width: 120px;
+            height: 120px;
             background: var(--water-blue);
             border-radius: 50%;
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
         }
 
         .score-text {
             position: absolute;
-            font-size: 3.2rem;
+            font-size: 2.8rem;
             font-weight: 700;
             font-family: 'JetBrains Mono', monospace;
             z-index: 1;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .score-otter {
-            position: absolute;
-            bottom: -12px;
-            right: -12px;
-            font-size: 2.2rem;
-            animation: celebrate 2.5s infinite;
-            z-index: 2;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-        }
-
-        @keyframes scoreReveal {
-            from { transform: scale(0) rotate(0deg); opacity: 0; }
-            to { transform: scale(1) rotate(360deg); opacity: 1; }
-        }
-
-        @keyframes celebrate {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(15deg) scale(1.15); }
-            75% { transform: rotate(-15deg) scale(1.15); }
-        }
-
-        .score-info h2 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .score-info p {
-            font-size: 1.4rem;
-            opacity: 0.95;
-            line-height: 1.6;
-            max-width: 500px;
-        }
-
-        .improvement-insight {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 30px;
-            margin-top: 40px;
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Responsive Design Improvements */
-        @media (max-width: 1024px) {
-            .container { max-width: 100%; padding: 15px; }
-            .analysis-card { padding: 40px 30px; }
-            .trust-stats { grid-template-columns: repeat(2, 1fr); }
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .container { padding: 10px; }
-            .analysis-card { padding: 30px 20px; border-radius: 24px; }
-            .logo-text { font-size: 3.5rem; }
-            .tagline { font-size: 1.6rem; }
-            .subtitle { font-size: 1.1rem; }
-            .input-title { font-size: 2.2rem; }
-            .input-subtitle { font-size: 1.1rem; }
-            .url-input { padding: 24px 160px 24px 24px; font-size: 16px; }
-            .analyze-btn { padding: 18px 24px; font-size: 14px; }
-            .score-display { flex-direction: column; gap: 40px; }
-            .trust-stats { grid-template-columns: 1fr; gap: 20px; padding: 30px 20px; }
-            .features-grid { grid-template-columns: 1fr; gap: 25px; }
-            .score-visual { width: 140px; height: 140px; }
-            .score-circle { width: 140px; height: 140px; }
-            .score-circle::before { width: 110px; height: 110px; }
-            .score-text { font-size: 2.5rem; }
-            .score-hero { padding: 50px 30px; }
-            .score-info h2 { font-size: 2.2rem; }
-            .score-info p { font-size: 1.2rem; }
-            .logo-icon { width: 70px; height: 70px; font-size: 32px; }
-            .example-buttons { gap: 15px; }
-            .example-btn { padding: 12px 20px; font-size: 0.85rem; }
-        }
-
-        @media (max-width: 480px) {
-            .header { padding: 40px 0; }
-            .logo-container { gap: 15px; }
-            .logo-text { font-size: 2.8rem; }
-            .tagline { font-size: 1.3rem; }
-            .input-title { font-size: 1.8rem; }
-            .url-input { padding: 20px 140px 20px 20px; }
-            .analyze-btn { padding: 16px 20px; }
-            .trust-stats { padding: 25px 15px; }
-            .stat-number { font-size: 2.2rem; }
-            .score-hero { padding: 40px 20px; }
-            .feature-card { padding: 30px 25px; }
-            .feature-icon { width: 60px; height: 60px; font-size: 24px; }
-            .example-buttons { flex-direction: column; align-items: center; }
-        }
-
-        /* Accessibility Improvements */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+            .nav-header {
+                flex-direction: column;
+                gap: 20px;
             }
-        }
 
-        /* Enhanced Focus States */
-        .url-input:focus,
-        .analyze-btn:focus,
-        .example-btn:focus,
-        .btn-primary:focus,
-        .btn-secondary:focus {
-            outline: 3px solid var(--water-blue);
-            outline-offset: 3px;
-        }
+            .nav-actions {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
 
-        /* New Dashboard Section */
-        .dashboard-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 50px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
+            .pricing-plans {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
 
-        .dashboard-toggle:hover {
-            background: var(--water-blue);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
-        }
+            .modal-header {
+                padding: 30px 20px 15px;
+            }
 
-        /* Analysis History */
-        .analysis-history {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            margin-top: 40px;
-            display: none;
-        }
+            .pricing-tabs {
+                margin: 0 20px;
+            }
 
-        .history-header {
-            display: flex;
-            align-items: center;
-            justify-content: between;
-            margin-bottom: 30px;
-            gap: 20px;
-        }
+            .url-input {
+                padding: 20px 140px 20px 20px;
+            }
 
-        .history-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--text);
-            flex: 1;
-        }
-
-        .clear-history {
-            padding: 8px 16px;
-            background: transparent;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .clear-history:hover {
-            border-color: var(--coral);
-            color: var(--coral);
-        }
-
-        .history-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .history-item {
-            background: var(--surface-light);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .history-item:hover {
-            border-color: var(--water-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.15);
-        }
-
-        .history-url {
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 8px;
-            word-break: break-all;
-        }
-
-        .history-score {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--water-blue);
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 8px;
-        }
-
-        .history-date {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-
-        /* Enhanced Result Cards */
-        .analysis-results {
-            display: grid;
-            gap: 35px;
-            margin-top: 50px;
-        }
-
-        .result-card {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-        }
-
-        .result-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam));
-            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .result-card:hover::before {
-            left: 0;
-        }
-
-        .result-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--water-blue);
-            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.12);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .card-title-section {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .status-badge {
-            width: 70px;
-            height: 70px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-            position: relative;
-        }
-
-        .status-badge::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 22px;
-            opacity: 0.5;
-            z-index: -1;
-        }
-
-        .status-pass { 
-            background: linear-gradient(135deg, var(--secondary), #059669); 
-        }
-        .status-pass::before { 
-            background: linear-gradient(135deg, var(--secondary), #059669); 
-        }
-
-        .status-warning { 
-            background: linear-gradient(135deg, var(--sand), #d97706); 
-        }
-        .status-warning::before { 
-            background: linear-gradient(135deg, var(--sand), #d97706); 
-        }
-
-        .status-fail { 
-            background: linear-gradient(135deg, var(--coral), #dc2626); 
-        }
-        .status-fail::before { 
-            background: linear-gradient(135deg, var(--coral), #dc2626); 
-        }
-
-        .card-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--text);
-            line-height: 1.3;
-        }
-
-        .priority-tag {
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .priority-high { 
-            background: linear-gradient(135deg, var(--coral), #fca5a5); 
-            color: white; 
-        }
-        .priority-medium { 
-            background: linear-gradient(135deg, var(--sand), #fcd34d); 
-            color: white; 
-        }
-        .priority-low { 
-            background: linear-gradient(135deg, var(--secondary), #6ee7b7); 
-            color: white; 
-        }
-
-        .metric-section {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            margin-bottom: 30px;
-            background: var(--surface-light);
-            border-radius: 20px;
-            padding: 30px;
-            border: 2px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .metric-section:hover {
-            background: rgba(6, 182, 212, 0.05);
-            border-color: var(--water-blue);
-        }
-
-        .metric-value {
-            font-size: 3rem;
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--water-blue);
-            text-shadow: 0 2px 4px rgba(6, 182, 212, 0.2);
-        }
-
-        .metric-info {
-            flex: 1;
-        }
-
-        .metric-label {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .metric-target {
-            color: var(--gray);
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .description {
-            color: var(--text-light);
-            line-height: 1.8;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-        }
-
-        .recommendation-box {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.06), rgba(16, 185, 129, 0.06));
-            border: 2px solid rgba(6, 182, 212, 0.2);
-            border-radius: 24px;
-            padding: 35px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .recommendation-box:hover {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(16, 185, 129, 0.08));
-            border-color: rgba(6, 182, 212, 0.3);
-        }
-
-        .recommendation-box::before {
-            content: '🦦';
-            position: absolute;
-            top: -18px;
-            left: 25px;
-            background: var(--surface);
-            padding: 8px 12px;
-            border-radius: 30px;
-            font-size: 1.4rem;
-            border: 2px solid rgba(6, 182, 212, 0.2);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .rec-title {
-            font-weight: 600;
-            color: var(--water-blue);
-            margin-bottom: 18px;
-            font-size: 1.3rem;
-        }
-
-        .rec-text {
-            color: var(--text-light);
-            line-height: 1.7;
-            margin-bottom: 25px;
-            font-size: 1.05rem;
-        }
-
-        .action-steps {
-            list-style: none;
-            padding: 0;
-        }
-
-        .action-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 18px;
-            margin-bottom: 18px;
-            padding: 15px 0;
-        }
-
-        .action-number {
-            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: 600;
-            flex-shrink: 0;
-            box-shadow: 0 6px 15px rgba(6, 182, 212, 0.3);
-        }
-
-        .action-text {
-            color: var(--text-light);
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-
-        /* Enhanced CTA Section */
-        .cta-section {
-            background: var(--surface);
-            border: 2px solid transparent;
-            border-radius: 32px;
-            padding: 80px 50px;
-            text-align: center;
-            margin-top: 60px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-            background-image: linear-gradient(var(--surface), var(--surface)), 
-                             linear-gradient(135deg, var(--water-blue), var(--sea-foam));
-            background-origin: border-box;
-            background-clip: content-box, border-box;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam), var(--secondary));
-        }
-
-        .cta-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 25px;
-            background: linear-gradient(135deg, var(--text), var(--water-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .cta-subtitle {
-            font-size: 1.3rem;
-            color: var(--text-light);
-            margin-bottom: 50px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            padding: 22px 40px;
-            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 12px 30px rgba(6, 182, 212, 0.4);
-            font-family: 'Inter', sans-serif;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 40px rgba(6, 182, 212, 0.6);
-        }
-
-        .btn-secondary {
-            padding: 22px 40px;
-            background: transparent;
-            color: var(--text);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Inter', sans-serif;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-secondary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--water-blue), var(--sea-foam));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-secondary:hover::before {
-            opacity: 1;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--water-blue);
-            color: white;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(6, 182, 212, 0.3);
-        }
-
-        .btn-secondary span {
-            position: relative;
-            z-index: 1;
+            .analyze-btn {
+                padding: 14px 20px;
+                font-size: 14px;
+            }
         }
 
         /* Utility Classes */
@@ -1406,34 +901,6 @@
         .mb-4 { margin-bottom: 1rem; }
         .mb-6 { margin-bottom: 1.5rem; }
         .mb-8 { margin-bottom: 2rem; }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        /* Print Styles */
-        @media print {
-            .bg-container,
-            .dashboard-toggle,
-            .cta-section,
-            .floating-bubble { display: none; }
-            
-            .analysis-card,
-            .result-card { 
-                box-shadow: none;
-                border: 1px solid var(--border);
-            }
-            
-            .score-hero {
-                background: var(--surface-light);
-                color: var(--text);
-            }
-        }
     </style>
 </head>
 <body>
@@ -1444,207 +911,690 @@
         <div class="floating-bubble bubble-4"></div>
     </div>
 
-    <button class="dashboard-toggle" onclick="toggleHistory()" id="dashboardBtn">
-        📊 History
-    </button>
-    
     <div class="container">
-        <div class="header">
-            <div class="logo-container">
-                <div class="logo-icon">🦦</div>
-                <div class="logo-text">SEOtter</div>
-            </div>
-            <div class="tagline">Your Playful SEO Sidekick</div>
-            <div class="subtitle">
-                Just like otters master their watery world, SEOtter helps you navigate and dominate the ocean of search rankings with professional analysis and adorable intelligence
+        <!-- Navigation -->
+        <nav class="nav-header">
+            <div class="nav-logo">
+                <div class="nav-logo-icon">🦦</div>
+                <div class="nav-logo-text">SEOtter</div>
             </div>
             
-            <div class="trust-stats">
-                <div class="stat-item">
-                    <div class="stat-icon">⚡</div>
-                    <div class="stat-number">15s</div>
-                    <div class="stat-label">Analysis Time</div>
+            <div class="nav-actions">
+                <!-- Guest User -->
+                <div id="guestActions" class="nav-actions">
+                    <button class="nav-btn btn-login" onclick="showModal('login')">Sign In</button>
+                    <button class="nav-btn btn-signup" onclick="showModal('signup')">Start Free Trial</button>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-icon">🔍</div>
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">SEO Checks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">🎯</div>
-                    <div class="stat-number">98%</div>
-                    <div class="stat-label">Accuracy</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">📈</div>
-                    <div class="stat-number">Free</div>
-                    <div class="stat-label">Forever</div>
+                
+                <!-- Logged In User -->
+                <div id="userActions" class="nav-actions hidden">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="user-details">
+                            <div class="user-email" id="userEmail">user@example.com</div>
+                            <div class="user-plan" id="userPlan">Free Plan</div>
+                        </div>
+                    </div>
+                    <button class="nav-btn btn-upgrade" id="upgradeBtn" onclick="showPricingModal()">
+                        Upgrade
+                    </button>
+                    <button class="nav-btn btn-login" onclick="logout()">Sign Out</button>
                 </div>
             </div>
+        </nav>
+
+        <!-- Usage Indicator -->
+        <div class="usage-indicator" id="usageIndicator">
+            <div class="usage-info">
+                <div class="usage-icon">🦦</div>
+                <div>
+                    <div class="usage-text" id="usageText">2 of 3 free analyses used today</div>
+                    <div class="usage-limit" id="usageLimit">Resets in 18 hours</div>
+                </div>
+            </div>
+            <div class="usage-progress">
+                <div class="usage-fill" id="usageFill" style="width: 67%"></div>
+            </div>
+            <button class="nav-btn btn-upgrade" onclick="showPricingModal()">
+                Upgrade
+            </button>
         </div>
 
-        <!-- Analysis History Section -->
-        <div class="analysis-history" id="analysisHistory">
-            <div class="history-header">
-                <div class="history-title">🦦 Your SEO Journey</div>
-                <button class="clear-history" onclick="clearHistory()">Clear History</button>
-            </div>
-            <div class="history-grid" id="historyGrid">
-                <div class="text-center" style="grid-column: 1/-1; padding: 40px; color: var(--gray);">
-                    No analysis history yet. Start analyzing websites to see your journey! 🌊
-                </div>
-            </div>
+        <!-- Upgrade Banner for Free Users -->
+        <div class="upgrade-banner" id="upgradeBanner" style="display: none;">
+            <h3>🚀 Unlock Your SEO Potential!</h3>
+            <p>Get unlimited analyses, advanced insights, and priority support with SEOtter Pro</p>
+            <button onclick="showPricingModal()">Upgrade to Pro - Only $29/month</button>
         </div>
 
+        <!-- Main Analysis Card -->
         <div class="analysis-card">
             <div class="input-section">
                 <div class="input-header">
-                    <div class="input-title">Dive Into Your SEO Potential</div>
-                    <div class="input-subtitle">Enter any website URL and watch our intelligent otter uncover actionable insights to improve your search rankings</div>
+                    <div class="input-title">Professional SEO Analysis</div>
+                    <div class="input-subtitle">Enter any website URL and get comprehensive SEO insights with actionable recommendations</div>
                 </div>
                 
                 <div class="url-container">
-                    <input type="url" class="url-input" placeholder="yourwebsite.com (we'll add https for you!)" id="urlInput" aria-label="Website URL to analyze">
+                    <input type="url" class="url-input" placeholder="yourwebsite.com" id="urlInput" aria-label="Website URL to analyze">
                     <button class="analyze-btn" onclick="startAnalysis()" id="analyzeBtn" aria-label="Start SEO analysis">
-                        🦦 Start Diving
+                        🦦 Analyze Now
                     </button>
-                </div>
-
-                <div class="examples-section">
-                    <div class="examples-label">🦦 <strong>Try these examples:</strong></div>
-                    <div class="example-buttons">
-                        <button onclick="analyzeExample('apple.com')" class="example-btn" aria-label="Analyze Apple.com">
-                            <span>🍎 apple.com</span>
-                        </button>
-                        <button onclick="analyzeExample('spotify.com')" class="example-btn" aria-label="Analyze Spotify.com">
-                            <span>🎵 spotify.com</span>
-                        </button>
-                        <button onclick="analyzeExample('airbnb.com')" class="example-btn" aria-label="Analyze Airbnb.com">
-                            <span>🏠 airbnb.com</span>
-                        </button>
-                        <button onclick="analyzeExample('shopify.com')" class="example-btn" aria-label="Analyze Shopify.com">
-                            <span>🛍️ shopify.com</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <div class="feature-title">Professional Analysis</div>
-                    <div class="feature-desc">Real Google PageSpeed data, comprehensive SEO checks, and enterprise-level insights made simple and actionable</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <div class="feature-title">Lightning Fast</div>
-                    <div class="feature-desc">Complete analysis in 15 seconds with real-time data from Google's official APIs and advanced algorithms</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌊</div>
-                    <div class="feature-title">Actionable Insights</div>
-                    <div class="feature-desc">Step-by-step recommendations you can implement immediately to boost your rankings and organic traffic</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <div class="feature-title">Proven Results</div>
-                    <div class="feature-desc">Used by thousands of websites to improve their SEO performance and achieve measurable growth</div>
-                </div>
-            </div>
-
-            <!-- Loading Section -->
-            <div class="loading" id="loadingSection">
-                <div class="loading-animation">
-                    <div class="loading-ring"></div>
-                    <div class="loading-otter">🦦</div>
-                </div>
-                <div class="loading-title">SEOtter is Diving Deep...</div>
-                <div class="loading-subtitle" id="loadingText">Initializing comprehensive SEO analysis</div>
-                
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar"></div>
-                </div>
-                
-                <div class="otter-status">
-                    <span class="status-icon" id="statusIcon">🔍</span>
-                    <span id="statusText">Starting intelligent analysis...</span>
                 </div>
             </div>
 
             <!-- Results Section -->
             <div class="results" id="resultsSection">
                 <div class="score-hero">
-                    <div class="score-content">
-                        <div class="score-display">
-                            <div class="score-visual">
-                                <div class="score-circle" id="scoreCircle">
-                                    <div class="score-text" id="scoreValue">0</div>
-                                </div>
-                                <div class="score-otter">🦦</div>
+                    <div class="score-display">
+                        <div class="score-visual">
+                            <div class="score-circle" id="scoreCircle">
+                                <div class="score-text" id="scoreValue">0</div>
                             </div>
-                            <div class="score-info">
-                                <h2 id="scoreLabel">Analyzing...</h2>
-                                <p id="scoreDescription">Calculating your SEO potential</p>
-                                <div class="improvement-insight" id="improvementSection" style="display: none;">
-                                    <strong>🚀 Otter's Insight:</strong>
-                                    <span id="improvementText"></span>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="score-info">
+                            <h2 id="scoreLabel">SEO Score</h2>
+                            <p id="scoreDescription">Professional analysis complete</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="analysis-results" id="analysisResults">
-                    <!-- Results will be populated here -->
-                </div>
-
-                <div class="cta-section">
-                    <div class="cta-title">Ready to Boost Your Rankings? 🚀</div>
-                    <div class="cta-subtitle">SEOtter provides enterprise-level SEO insights completely free. Share the otter love and help others improve their websites too!</div>
-                    <div class="cta-buttons">
-                        <button class="btn-primary" onclick="window.location.reload()">
-                            <span>🦦 Analyze Another Site</span>
-                        </button>
-                        <button class="btn-secondary" onclick="shareResults()">
-                            <span>📤 Share Results</span>
+                <!-- Pro Features Section -->
+                <div id="proFeaturesLocked" class="feature-locked">
+                    <div style="background: var(--surface); padding: 40px; border-radius: 20px; margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 20px;">🔒 Unlock Advanced SEO Insights</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <div>
+                                <h4>📊 Detailed Analytics</h4>
+                                <p>Core Web Vitals, Mobile Performance, Page Speed breakdown</p>
+                            </div>
+                            <div>
+                                <h4>🎯 Keyword Analysis</h4>
+                                <p>Keyword density, ranking opportunities, competitor insights</p>
+                            </div>
+                            <div>
+                                <h4>🔗 Backlink Profile</h4>
+                                <p>Link quality analysis, toxic link detection, link building opportunities</p>
+                            </div>
+                            <div>
+                                <h4>📈 Tracking & Reports</h4>
+                                <p>Weekly reports, progress tracking, custom dashboards</p>
+                            </div>
+                        </div>
+                        <button onclick="showPricingModal()" style="margin-top: 20px; padding: 15px 30px; background: linear-gradient(135deg, var(--premium), var(--premium-light)); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                            Upgrade to Pro - $29/month
                         </button>
                     </div>
+                </div>
+
+                <div id="analysisResults">
+                    <!-- Basic results for free users -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Modal -->
+    <div class="modal-overlay" id="pricingModal">
+        <div class="pricing-modal">
+            <button class="modal-close" onclick="closePricingModal()">&times;</button>
+            
+            <div class="modal-header">
+                <div class="modal-title">Choose Your Plan</div>
+                <div class="modal-subtitle">Start with our free plan or unlock professional features</div>
+                
+                <div class="pricing-tabs">
+                    <button class="pricing-tab active" onclick="switchPricingTab('monthly')">Monthly</button>
+                    <button class="pricing-tab" onclick="switchPricingTab('yearly')">Yearly <span style="color: var(--secondary); font-size: 0.8rem;">(Save 20%)</span></button>
+                </div>
+            </div>
+
+            <div class="pricing-plans" id="pricingPlans">
+                <!-- Free Plan -->
+                <div class="pricing-plan">
+                    <div class="plan-name">Starter</div>
+                    <div class="plan-price">$0</div>
+                    <div class="plan-period">Forever free</div>
+                    
+                    <ul class="plan-features">
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            3 analyses per day
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Basic SEO score
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Core recommendations
+                        </li>
+                        <li class="plan-feature feature-disabled">
+                            <span class="feature-icon">✗</span>
+                            Detailed analytics
+                        </li>
+                        <li class="plan-feature feature-disabled">
+                            <span class="feature-icon">✗</span>
+                            Keyword analysis
+                        </li>
+                        <li class="plan-feature feature-disabled">
+                            <span class="feature-icon">✗</span>
+                            Weekly reports
+                        </li>
+                    </ul>
+                    
+                    <button class="plan-button btn-plan-free" onclick="selectPlan('free')">
+                        Current Plan
+                    </button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-plan plan-popular">
+                    <div class="plan-name">Professional</div>
+                    <div class="plan-price" id="proPriceMonthly">$29</div>
+                    <div class="plan-period" id="proPeriodMonthly">per month</div>
+                    
+                    <ul class="plan-features">
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Unlimited analyses
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Advanced SEO insights
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Core Web Vitals analysis
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Keyword density analysis
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Competitor insights
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Priority email support
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            PDF report exports
+                        </li>
+                    </ul>
+                    
+                    <button class="plan-button btn-plan-pro" onclick="selectPlan('pro')">
+                        Start 7-Day Free Trial
+                    </button>
+                </div>
+
+                <!-- Agency Plan -->
+                <div class="pricing-plan plan-premium">
+                    <div class="plan-name">Agency</div>
+                    <div class="plan-price" id="agencyPriceMonthly">$99</div>
+                    <div class="plan-period" id="agencyPeriodMonthly">per month</div>
+                    
+                    <ul class="plan-features">
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Everything in Pro
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            White-label reports
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Client management dashboard
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            API access
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Weekly automated reports
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Priority phone support
+                        </li>
+                        <li class="plan-feature">
+                            <span class="feature-icon">✓</span>
+                            Custom integrations
+                        </li>
+                    </ul>
+                    
+                    <button class="plan-button btn-plan-premium" onclick="selectPlan('agency')">
+                        Start 14-Day Free Trial
+                    </button>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-form" id="paymentForm">
+                <div class="payment-header">
+                    <div class="payment-title">Complete Your Subscription</div>
+                </div>
+
+                <div class="payment-summary" id="paymentSummary">
+                    <div class="summary-item">
+                        <span>Plan:</span>
+                        <span id="selectedPlanName">Professional</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Billing:</span>
+                        <span id="selectedBilling">Monthly</span>
+                    </div>
+                    <div class="summary-item summary-total">
+                        <span>Total:</span>
+                        <span id="totalAmount">$29.00/month</span>
+                    </div>
+                </div>
+
+                <div id="card-element" class="card-element">
+                    <!-- Stripe Elements will mount here -->
+                </div>
+
+                <button id="submit-payment" class="payment-button">
+                    <span id="payment-button-text">Start Free Trial</span>
+                </button>
+
+                <div style="text-align: center; margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
+                    <p>🔒 Secure payment powered by Stripe</p>
+                    <p>Cancel anytime. No hidden fees.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let analysisData = {};
-        let analysisHistory = JSON.parse(localStorage.getItem('seotter-history') || '[]');
-        
-        // Enhanced analysis steps with more personality
-        const analysisSteps = [
-            { icon: '🦦', name: 'Scout Otter', text: 'Swimming to your website and checking the waters...' },
-            { icon: '🔍', name: 'Detective Otter', text: 'Analyzing content quality, structure, and SEO elements...' },
-            { icon: '⚡', name: 'Speed Otter', text: 'Testing performance with Google PageSpeed Insights...' },
-            { icon: '🎯', name: 'SEO Otter', text: 'Evaluating optimization opportunities and best practices...' },
-            { icon: '📊', name: 'Analytics Otter', text: 'Calculating your comprehensive SEO score...' },
-            { icon: '🧠', name: 'Wise Otter', text: 'Generating personalized recommendations...' },
-            { icon: '✨', name: 'Magic Otter', text: 'Finalizing your detailed SEO report...' }
-        ];
+        // User state management
+        let currentUser = {
+            id: null,
+            email: null,
+            plan: 'free', // free, pro, agency
+            analysesUsed: 2,
+            analysesLimit: 3,
+            resetTime: new Date(Date.now() + 18 * 60 * 60 * 1000) // 18 hours from now
+        };
 
-        // Initialize page
+        // Pricing data
+        const pricingData = {
+            monthly: {
+                pro: { price: 29, period: 'per month' },
+                agency: { price: 99, period: 'per month' }
+            },
+            yearly: {
+                pro: { price: 23, period: 'per month (billed yearly)', savings: 'Save $72/year' },
+                agency: { price: 79, period: 'per month (billed yearly)', savings: 'Save $240/year' }
+            }
+        };
+
+        let currentBillingPeriod = 'monthly';
+        let selectedPlan = null;
+
+        // Stripe setup
+        const stripe = Stripe('pk_test_your_publishable_key_here'); // Replace with your actual publishable key
+        let elements, cardElement;
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('urlInput').focus();
-            updateHistoryDisplay();
+            updateUI();
+            updateUsageIndicator();
+            initializeStripe();
         });
 
-        // Main analysis function
+        // UI Updates
+        function updateUI() {
+            const isLoggedIn = currentUser.id !== null;
+            
+            document.getElementById('guestActions').classList.toggle('hidden', isLoggedIn);
+            document.getElementById('userActions').classList.toggle('hidden', !isLoggedIn);
+            
+            if (isLoggedIn) {
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('userPlan').textContent = `${currentUser.plan.charAt(0).toUpperCase() + currentUser.plan.slice(1)} Plan`;
+                document.getElementById('userPlan').className = `user-plan plan-${currentUser.plan}`;
+                document.getElementById('userAvatar').textContent = currentUser.email[0].toUpperCase();
+                
+                // Show/hide upgrade button
+                document.getElementById('upgradeBtn').classList.toggle('hidden', currentUser.plan !== 'free');
+            }
+        }
+
+        function updateUsageIndicator() {
+            const indicator = document.getElementById('usageIndicator');
+            const text = document.getElementById('usageText');
+            const fill = document.getElementById('usageFill');
+            const limit = document.getElementById('usageLimit');
+            
+            if (currentUser.plan === 'free') {
+                const used = currentUser.analysesUsed;
+                const total = currentUser.analysesLimit;
+                const percentage = (used / total) * 100;
+                
+                text.textContent = `${used} of ${total} free analyses used today`;
+                fill.style.width = `${percentage}%`;
+                
+                // Update styling based on usage
+                indicator.classList.remove('usage-warning', 'usage-danger');
+                if (percentage >= 100) {
+                    indicator.classList.add('usage-danger');
+                    text.textContent = 'Daily limit reached';
+                    limit.textContent = 'Upgrade for unlimited analyses';
+                    document.getElementById('upgradeBanner').style.display = 'block';
+                } else if (percentage >= 66) {
+                    indicator.classList.add('usage-warning');
+                }
+                
+                // Calculate reset time
+                const hours = Math.ceil((currentUser.resetTime - new Date()) / (1000 * 60 * 60));
+                limit.textContent = `Resets in ${hours} hours`;
+                
+                indicator.style.display = 'flex';
+            } else {
+                indicator.style.display = 'none';
+                document.getElementById('upgradeBanner').style.display = 'none';
+            }
+        }
+
+        // Authentication functions
+        function showModal(type) {
+            // Simulate authentication
+            if (type === 'login' || type === 'signup') {
+                // In real app, show login/signup form
+                currentUser = {
+                    id: 'user123',
+                    email: 'demo@example.com',
+                    plan: 'free',
+                    analysesUsed: 2,
+                    analysesLimit: 3,
+                    resetTime: new Date(Date.now() + 18 * 60 * 60 * 1000)
+                };
+                updateUI();
+                updateUsageIndicator();
+                showNotification('Welcome to SEOtter! 🦦', 'success');
+            }
+        }
+
+        function logout() {
+            currentUser = {
+                id: null,
+                email: null,
+                plan: 'free',
+                analysesUsed: 0,
+                analysesLimit: 3,
+                resetTime: new Date()
+            };
+            updateUI();
+            updateUsageIndicator();
+            showNotification('Logged out successfully', 'info');
+        }
+
+        // Pricing modal functions
+        function showPricingModal() {
+            document.getElementById('pricingModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePricingModal() {
+            document.getElementById('pricingModal').classList.remove('active');
+            document.getElementById('paymentForm').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchPricingTab(period) {
+            currentBillingPeriod = period;
+            
+            // Update tab appearance
+            document.querySelectorAll('.pricing-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update pricing
+            const proData = pricingData[period].pro;
+            const agencyData = pricingData[period].agency;
+            
+            document.getElementById('proPriceMonthly').textContent = `${proData.price}`;
+            document.getElementById('proPeriodMonthly').textContent = proData.period;
+            
+            document.getElementById('agencyPriceMonthly').textContent = `${agencyData.price}`;
+            document.getElementById('agencyPeriodMonthly').textContent = agencyData.period;
+        }
+
+        function selectPlan(plan) {
+            if (plan === 'free') {
+                closePricingModal();
+                return;
+            }
+            
+            selectedPlan = plan;
+            
+            // Update payment summary
+            const planName = plan === 'pro' ? 'Professional' : 'Agency';
+            const planData = pricingData[currentBillingPeriod][plan];
+            
+            document.getElementById('selectedPlanName').textContent = planName;
+            document.getElementById('selectedBilling').textContent = currentBillingPeriod === 'monthly' ? 'Monthly' : 'Yearly';
+            document.getElementById('totalAmount').textContent = `${planData.price}.00/${currentBillingPeriod === 'monthly' ? 'month' : 'year'}`;
+            
+            // Show payment form
+            document.getElementById('paymentForm').style.display = 'block';
+            document.getElementById('paymentForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Stripe integration
+        function initializeStripe() {
+            elements = stripe.elements();
+            
+            cardElement = elements.create('card', {
+                style: {
+                    base: {
+                        fontSize: '16px',
+                        color: '#1e293b',
+                        '::placeholder': {
+                            color: '#64748b',
+                        },
+                    },
+                },
+            });
+            
+            // Mount card element when payment form is shown
+            setTimeout(() => {
+                if (document.getElementById('card-element')) {
+                    cardElement.mount('#card-element');
+                }
+            }, 100);
+        }
+
+        async function handlePayment() {
+            const button = document.getElementById('submit-payment');
+            const buttonText = document.getElementById('payment-button-text');
+            
+            button.disabled = true;
+            buttonText.textContent = 'Processing...';
+            
+            try {
+                // Create payment method
+                const {error, paymentMethod} = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                // In real app, send paymentMethod.id to your backend
+                // For demo, simulate success
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Update user plan
+                currentUser.plan = selectedPlan;
+                currentUser.analysesUsed = 0;
+                currentUser.analysesLimit = selectedPlan === 'pro' ? 999999 : 999999;
+                
+                updateUI();
+                updateUsageIndicator();
+                closePricingModal();
+                
+                showNotification(`Successfully upgraded to ${selectedPlan === 'pro' ? 'Professional' : 'Agency'} plan! 🎉`, 'success');
+                
+            } catch (error) {
+                showNotification(`Payment failed: ${error.message}`, 'error');
+            } finally {
+                button.disabled = false;
+                buttonText.textContent = 'Start Free Trial';
+            }
+        }
+
+        // Add event listener for payment button
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const paymentButton = document.getElementById('submit-payment');
+                if (paymentButton) {
+                    paymentButton.addEventListener('click', handlePayment);
+                }
+            }, 100);
+        });
+
+        // Analysis functions
         async function startAnalysis() {
-            let url = document.getElementById('urlInput').value.trim();
+            const url = document.getElementById('urlInput').value.trim();
             
             if (!url) {
                 showNotification('Please enter a website URL! 🦦', 'warning');
                 return;
             }
-
-            // Smart URL fixing
-            url = fixUrl(url);
             
-            if (!
+            // Check usage limits for free users
+            if (currentUser.plan === 'free' && currentUser.analysesUsed >= currentUser.analysesLimit) {
+                showNotification('Daily limit reached! Upgrade for unlimited analyses 🚀', 'warning');
+                showPricingModal();
+                return;
+            }
+            
+            // Perform analysis
+            await performAnalysis(url);
+            
+            // Update usage for free users
+            if (currentUser.plan === 'free') {
+                currentUser.analysesUsed++;
+                updateUsageIndicator();
+            }
+        }
+
+        async function performAnalysis(url) {
+            // Show loading state
+            document.getElementById('resultsSection').style.display = 'block';
+            
+            // Simulate analysis
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Update score
+            const score = 75 + Math.random() * 20;
+            document.getElementById('scoreValue').textContent = Math.round(score);
+            document.getElementById('scoreCircle').style.setProperty('--score-angle', `${(score / 100) * 360}deg`);
+            
+            // Show appropriate features based on plan
+            if (currentUser.plan === 'free') {
+                document.getElementById('proFeaturesLocked').style.display = 'block';
+                // Show basic results only
+                document.getElementById('analysisResults').innerHTML = `
+                    <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
+                        <h3 style="margin-bottom: 15px;">Basic SEO Analysis</h3>
+                        <p style="color: var(--text-light); margin-bottom: 20px;">Your website has a good foundation. Upgrade to Pro for detailed insights and actionable recommendations.</p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 10px;">✅ Page loads successfully</li>
+                            <li style="margin-bottom: 10px;">✅ Basic meta tags found</li>
+                            <li style="margin-bottom: 10px;">⚠️ Some optimization opportunities detected</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                document.getElementById('proFeaturesLocked').style.display = 'none';
+                // Show full premium results
+                document.getElementById('analysisResults').innerHTML = `
+                    <div style="display: grid; gap: 20px;">
+                        <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
+                            <h3>🚀 Core Web Vitals</h3>
+                            <p>Excellent performance metrics detected</p>
+                        </div>
+                        <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
+                            <h3>🎯 Keyword Analysis</h3>
+                            <p>15 optimization opportunities found</p>
+                        </div>
+                        <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
+                            <h3>🔗 Backlink Profile</h3>
+                            <p>Strong link authority with room for growth</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            showNotification('Analysis complete! 🦦', 'success');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--error)' : type === 'warning' ? 'var(--warning)' : 'var(--water-blue)'};
+                color: white;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 10001;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Keyboard support
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startAnalysis();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePricingModal();
+            }
+        });
+
+        // Close modal on outside click
+        document.getElementById('pricingModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePricingModal();
+            }
+        });
+    </script>
+</body>
+</html>
