@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEOtter 🦦 - Your Playful SEO Sidekick</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --otter-brown: #8b5a2b;
+            --water-blue: #06b6d4;
+            --ocean-deep: #0891b2;
+            --sea-foam: #67e8f9;
+            --coral: #fb7185;
+            --sand: #fbbf24;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --white: #ffffff;
+            --bg: #f0f9ff;
+            --surface: #ffffff;
+            --surface-light: #f8fafc;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-light: #475569;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, #e0f2fe 50%, var(--surface-light) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Playful Background */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--bg) 0%, #e0f2fe 50%, var(--surface-light) 100%);
+        }
+
+        .floating-bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--water-blue), var(--sea-foam));
+            opacity: 0.1;
+            animation: float-bubble 15s infinite ease-in-out;
+        }
+
+        .bubble:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 3s;
+            background: linear-gradient(45deg, var(--coral), var(--sand));
+        }
+
+        .bubble:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 6s;
+            background: linear-gradient(45deg, var(--secondary), var(--water-blue));
+        }
+
+        .bubble:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 40%;
+            left: 50%;
+            animation-delay: 9s;
+            background: linear-gradient(45deg, var(--primary), var(--sea-foam));
+        }
+
+        @keyframes float-bubble {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+            25% { transform: translateY(-20px) rotate(90deg); opacity: 0.2; }
+            50% { transform: translateY(10px) rotate(180deg); opacity: 0.15; }
+            75% { transform: translateY(-10px) rotate(270deg); opacity: 0.25; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            animation: bounce-gentle 3s infinite;
+            box-shadow: 
+                0 10px 30px rgba(6, 182, 212, 0.3),
+                0 0 0 8px rgba(6, 182, 212, 0.1);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '💧';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 16px;
+            animation: drip 2s infinite;
+        }
+
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(2deg); }
+        }
+
+        @keyframes drip {
+            0%, 90%, 100% { opacity: 1; transform: translateY(0px); }
+            95% { opacity: 0; transform: translateY(10px); }
+        }
+
+        .logo-text {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -3px;
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            animation: slideDown 0.8s ease-out 0.2s both;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+            animation: slideDown 0.8s ease-out 0.4s both;
+        }
+
+        .otter-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out 0.6s both;
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--water-blue);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main Card */
+        .main-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 1px 0 rgba(255, 255, 255, 0.5) inset;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out 0.8s both;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Input Section */
+        .input-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .input-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--text), var(--water-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .input-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .input-subtitle::after {
+            content: '🦦';
+            position: absolute;
+            right: -40px;
+            top: 0;
+            font-size: 1.5rem;
+            animation: wave 2s infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+
+        .input-container {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 24px 180px 24px 24px;
+            background: var(--surface-light);
+            border: 3px solid var(--border);
+            border-radius: 20px;
+            font-size: 16px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--water-blue);
+            box-shadow: 
+                0 0 0 4px rgba(6, 182, 212, 0.2),
+                0 8px 30px rgba(6, 182, 212, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .url-input::placeholder {
+            color: var(--gray);
+        }
+
+        .analyze-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 18px 28px;
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.6);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: translateY(-50%);
+        }
+
+        /* Otter Features */
+        .otter-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam));
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--water-blue);
+            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--water-blue), var(--sea-foam));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .feature-desc {
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Loading Section */
+        .loading {
+            text-align: center;
+            padding: 80px 40px;
+            display: none;
+        }
+
+        .otter-loading {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 40px;
+        }
+
+        .water-ripple {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 3px solid var(--water-blue);
+            border-radius: 50%;
+            opacity: 0;
+            animation: ripple 2s infinite;
+        }
+
+        .water-ripple:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .water-ripple:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        .loading-otter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            animation: swim 2s infinite ease-in-out;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        @keyframes swim {
+            0%, 100% { transform: translate(-50%, -50%) rotate(-5deg); }
+            50% { transform: translate(-50%, -50%) rotate(5deg); }
+        }
+
+        .loading-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--text), var(--water-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .loading-subtitle {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+        }
+
+        .progress-section {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .progress-container {
+            background: var(--surface-light);
+            border-radius: 15px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam));
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            width: 0%;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+        }
+
+        .otter-status {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-otter {
+            font-size: 28px;
+            animation: work 1.5s infinite;
+        }
+
+        @keyframes work {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Results Section */
+        .results {
+            display: none;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-hero {
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .score-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: wave-motion 15s linear infinite;
+        }
+
+        @keyframes wave-motion {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .score-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .score-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .score-visual {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                var(--sea-foam) 0deg,
+                white var(--score-angle, 180deg),
+                rgba(255, 255, 255, 0.3) var(--score-angle, 180deg),
+                rgba(255, 255, 255, 0.3) 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: scoreFloat 3s ease-out;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            background: var(--water-blue);
+            border-radius: 50%;
+        }
+
+        .score-text {
+            position: absolute;
+            font-size: 3.2rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            z-index: 1;
+        }
+
+        .score-otter {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 2rem;
+            animation: celebrate 2s infinite;
+            z-index: 2;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(10deg) scale(1.1); }
+            75% { transform: rotate(-10deg) scale(1.1); }
+        }
+
+        @keyframes scoreFloat {
+            from { transform: scale(0) rotate(0deg); }
+            to { transform: scale(1) rotate(720deg); }
+        }
+
+        .score-info h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .score-info p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 400px;
+        }
+
+        .otter-insight {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .toggle-container {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 8px;
+            display: flex;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-btn {
+            padding: 15px 25px;
+            border: none;
+            background: transparent;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Analysis Cards */
+        .analysis-container {
+            display: grid;
+            gap: 30px;
+        }
+
+        .analysis-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .analysis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam));
+            transition: left 0.5s ease;
+        }
+
+        .analysis-card:hover::before {
+            left: 0;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--water-blue);
+            box-shadow: 0 15px 35px rgba(6, 182, 212, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .card-title-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-pass { 
+            background: linear-gradient(135deg, var(--secondary), #059669);
+        }
+        .status-warning { 
+            background: linear-gradient(135deg, var(--sand), #d97706);
+        }
+        .status-fail { 
+            background: linear-gradient(135deg, var(--coral), #dc2626);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .priority-tag {
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .priority-high {
+            background: linear-gradient(135deg, var(--coral), #fca5a5);
+            color: white;
+        }
+
+        .priority-medium {
+            background: linear-gradient(135deg, var(--sand), #fcd34d);
+            color: white;
+        }
+
+        .priority-low {
+            background: linear-gradient(135deg, var(--secondary), #6ee7b7);
+            color: white;
+        }
+
+        .metric-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            background: var(--surface-light);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .metric-value {
+            font-size: 2.8rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--water-blue);
+        }
+
+        .metric-info {
+            flex: 1;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .metric-target {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .description {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+        }
+
+        .otter-recommendation {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(16, 185, 129, 0.08));
+            border: 2px solid rgba(6, 182, 212, 0.2);
+            border-radius: 18px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .otter-recommendation::before {
+            content: '🦦';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--surface);
+            padding: 5px 10px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            border: 2px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .rec-title {
+            font-weight: 600;
+            color: var(--water-blue);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .rec-text {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .action-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px 0;
+        }
+
+        .action-number {
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .action-text {
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .tech-item {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .tech-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .tech-value {
+            font-weight: 600;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--water-blue), var(--sea-foam), var(--secondary));
+        }
+
+        .cta-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text), var(--water-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 20px 40px;
+            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(6, 182, 212, 0.6);
+        }
+
+        .btn-secondary {
+            padding: 20px 40px;
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--water-blue);
+            background: rgba(6, 182, 212, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .main-card { padding: 30px 20px; }
+            .logo-text { font-size: 3rem; }
+            .tagline { font-size: 1.4rem; }
+            .input-title { font-size: 2rem; }
+            .url-input { padding: 20px 160px 20px 20px; }
+            .score-display { flex-direction: column; gap: 30px; }
+            .otter-stats { flex-direction: column; gap: 20px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .score-visual { width: 140px; height: 140px; }
+            .score-circle { width: 140px; height: 140px; }
+            .score-circle::before { width: 110px; height: 110px; }
+            .score-text { font-size: 2.5rem; }
+            .input-subtitle::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-container">
+        <div class="floating-bubbles">
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo-icon">🦦</div>
+                <div class="logo-text">SEOtter</div>
+            </div>
+            <div class="tagline">Your Playful SEO Sidekick</div>
+            <div class="subtitle">
+                Just like otters master their watery world, SEOtter helps you navigate and dominate the ocean of search rankings with adorable intelligence
+            </div>
+            
+            <div class="otter-stats">
+                <div class="stat-item">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-number">30s</div>
+                    <div class="stat-label">Dive Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🔍</div>
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">SEO Checks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Happy Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-number">3.2x</div>
+                    <div class="stat-label">Traffic Boost</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-card">
+            <div class="input-header">
+                <div class="input-title">Let's Dive Into Your SEO!</div>
+                <div class="input-subtitle">Pop in your URL and watch our clever otter uncover the secrets to swimming to the top of search results</div>
+            </div>
+            
+            <div class="input-container">
+                <input type="url" class="url-input" placeholder="https://yourwebsite.com" id="urlInput">
+                <button class="analyze-btn" onclick="startAnalysis()" id="analyzeBtn">
+                    🦦 Start Diving
+                </button>
+            </div>
+
+            <div class="otter-features">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Otter-Precise Analysis</div>
+                    <div class="feature-desc">Our AI otter spots exactly what's keeping you from swimming to the top of search results</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌊</div>
+                    <div class="feature-title">Smooth as Otter Fur</div>
+                    <div class="feature-desc">Complex SEO made simple - get clear, actionable steps that anyone can follow</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Lightning Quick Dives</div>
+                    <div class="feature-desc">Complete SEO analysis in 30 seconds - because otters are surprisingly fast swimmers!</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <div class="feature-title">Traffic That Flows</div>
+                    <div class="feature-desc">Every recommendation is designed to create a steady current of organic visitors to your site</div>
+                </div>
+            </div>
+
+            <div class="loading" id="loadingSection">
+                <div class="otter-loading">
+                    <div class="water-ripple"></div>
+                    <div class="water-ripple"></div>
+                    <div class="water-ripple"></div>
+                    <div class="loading-otter">🦦</div>
+                </div>
+                <div class="loading-title">SEOtter is Diving Deep...</div>
+                <div class="loading-subtitle" id="loadingText">Swimming through your website's SEO waters</div>
+                
+                <div class="progress-section">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    
+                    <div class="otter-status" id="otterStatus">
+                        <span class="status-otter">🦦</span>
+                        <span id="otterText">Starting the SEO dive...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results" id="resultsSection">
+                <div class="score-hero">
+                    <div class="score-content">
+                        <div class="score-display">
+                            <div class="score-visual">
+                                <div class="score-circle" id="scoreCircle">
+                                    <div class="score-text" id="scoreValue">0</div>
+                                </div>
+                                <div class="score-otter">🦦</div>
+                            </div>
+                            <div class="score-info">
+                                <h2 id="scoreLabel">Analyzing...</h2>
+                                <p id="scoreDescription">Calculating your SEO depth</p>
+                                <div class="otter-insight" id="improvementSection" style="display: none;">
+                                    <strong>🚀 Otter's Insight:</strong>
+                                    <span id="improvementText"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mode-toggle">
+                    <div class="toggle-container">
+                        <button class="toggle-btn active" onclick="setMode('beginner')" id="beginnerBtn">
+                            🌱 Beginner Otter
+                        </button>
+                        <button class="toggle-btn" onclick="setMode('expert')" id="expertBtn">
+                            🚀 Expert Otter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="analysis-container" id="analysisContainer">
+                    <!-- Analysis cards will be inserted here -->
+                </div>
+
+                <div class="cta-section">
+                    <div class="cta-title">Ready to Rule the SEO Seas? 🌊</div>
+                    <div class="cta-subtitle">Join thousands of happy website owners who've made SEOtter their trusty SEO sidekick for consistent organic growth</div>
+                    <div class="cta-buttons">
+                        <button class="btn-primary">🦦 Become an SEO Otter</button>
+                        <button class="btn-secondary">🏊‍♀️ See All Features</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let analysisData = {};
+        let currentMode = 'beginner';
+        
+        const otterSteps = [
+            { icon: '🦦', name: 'Scout Otter', action: 'Swimming around your website to get the lay of the land...' },
+            { icon: '🔍', name: 'Detective Otter', action: 'Sniffing out content quality and keyword opportunities...' },
+            { icon: '⚙️', name: 'Tech Otter', action: 'Checking under the hood for technical SEO issues...' },
+            { icon: '⚡', name: 'Speed Otter', action: 'Testing how fast your pages load for visitors...' },
+            { icon: '🎯', name: 'Smart Otter', action: 'Analyzing what will boost your rankings most...' },
+            { icon: '📊', name: 'Wise Otter', action: 'Putting together your personalized SEO action plan...' }
+        ];
+
+        async function startAnalysis() {
+            const url = document.getElementById('urlInput').value.trim();
+            
+            if (!url) {
+                showOtterAlert('Oops! Please enter a website URL so I can dive in! 🦦', 'info');
+                return;
+            }
+
+            if (!isValidUrl(url)) {
+                showOtterAlert('Hmm, that doesn\'t look like a valid URL. Try something like https://yourwebsite.com 🌊', 'warning');
+                return;
+            }
+
+            showLoading();
+            await performOtterAnalysis(url);
+        }
+
+        function showOtterAlert(message, type) {
+            // Could be enhanced with custom otter-themed modal
+            alert(message);
+        }
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loadingSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('analyzeBtn').disabled = true;
+        }
+
+        async function performOtterAnalysis(url) {
+            const progressBar = document.getElementById('progressBar');
+            const otterText = document.getElementById('otterText');
+            const loadingText = document.getElementById('loadingText');
+            
+            for (let i = 0; i < otterSteps.length; i++) {
+                const step = otterSteps[i];
+                const progress = ((i + 1) / otterSteps.length) * 100;
+                
+                // Update UI with otter personality
+                progressBar.style.width = `${progress}%`;
+                otterText.innerHTML = `${step.icon} ${step.name}: ${step.action}`;
+                loadingText.textContent = step.action;
+                
+                // Simulate otter working time
+                await delay(1200 + Math.random() * 800);
+            }
+
+            // Generate otter-style analysis
+            analysisData = await generateOtterAnalysis(url);
+            showResults();
+        }
+
+        async function generateOtterAnalysis(url) {
+            const domain = new URL(url).hostname;
+            const isSecure = url.startsWith('https://');
+            const hasOtterFriendlyStructure = Math.random() > 0.3;
+            
+            // Generate otter-approved scoring
+            let baseScore = 60 + Math.random() * 35;
+            if (isSecure) baseScore += 8;
+            if (hasOtterFriendlyStructure) baseScore += 5;
+            if (domain.includes('.com')) baseScore += 3;
+            
+            const score = Math.min(96, Math.floor(baseScore));
+            const checks = [];
+
+            // Title Tag - Otter Style
+            const titleScore = score > 85 ? 'pass' : score > 65 ? 'warning' : 'fail';
+            const titleLength = titleScore === 'pass' ? 55 : titleScore === 'warning' ? 78 : 22;
+            checks.push({
+                title: 'Title Tag Optimization',
+                status: titleScore,
+                priority: titleScore === 'fail' ? 'high' : titleScore === 'warning' ? 'medium' : 'low',
+                currentValue: titleLength,
+                expectedValue: '50-60',
+                unit: 'characters',
+                description: titleScore === 'pass' ? 
+                    `Pawsome! 🦦 Your ${titleLength}-character title is perfectly sized for search results. SEOtter approves of this sleek headline!` :
+                    titleScore === 'warning' ?
+                    `Almost there! Your ${titleLength}-character title is a bit too long and might get cut off. Like an otter's whiskers, it needs a trim!` :
+                    `Ouch! Your ${titleLength}-character title is way too short or missing. Even baby otters need bigger titles than this!`,
+                impact: titleScore === 'fail' ? 'High' : titleScore === 'warning' ? 'Medium' : 'Low',
+                beginnerRec: {
+                    title: 'What SEOtter Says About Titles',
+                    text: titleScore === 'pass' ? 
+                        'Your title tag is like a perfectly groomed otter - sleek, attractive, and gets attention! People will definitely want to click on your search result.' :
+                        'Think of title tags like the sign on an otter\'s den. If it\'s too long, cramped, or boring, other otters (and people!) won\'t want to visit. Let\'s make yours irresistible!',
+                    steps: titleScore === 'pass' ? [
+                        'Keep monitoring how your title performs in search results',
+                        'Try adding emotional words that make people curious',
+                        'Make sure your most important keywords come first',
+                        'Test different variations to see what gets more clicks'
+                    ] : [
+                        'Open your website editor (WordPress, Squarespace, etc.)',
+                        'Find the SEO settings for your page',
+                        'Write a catchy 50-60 character title with your main keyword first',
+                        'Make it sound exciting - like "Best Coffee in Portland" vs just "Coffee"',
+                        'Preview how it looks in Google search results'
+                    ]
+                },
+                expertRec: {
+                    title: 'Advanced Title Tag Strategy',
+                    text: titleScore === 'pass' ?
+                        'Title optimization demonstrates strong understanding of SERP psychology and keyword prioritization. Consider implementing dynamic title testing for enhanced CTR performance.' :
+                        'Implement strategic title optimization focusing on semantic keyword integration, user intent alignment, and competitive SERP positioning for maximum ranking impact.',
+                    technical: {
+                        'Current Length': `${titleLength} characters`,
+                        'SERP Truncation Risk': titleScore === 'pass' ? 'Minimal' : 'High probability',
+                        'Keyword Placement': titleScore === 'pass' ? 'Front-loaded optimization' : 'Suboptimal positioning',
+                        'Click-Through Rate Potential': titleScore === 'pass' ? 'High engagement likely' : 'Below baseline expectations',
+                        'Competitive Analysis': titleScore === 'pass' ? 'Strong differentiation' : 'Lacks competitive edge',
+                        'Brand Integration': titleScore === 'pass' ? 'Balanced approach' : 'Needs brand visibility'
+                    }
+                }
+            });
+
+            // Meta Description - Otter Charm
+            const metaStatus = Math.random() > 0.2 ? 'pass' : Math.random() > 0.6 ? 'warning' : 'fail';
+            const metaLength = metaStatus === 'pass' ? 148 : metaStatus === 'warning' ? 95 : 38;
+            checks.push({
+                title: 'Meta Description Magic',
+                status: metaStatus,
+                priority: metaStatus === 'fail' ? 'high' : metaStatus === 'warning' ? 'medium' : 'low',
+                currentValue: metaLength,
+                expectedValue: '140-160',
+                unit: 'characters',
+                description: metaStatus === 'pass' ?
+                    `Splendid! 🌊 Your ${metaLength}-character meta description is like the perfect otter pitch - compelling and just the right length to make visitors want to dive in!` :
+                    metaStatus === 'warning' ?
+                    `Getting there! Your ${metaLength}-character description is a bit short. Like an otter story, it needs more detail to be truly captivating!` :
+                    `Oh no! Your ${metaLength}-character description is tiny! It's like trying to describe an otter with just "cute animal" - we need much more detail!`,
+                impact: metaStatus === 'fail' ? 'High' : metaStatus === 'warning' ? 'Medium' : 'Low',
+                beginnerRec: {
+                    title: 'SEOtter\'s Meta Description Guide',
+                    text: metaStatus === 'pass' ?
+                        'Your meta description works like a charming otter invitation - it tells people exactly what to expect and makes them excited to visit your website!' :
+                        'Meta descriptions are like the description on the back of a book. If it\'s boring or too short, people won\'t be interested. Let\'s make yours as engaging as watching otters play!',
+                    steps: metaStatus === 'pass' ? [
+                        'Keep track of how many people click through from search results',
+                        'Test descriptions with different emotional appeals',
+                        'Include your main keywords naturally',
+                        'Add power words like "discover," "amazing," or "essential"'
+                    ] : [
+                        'Write a compelling 140-160 character description',
+                        'Include your main keyword naturally (don\'t stuff it in)',
+                        'Mention a specific benefit people will get',
+                        'Use action words that create excitement',
+                        'End with something that makes people curious to learn more'
+                    ]
+                },
+                expertRec: {
+                    title: 'Meta Description Conversion Optimization',
+                    text: metaStatus === 'pass' ?
+                        'Meta description demonstrates effective SERP marketing with optimal length utilization and clear value proposition. Consider A/B testing emotional triggers for different user segments.' :
+                        'Develop comprehensive meta description strategy incorporating intent-based messaging, competitive differentiation, and conversion-focused language for improved CTR performance.',
+                    technical: {
+                        'Character Utilization': `${metaLength}/160 characters (${Math.round(metaLength/160*100)}%)`,
+                        'SERP Real Estate': metaStatus === 'pass' ? 'Maximized visibility' : 'Underutilized space',
+                        'Keyword Integration': metaStatus === 'pass' ? 'Natural incorporation' : 'Needs strategic placement',
+                        'Call-to-Action Strength': metaStatus === 'pass' ? 'Clear user direction' : 'Weak conversion signal',
+                        'Emotional Appeal': metaStatus === 'pass' ? 'Engaging copy' : 'Generic messaging',
+                        'Uniqueness Factor': metaStatus === 'pass' ? 'Differentiated positioning' : 'Lacks distinction'
+                    }
+                }
+            });
+
+            // Add more checks here following the same pattern...
+
+            return {
+                score,
+                url,
+                domain,
+                checks,
+                totalIssues: checks.filter(c => c.status !== 'pass').length,
+                highPriorityIssues: checks.filter(c => c.priority === 'high').length,
+                otterApproval: score > 80 ? 'high' : score > 60 ? 'medium' : 'needs-work'
+            };
+        }
+
+        function showResults() {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            document.getElementById('analyzeBtn').disabled = false;
+
+            updateOtterScore();
+            renderAnalysisCards();
+        }
+
+        function updateOtterScore() {
+            const score = analysisData.score;
+            const scoreElement = document.getElementById('scoreValue');
+            const scoreLabel = document.getElementById('scoreLabel');
+            const scoreDescription = document.getElementById('scoreDescription');
+            const scoreCircle = document.getElementById('scoreCircle');
+            const improvementSection = document.getElementById('improvementSection');
+            const improvementText = document.getElementById('improvementText');
+
+            // Animate score with otter enthusiasm
+            let currentScore = 0;
+            const increment = score / 75;
+            const timer = setInterval(() => {
+                currentScore += increment;
+                if (currentScore >= score) {
+                    currentScore = score;
+                    clearInterval(timer);
+                }
+                scoreElement.textContent = Math.floor(currentScore);
+            }, 20);
+
+            // Update circular progress
+            const angle = (score / 100) * 360;
+            scoreCircle.style.setProperty('--score-angle', `${angle}deg`);
+
+            // Otter-style messaging
+            if (score >= 90) {
+                scoreLabel.textContent = '🎉 Otter-standing SEO!';
+                scoreDescription.textContent = 'Your website swims with the best of them! SEOtter is proud of your optimization skills!';
+                improvementText.textContent = `Just a few small tweaks could get you to ${Math.min(98, score + 3)} - you\'re almost at otter perfection!`;
+            } else if (score >= 80) {
+                scoreLabel.textContent = '🏊‍♀️ Swimming Strong!';
+                scoreDescription.textContent = 'Great SEO foundation! You\'re swimming in the right direction with room to grow!';
+                improvementText.textContent = `Some quick optimizations could boost you to ${Math.min(98, score + 8)}+ and really make a splash!`;
+            } else if (score >= 65) {
+                scoreLabel.textContent = '🦦 Learning to Swim!';
+                scoreDescription.textContent = 'You\'re getting the hang of it! With some focused effort, you\'ll be an SEO otter in no time!';
+                improvementText.textContent = `Following SEOtter\'s advice could increase your score to ${Math.min(98, score + 15)}+ and triple your organic traffic!`;
+            } else if (score >= 50) {
+                scoreLabel.textContent = '🌊 Treading Water!';
+                scoreDescription.textContent = 'You\'re staying afloat, but let\'s teach you some proper SEO swimming techniques!';
+                improvementText.textContent = `Major improvements could boost your score by ${Math.min(35, 85 - score)} points - let\'s dive in together!`;
+            } else {
+                scoreLabel.textContent = '🆘 Need SEO Swimming Lessons!';
+                scoreDescription.textContent = 'Don\'t worry! Even the best otters had to learn to swim. Let\'s start with the basics!';
+                improvementText.textContent = `SEOtter\'s comprehensive help could more than double your score and transform your search visibility!`;
+            }
+
+            if (score < 90) {
+                improvementSection.style.display = 'block';
+            }
+        }
+
+        function renderAnalysisCards() {
+            const container = document.getElementById('analysisContainer');
+            container.innerHTML = analysisData.checks.map(check => createOtterCard(check)).join('');
+        }
+
+        function createOtterCard(check) {
+            const rec = currentMode === 'beginner' ? check.beginnerRec : check.expertRec;
+            const statusIcon = check.status === 'pass' ? '✓' : check.status === 'warning' ? '⚠' : '✗';
+            
+            return `
+                <div class="analysis-card">
+                    <div class="card-header">
+                        <div class="card-title-section">
+                            <div class="status-badge status-${check.status}">
+                                ${statusIcon}
+                            </div>
+                            <div class="card-title">${check.title}</div>
+                        </div>
+                        <div class="priority-tag priority-${check.priority}">
+                            ${check.priority} priority
+                        </div>
+                    </div>
+
+                    <div class="metric-section">
+                        <div class="metric-value">${check.currentValue}</div>
+                        <div class="metric-info">
+                            <div class="metric-label">${check.unit}</div>
+                            <div class="metric-target">SEOtter recommends: ${check.expectedValue} ${check.unit}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="description">${check.description}</div>
+                    
+                    <div class="otter-recommendation">
+                        <div class="rec-title">${rec.title}</div>
+                        <div class="rec-text">${rec.text}</div>
+                        
+                        ${currentMode === 'beginner' ? `
+                            <div class="action-steps">
+                                ${rec.steps.map((step, index) => `
+                                    <div class="action-item">
+                                        <div class="action-number">${index + 1}</div>
+                                        <div class="action-text">${step}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <div class="tech-grid">
+                                ${Object.entries(rec.technical).map(([key, value]) => `
+                                    <div class="tech-item">
+                                        <div class="tech-label">${key}</div>
+                                        <div class="tech-value">${value}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('beginnerBtn').classList.toggle('active', mode === 'beginner');
+            document.getElementById('expertBtn').classList.toggle('active', mode === 'expert');
+            
+            if (analysisData.checks) {
+                renderAnalysisCards();
+            }
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Initialize with otter charm
+        window.onload = function() {
+            document.getElementById('urlInput').focus();
+            // Could add otter sound effects or animations here
+        };
+
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startAnalysis();
+            }
+        });
+    </script>
+</body>
+</html>
