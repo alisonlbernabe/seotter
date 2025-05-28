@@ -994,7 +994,7 @@
                         </div>
                         <div class="score-info">
                             <h2 id="scoreLabel">SEO Score</h2>
-                            <p id="scoreDescription">Professional analysis complete</p>
+                            <p id="scoreDeion">Professional analysis complete</p>
                         </div>
                     </div>
                 </div>
@@ -1211,6 +1211,64 @@
     </div>
 
     <script>
+        
+        async function startAnalysis() {
+            console.log('Button clicked!');
+            
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a website URL!');
+                return;
+            }
+            
+            let finalUrl = url;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                finalUrl = 'https://' + url;
+            }
+            
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: #f0f9ff; border: 2px solid #06b6d4; border-radius: 16px; margin-top: 20px;">
+                    <h2>🦦 Analyzing ${finalUrl}...</h2>
+                    <p>Please wait...</p>
+                </div>
+            `;
+            resultsSection.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: finalUrl })
+                });
+                
+                const result = await response.json();
+                
+                resultsSection.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: white; border: 2px solid #4CAF50; border-radius: 16px;">
+                        <h2>✅ Analysis Complete!</h2>
+                        <div style="font-size: 3rem; margin: 20px 0; color: #4CAF50;">${result.score || 'N/A'}</div>
+                        <p><strong>Website:</strong> ${result.domain || finalUrl}</p>
+                    </div>
+                `;
+                
+                alert('Analysis complete! 🎉');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultsSection.innerHTML = `<div style="padding: 20px; color: red;">Error: ${error.message}</div>`;
+            }
+        }
+        
+        
+        // User state management
+        let currentUser = {
+            id: null,
+            email: null,
+            plan: 'free',
+            // ... rest of existing code
         // User state management
         let currentUser = {
             id: null,
