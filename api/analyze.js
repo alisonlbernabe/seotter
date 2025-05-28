@@ -618,7 +618,7 @@ function extractRealOpportunities(audits) {
 }
 
 // Generate analysis using REAL data
-function generateRealAnalysis(url, pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis) {
+function Analysis(url, pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis) {
   // Calculate the advanced score
   const scoreData = calculateAdvancedSEOScore(pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis);
   
