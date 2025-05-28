@@ -1488,54 +1488,192 @@
             }
         }
 
-        async function performAnalysis(url) {
-            // Show loading state
-            document.getElementById('resultsSection').style.display = 'block';
-            
-            // Simulate analysis
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            // Update score
-            const score = 75 + Math.random() * 20;
-            document.getElementById('scoreValue').textContent = Math.round(score);
-            document.getElementById('scoreCircle').style.setProperty('--score-angle', `${(score / 100) * 360}deg`);
-            
-            // Show appropriate features based on plan
-            if (currentUser.plan === 'free') {
-                document.getElementById('proFeaturesLocked').style.display = 'block';
-                // Show basic results only
-                document.getElementById('analysisResults').innerHTML = `
-                    <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
-                        <h3 style="margin-bottom: 15px;">Basic SEO Analysis</h3>
-                        <p style="color: var(--text-light); margin-bottom: 20px;">Your website has a good foundation. Upgrade to Pro for detailed insights and actionable recommendations.</p>
-                        <ul style="list-style: none; padding: 0;">
-                            <li style="margin-bottom: 10px;">✅ Page loads successfully</li>
-                            <li style="margin-bottom: 10px;">✅ Basic meta tags found</li>
-                            <li style="margin-bottom: 10px;">⚠️ Some optimization opportunities detected</li>
-                        </ul>
+async function performAnalysis(url) {
+    // Check if URL is provided
+    if (!url) {
+        showNotification('Please enter a website URL! 🦦', 'warning');
+        return;
+    }
+    
+    // Add https:// if missing
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+    }
+    
+    // Check usage limits for free users
+    if (currentUser.plan === 'free' && currentUser.analysesUsed >= currentUser.analysesLimit) {
+        showNotification('Daily limit reached! Upgrade for unlimited analyses 🚀', 'warning');
+        showPricingModal();
+        return;
+    }
+    
+    // Show loading message
+    const resultsSection = document.getElementById('resultsSection');
+    resultsSection.innerHTML = `
+        <div style="text-align: center; padding: 60px; background: var(--surface); border-radius: 24px;">
+            <h2>🦦 Analyzing your website...</h2>
+            <p>This may take 10-30 seconds</p>
+            <div style="margin: 20px 0;">
+                <div style="width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px;">
+                    <div style="width: 0%; height: 100%; background: var(--water-blue); border-radius: 4px; transition: width 2s;" id="progressBar"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    resultsSection.style.display = 'block';
+    
+    // Animate progress bar
+    setTimeout(() => {
+        document.getElementById('progressBar').style.width = '100%';
+    }, 100);
+    
+    try {
+        // Call the analysis API
+        const response = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        
+        // Show the enhanced results
+        displayEnhancedResults(result);
+        
+        // Update usage for free users
+        if (currentUser.plan === 'free') {
+            currentUser.analysesUsed++;
+            updateUsageIndicator();
+        }
+        
+        showNotification('Analysis complete! 🦦', 'success');
+        
+    } catch (error) {
+        console.error('Analysis error:', error);
+        showNotification(`Analysis failed: ${error.message}`, 'error');
+        
+        // Hide loading on error
+        resultsSection.style.display = 'none';
+    }
+}
+        function displayEnhancedResults(result) {
+    const resultsSection = document.getElementById('resultsSection');
+    
+    resultsSection.innerHTML = `
+        <!-- Main Score -->
+        <div class="score-hero">
+            <div class="score-display">
+                <div class="score-visual">
+                    <div class="score-circle" style="--score-angle: ${(result.score / 100) * 360}deg">
+                        <div class="score-text">${result.score}</div>
                     </div>
-                `;
-            } else {
-                document.getElementById('proFeaturesLocked').style.display = 'none';
-                // Show full premium results
-                document.getElementById('analysisResults').innerHTML = `
-                    <div style="display: grid; gap: 20px;">
-                        <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
-                            <h3>🚀 Core Web Vitals</h3>
-                            <p>Excellent performance metrics detected</p>
+                </div>
+                <div class="score-info">
+                    <h2 style="color: ${result.grade.color}; margin-bottom: 10px;">
+                        Grade: ${result.grade.grade}
+                    </h2>
+                    <p style="opacity: 0.9; font-size: 1.2rem;">${result.grade.description}</p>
+                    <p style="opacity: 0.8; margin-top: 10px;">
+                        Analysis completed for ${result.domain}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Breakdown -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="margin-bottom: 25px; font-size: 1.8rem; text-align: center;">📊 Detailed Score Breakdown</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;">
+                
+                <!-- Performance Card -->
+                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">⚡</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Performance</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.performance)}; margin-bottom: 15px;">${result.breakdown.performance}</div>
+                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
+                        <div style="width: ${result.breakdown.performance}%; height: 100%; background: ${getScoreColor(result.breakdown.performance)}; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Technical SEO Card -->
+                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🔧</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Technical SEO</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.technical)}; margin-bottom: 15px;">${result.breakdown.technical}</div>
+                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
+                        <div style="width: ${result.breakdown.technical}%; height: 100%; background: ${getScoreColor(result.breakdown.technical)}; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Content Card -->
+                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📝</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Content</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.content)}; margin-bottom: 15px;">${result.breakdown.content}</div>
+                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
+                        <div style="width: ${result.breakdown.content}%; height: 100%; background: ${getScoreColor(result.breakdown.content)}; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Social Card -->
+                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📱</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Social</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.social)}; margin-bottom: 15px;">${result.breakdown.social}</div>
+                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
+                        <div style="width: ${result.breakdown.social}%; height: 100%; background: ${getScoreColor(result.breakdown.social)}; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Security Card -->
+                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🔒</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Security</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.security)}; margin-bottom: 15px;">${result.breakdown.security}</div>
+                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
+                        <div style="width: ${result.breakdown.security}%; height: 100%; background: ${getScoreColor(result.breakdown.security)}; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div style="background: var(--surface); padding: 30px; border-radius: 16px; margin-top: 30px;">
+            <h3 style="margin-bottom: 20px;">🎯 Top Recommendations</h3>
+            <div>
+                ${result.recommendations.slice(0, 5).map(rec => `
+                    <div style="margin-bottom: 20px; padding: 20px; background: var(--surface-light); border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="background: var(--water-blue); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">${rec.category}</span>
+                            <span style="background: ${rec.priority === 'Critical' ? '#fee2e2' : rec.priority === 'High' ? '#fef3c7' : '#dbeafe'}; 
+                                         color: ${rec.priority === 'Critical' ? '#dc2626' : rec.priority === 'High' ? '#d97706' : '#2563eb'}; 
+                                         padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">${rec.priority} Priority</span>
                         </div>
-                        <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
-                            <h3>🎯 Keyword Analysis</h3>
-                            <p>15 optimization opportunities found</p>
-                        </div>
-                        <div style="background: var(--surface); padding: 30px; border-radius: 16px; border: 2px solid var(--border);">
-                            <h3>🔗 Backlink Profile</h3>
-                            <p>Strong link authority with room for growth</p>
+                        <div style="font-weight: 600; margin-bottom: 8px;">${rec.issue}</div>
+                        <div style="color: var(--text-light); margin-bottom: 12px;">${rec.solution}</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">
+                            <span>⏱️ ${rec.timeToComplete}</span> • 
+                            <span>📈 ${rec.impact} Impact</span> • 
+                            <span>⚡ ${rec.difficulty} Difficulty</span>
                         </div>
                     </div>
-                `;
-            }
-            
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+// Helper function for colors
+function getScoreColor(score) {
+    if (score >= 80) return '#10b981';  // Green
+    if (score >= 60) return '#f59e0b';  // Yellow
+    return '#ef4444';                   // Red
+}
             showNotification('Analysis complete! 🦦', 'success');
         }
 
