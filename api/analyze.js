@@ -906,4 +906,156 @@ function generateDetailedChecks(pageAnalysis, technicalAnalysis, socialAnalysis,
   });
 
   return checks;
+}// ADD THESE NEW FUNCTIONS AT THE END OF YOUR analyze.js FILE
+
+function calculateAdvancedSEOScore(pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis) {
+  const weights = {
+    performance: 0.25,    // 25%
+    technical: 0.25,      // 25%
+    content: 0.30,        // 30%
+    social: 0.10,         // 10%
+    security: 0.10        // 10%
+  };
+
+  const performanceScore = calculatePerformanceScore(pageSpeedData);
+  const technicalScore = calculateTechnicalScore(pageAnalysis, technicalAnalysis);
+  const contentScore = calculateContentScore(pageAnalysis);
+  const socialScore = calculateSocialScore(socialAnalysis);
+  const securityScore = calculateSecurityScore(technicalAnalysis);
+
+  const finalScore = Math.round(
+    (performanceScore * weights.performance) +
+    (technicalScore * weights.technical) +
+    (contentScore * weights.content) +
+    (socialScore * weights.social) +
+    (securityScore * weights.security)
+  );
+
+  return {
+    overall: finalScore,
+    breakdown: {
+      performance: performanceScore,
+      technical: technicalScore,
+      content: contentScore,
+      social: socialScore,
+      security: securityScore
+    },
+    grade: getScoreGrade(finalScore)
+  };
+}
+
+function calculatePerformanceScore(pageSpeedData) {
+  const mobile = pageSpeedData.mobile;
+  const desktop = pageSpeedData.desktop;
+  
+  const mobileWeight = 0.6;
+  const desktopWeight = 0.4;
+  
+  const mobileScore = (mobile.performance + mobile.accessibility + mobile.bestPractices) / 3;
+  const desktopScore = (desktop.performance + desktop.bestPractices) / 2;
+  
+  return Math.round((mobileScore * mobileWeight) + (desktopScore * desktopWeight));
+}
+
+function calculateTechnicalScore(pageAnalysis, technicalAnalysis) {
+  let score = 100;
+
+  if (pageAnalysis.title.analysis.missing) score -= 15;
+  else if (pageAnalysis.title.analysis.tooShort) score -= 8;
+  else if (pageAnalysis.title.analysis.tooLong) score -= 5;
+
+  if (pageAnalysis.meta.description.analysis.missing) score -= 10;
+  else if (pageAnalysis.meta.description.analysis.tooShort) score -= 5;
+
+  if (pageAnalysis.headers.h1.analysis.missing) score -= 12;
+  else if (pageAnalysis.headers.h1.analysis.multiple) score -= 6;
+
+  if (pageAnalysis.images.analysis.percentageOptimized < 80) score -= 8;
+  if (!pageAnalysis.technical.hasViewport) score -= 5;
+  if (!technicalAnalysis.security.https) score -= 15;
+
+  return Math.max(0, score);
+}
+
+function calculateContentScore(pageAnalysis) {
+  let score = 100;
+
+  if (!pageAnalysis.content.analysis.hasContent) score -= 20;
+  else if (!pageAnalysis.content.analysis.sufficientContent) score -= 10;
+
+  if (pageAnalysis.headers.h2.count === 0) score -= 8;
+  if (!pageAnalysis.links.analysis.hasInternalLinks) score -= 5;
+
+  return Math.max(0, score);
+}
+
+function calculateSocialScore(socialAnalysis) {
+  let score = 50;
+
+  if (socialAnalysis.openGraph.analysis.complete) score += 25;
+  else if (socialAnalysis.openGraph.present) score += 15;
+
+  if (socialAnalysis.twitterCard.present) score += 25;
+
+  return Math.min(100, score);
+}
+
+function calculateSecurityScore(technicalAnalysis) {
+  let score = 100;
+  if (!technicalAnalysis.security.https) score -= 50;
+  return score;
+}
+
+function getScoreGrade(score) {
+  if (score >= 90) return { grade: 'A+', color: '#10b981', description: 'Excellent' };
+  if (score >= 80) return { grade: 'A', color: '#10b981', description: 'Very Good' };
+  if (score >= 70) return { grade: 'B', color: '#f59e0b', description: 'Good' };
+  if (score >= 60) return { grade: 'C', color: '#f59e0b', description: 'Fair' };
+  if (score >= 50) return { grade: 'D', color: '#ef4444', description: 'Poor' };
+  return { grade: 'F', color: '#ef4444', description: 'Very Poor' };
+}
+
+function generateDetailedRecommendations(scoreData, pageAnalysis) {
+  const recommendations = [];
+
+  if (scoreData.breakdown.performance < 80) {
+    recommendations.push({
+      category: 'Performance',
+      priority: 'High',
+      issue: 'Page speed needs improvement',
+      solution: 'Optimize images, minify CSS/JS, enable compression',
+      impact: 'High',
+      difficulty: 'Medium',
+      timeToComplete: '2-4 hours'
+    });
+  }
+
+  if (pageAnalysis.title.analysis.missing) {
+    recommendations.push({
+      category: 'Technical SEO',
+      priority: 'Critical',
+      issue: 'Missing title tag',
+      solution: 'Add a descriptive title tag (50-60 characters)',
+      impact: 'Very High',
+      difficulty: 'Easy',
+      timeToComplete: '5 minutes'
+    });
+  }
+
+  if (pageAnalysis.meta.description.analysis.missing) {
+    recommendations.push({
+      category: 'Technical SEO',
+      priority: 'High',
+      issue: 'Missing meta description',
+      solution: 'Add a compelling meta description (140-160 characters)',
+      impact: 'High',
+      difficulty: 'Easy',
+      timeToComplete: '10 minutes'
+    });
+  }
+
+  const priorityOrder = { 'Critical': 4, 'High': 3, 'Medium': 2, 'Low': 1 };
+  recommendations.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
+
+  return recommendations;
 }
