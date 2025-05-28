@@ -841,38 +841,28 @@
             }, 500);
         }
 
-        function showErrorState(errorMessage, url) {
-            const resultsSection = document.getElementById('resultsSection');
-            
-            resultsSection.innerHTML = `
-                <div style="text-align: center; padding: 60px 40px; background: var(--surface); border: 2px solid var(--error); border-radius: 24px; margin-bottom: 40px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">😕</div>
-                    <h2 style="color: var(--error); margin-bottom: 15px;">Analysis Failed</h2>
-                    <p style="color: var(--text-light); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                        We couldn't analyze <strong>${url}</strong>. This might be due to:
-                    </p>
-                    <ul style="text-align: left; max-width: 400px; margin: 20px auto; color: var(--text-light);">
-                        <li>The website is temporarily unavailable</li>
-                        <li>The URL is incorrect or doesn't exist</li>
-                        <li>The site blocks automated analysis</li>
-                        <li>Server connectivity issues</li>
-                    </ul>
-                    <div style="background: var(--surface-light); padding: 15px; border-radius: 12px; margin: 20px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--error);">
-                        Error: ${errorMessage}
-                    </div>
-                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 30px;">
-                        <button onclick="retryAnalysis()" style="padding: 12px 24px; background: var(--water-blue); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
-                            🔄 Try Again
-                        </button>
-                        <button onclick="clearResults()" style="padding: 12px 24px; background: var(--surface-light); border: 2px solid var(--border); border-radius: 12px; font-weight: 600; cursor: pointer; color: var(--text);">
-                            ← Start Over
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            resultsSection.style.display = 'block';
-        }
+       function showError(error, url) {
+    const results = document.getElementById('results');
+    results.innerHTML = `
+        <div style="text-align: center; padding: 40px; background: white; border: 2px solid #ef4444; border-radius: 16px;">
+            <div style="font-size: 3rem; margin-bottom: 20px;">😕</div>
+            <h2 style="color: #ef4444; margin-bottom: 15px;">Analysis Failed</h2>
+            <p style="color: #64748b; margin-bottom: 20px;">
+                We couldn't analyze <strong>${url}</strong>
+            </p>
+            <div style="background: #fef2f2; padding: 15px; border-radius: 8px; margin: 20px 0; font-family: monospace; color: #ef4444;">
+                ${error}
+            </div>
+            <button onclick="startAnalysis()" style="padding: 12px 24px; background: #06b6d4; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-right: 15px;">
+                🔄 Try Again
+            </button>
+            <button onclick="analyzeAnother()" style="padding: 12px 24px; background: white; border: 2px solid #e2e8f0; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                ← Start Over
+            </button>
+        </div>
+    `;
+    results.style.display = 'block';
+}
 
         function animateScoreCounters(result) {
             // Animate main score
