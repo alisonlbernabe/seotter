@@ -11,9 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Stripe.js -->
-    <script src="https://js.stripe.com/v3/"></script>
-    
     <style>
         :root {
             --primary: #0ea5e9;
@@ -54,36 +51,6 @@
             color: var(--text);
             min-height: 100vh;
             line-height: 1.6;
-        }
-
-        .bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .floating-bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--water-blue), var(--sea-foam));
-            opacity: 0.08;
-            animation: float-gentle 25s infinite ease-in-out;
-        }
-
-        .bubble-1 { width: 200px; height: 200px; top: 10%; left: 5%; animation-delay: 0s; }
-        .bubble-2 { width: 150px; height: 150px; top: 60%; right: 10%; animation-delay: 8s; }
-        .bubble-3 { width: 120px; height: 120px; bottom: 15%; left: 15%; animation-delay: 16s; }
-        .bubble-4 { width: 80px; height: 80px; top: 30%; right: 30%; animation-delay: 4s; }
-
-        @keyframes float-gentle {
-            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.08; }
-            25% { transform: translateY(-30px) translateX(20px) scale(1.1); opacity: 0.12; }
-            50% { transform: translateY(-10px) translateX(-15px) scale(0.9); opacity: 0.06; }
-            75% { transform: translateY(20px) translateX(10px) scale(1.05); opacity: 0.1; }
         }
 
         .container {
@@ -130,579 +97,7 @@
             background-clip: text;
         }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            display: none;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--water-blue), var(--sea-foam));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-email {
-            font-size: 0.9rem;
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        .user-plan {
-            font-size: 0.8rem;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .plan-free { color: var(--gray); }
-        .plan-pro { color: var(--water-blue); font-weight: 600; }
-        .plan-agency { color: var(--premium); font-weight: 600; }
-
-        .nav-btn {
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn-login {
-            background: transparent;
-            color: var(--text);
-            border: 2px solid var(--border);
-        }
-
-        .btn-login:hover {
-            border-color: var(--water-blue);
-            background: rgba(6, 182, 212, 0.1);
-        }
-
-        .btn-signup {
-            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            color: white;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
-        }
-
-        .btn-signup:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
-        }
-
-        .btn-upgrade {
-            background: linear-gradient(135deg, var(--premium), var(--premium-light));
-            color: white;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-upgrade::before {
-            content: '✨';
-            position: absolute;
-            left: 8px;
-            animation: sparkle 2s infinite;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .btn-upgrade:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Usage Indicator */
-        .usage-indicator {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 15px 20px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .usage-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .usage-icon {
-            font-size: 1.5rem;
-        }
-
-        .usage-text {
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .usage-limit {
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-
-        .usage-progress {
-            flex: 1;
-            margin: 0 20px;
-            height: 8px;
-            background: var(--surface-light);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .usage-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--secondary), var(--water-blue));
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        .usage-warning {
-            border-color: var(--warning);
-            background: rgba(245, 158, 11, 0.05);
-        }
-
-        .usage-danger {
-            border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.05);
-        }
-
-        /* Pricing Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .pricing-modal {
-            background: var(--surface);
-            border-radius: 24px;
-            max-width: 900px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .pricing-modal {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            padding: 40px 40px 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--gray);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover {
-            background: var(--surface-light);
-            color: var(--text);
-        }
-
-        .modal-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--text), var(--water-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .modal-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-light);
-            margin-bottom: 30px;
-        }
-
-        .pricing-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            background: var(--surface-light);
-            border-radius: 12px;
-            padding: 8px;
-            margin: 0 40px;
-        }
-
-        .pricing-tab {
-            padding: 12px 24px;
-            border-radius: 8px;
-            background: transparent;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-light);
-        }
-
-        .pricing-tab.active {
-            background: var(--surface);
-            color: var(--water-blue);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .pricing-plans {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 40px;
-        }
-
-        .pricing-plan {
-            background: var(--surface-light);
-            border: 3px solid var(--border);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .pricing-plan:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .plan-popular {
-            border-color: var(--water-blue);
-            background: var(--surface);
-            transform: scale(1.05);
-        }
-
-        .plan-popular::before {
-            content: '🔥 Most Popular';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .plan-premium {
-            border-color: var(--premium);
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(167, 139, 250, 0.05));
-        }
-
-        .plan-premium::before {
-            content: '👑 Premium';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--premium), var(--premium-light));
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .plan-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text);
-        }
-
-        .plan-price {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--water-blue);
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 5px;
-        }
-
-        .plan-premium .plan-price {
-            color: var(--premium);
-        }
-
-        .plan-period {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-        }
-
-        .plan-features {
-            list-style: none;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .plan-feature {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            padding: 8px 0;
-        }
-
-        .feature-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--secondary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-
-        .feature-disabled .feature-icon {
-            background: var(--gray-light);
-        }
-
-        .feature-disabled {
-            color: var(--gray-light);
-            text-decoration: line-through;
-        }
-
-        .plan-button {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn-plan-free {
-            background: var(--surface-light);
-            color: var(--text);
-            border: 2px solid var(--border);
-        }
-
-        .btn-plan-free:hover {
-            border-color: var(--water-blue);
-            background: rgba(6, 182, 212, 0.1);
-        }
-
-        .btn-plan-pro {
-            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            color: white;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
-        }
-
-        .btn-plan-pro:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
-        }
-
-        .btn-plan-premium {
-            background: linear-gradient(135deg, var(--premium), var(--premium-light));
-            color: white;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .btn-plan-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Payment Form */
-        .payment-form {
-            display: none;
-            padding: 40px;
-            border-top: 2px solid var(--border);
-            background: var(--surface-light);
-        }
-
-        .payment-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .payment-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text);
-        }
-
-        .payment-summary {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .summary-total {
-            font-weight: 700;
-            font-size: 1.2rem;
-            border-top: 2px solid var(--border);
-            padding-top: 10px;
-            margin-top: 10px;
-        }
-
-        .card-element {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-
-        .payment-button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--water-blue), var(--ocean-deep));
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .payment-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
-        }
-
-        .payment-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Feature Limitations */
-        .feature-locked {
-            position: relative;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .feature-locked::after {
-            content: '🔒 Pro Feature';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            white-space: nowrap;
-            z-index: 10;
-        }
-
-        .upgrade-banner {
-            background: linear-gradient(135deg, var(--premium), var(--premium-light));
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
-        }
-
-        .upgrade-banner h3 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
-
-        .upgrade-banner p {
-            opacity: 0.9;
-            margin-bottom: 15px;
-        }
-
-        .upgrade-banner button {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .upgrade-banner button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Enhanced Input Section */
+        /* Input Section */
         .input-section {
             margin-bottom: 40px;
         }
@@ -858,59 +253,230 @@
             z-index: 1;
         }
 
+        /* Score Breakdown */
+        .score-breakdown {
+            margin-bottom: 40px;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .breakdown-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .breakdown-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .breakdown-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .breakdown-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .breakdown-score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .breakdown-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--surface-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .breakdown-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        /* Recommendations */
+        .recommendations-section {
+            margin-bottom: 40px;
+        }
+
+        .recommendation-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--water-blue);
+        }
+
+        .recommendation-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .recommendation-category {
+            background: var(--water-blue);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recommendation-priority {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-critical { 
+            background: linear-gradient(135deg, #fee2e2, #fecaca); 
+            color: #dc2626; 
+            border: 1px solid #f87171;
+        }
+
+        .priority-high { 
+            background: linear-gradient(135deg, #fef3c7, #fde68a); 
+            color: #d97706; 
+            border: 1px solid #f59e0b;
+        }
+
+        .priority-medium { 
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe); 
+            color: #2563eb; 
+            border: 1px solid #3b82f6;
+        }
+
+        .recommendation-issue {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .recommendation-solution {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .recommendation-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-light);
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-header {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .nav-actions {
-                flex-wrap: wrap;
+            .breakdown-grid {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
+            
+            .breakdown-card {
+                padding: 20px 15px;
+            }
+            
+            .breakdown-score {
+                font-size: 2rem;
+            }
+            
+            .recommendation-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .recommendation-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
 
-            .pricing-plans {
+        @media (max-width: 480px) {
+            .breakdown-grid {
                 grid-template-columns: 1fr;
-                padding: 20px;
             }
-
-            .modal-header {
-                padding: 30px 20px 15px;
+            
+            .score-display {
+                flex-direction: column;
+                gap: 30px;
             }
-
-            .pricing-tabs {
-                margin: 0 20px;
+            
+            .score-visual {
+                width: 120px;
+                height: 120px;
             }
-
-            .url-input {
-                padding: 20px 140px 20px 20px;
+            
+            .score-circle {
+                width: 120px;
+                height: 120px;
             }
-
-            .analyze-btn {
-                padding: 14px 20px;
-                font-size: 14px;
+            
+            .score-circle::before {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .score-text {
+                font-size: 2rem;
             }
         }
 
         /* Utility Classes */
         .hidden { display: none !important; }
-        
         .text-center { text-align: center; }
-        
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
-        .mb-8 { margin-bottom: 2rem; }
     </style>
 </head>
 <body>
-    <div class="bg-container">
-        <div class="floating-bubble bubble-1"></div>
-        <div class="floating-bubble bubble-2"></div>
-        <div class="floating-bubble bubble-3"></div>
-        <div class="floating-bubble bubble-4"></div>
-    </div>
-
     <div class="container">
         <!-- Navigation -->
         <nav class="nav-header">
@@ -918,54 +484,7 @@
                 <div class="nav-logo-icon">🦦</div>
                 <div class="nav-logo-text">SEOtter</div>
             </div>
-            
-            <div class="nav-actions">
-                <!-- Guest User -->
-                <div id="guestActions" class="nav-actions">
-                    <button class="nav-btn btn-login" onclick="showModal('login')">Sign In</button>
-                    <button class="nav-btn btn-signup" onclick="showModal('signup')">Start Free Trial</button>
-                </div>
-                
-                <!-- Logged In User -->
-                <div id="userActions" class="nav-actions hidden">
-                    <div class="user-info">
-                        <div class="user-avatar" id="userAvatar">U</div>
-                        <div class="user-details">
-                            <div class="user-email" id="userEmail">user@example.com</div>
-                            <div class="user-plan" id="userPlan">Free Plan</div>
-                        </div>
-                    </div>
-                    <button class="nav-btn btn-upgrade" id="upgradeBtn" onclick="showPricingModal()">
-                        Upgrade
-                    </button>
-                    <button class="nav-btn btn-login" onclick="logout()">Sign Out</button>
-                </div>
-            </div>
         </nav>
-
-        <!-- Usage Indicator -->
-        <div class="usage-indicator" id="usageIndicator">
-            <div class="usage-info">
-                <div class="usage-icon">🦦</div>
-                <div>
-                    <div class="usage-text" id="usageText">2 of 3 free analyses used today</div>
-                    <div class="usage-limit" id="usageLimit">Resets in 18 hours</div>
-                </div>
-            </div>
-            <div class="usage-progress">
-                <div class="usage-fill" id="usageFill" style="width: 67%"></div>
-            </div>
-            <button class="nav-btn btn-upgrade" onclick="showPricingModal()">
-                Upgrade
-            </button>
-        </div>
-
-        <!-- Upgrade Banner for Free Users -->
-        <div class="upgrade-banner" id="upgradeBanner" style="display: none;">
-            <h3>🚀 Unlock Your SEO Potential!</h3>
-            <p>Get unlimited analyses, advanced insights, and priority support with SEOtter Pro</p>
-            <button onclick="showPricingModal()">Upgrade to Pro - Only $29/month</button>
-        </div>
 
         <!-- Main Analysis Card -->
         <div class="analysis-card">
@@ -985,765 +504,451 @@
 
             <!-- Results Section -->
             <div class="results" id="resultsSection">
-                <div class="score-hero">
-                    <div class="score-display">
-                        <div class="score-visual">
-                            <div class="score-circle" id="scoreCircle">
-                                <div class="score-text" id="scoreValue">0</div>
-                            </div>
-                        </div>
-                        <div class="score-info">
-                            <h2 id="scoreLabel">SEO Score</h2>
-                            <p id="scoreDeion">Professional analysis complete</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pro Features Section -->
-                <div id="proFeaturesLocked" class="feature-locked">
-                    <div style="background: var(--surface); padding: 40px; border-radius: 20px; margin-bottom: 30px;">
-                        <h3 style="margin-bottom: 20px;">🔒 Unlock Advanced SEO Insights</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                            <div>
-                                <h4>📊 Detailed Analytics</h4>
-                                <p>Core Web Vitals, Mobile Performance, Page Speed breakdown</p>
-                            </div>
-                            <div>
-                                <h4>🎯 Keyword Analysis</h4>
-                                <p>Keyword density, ranking opportunities, competitor insights</p>
-                            </div>
-                            <div>
-                                <h4>🔗 Backlink Profile</h4>
-                                <p>Link quality analysis, toxic link detection, link building opportunities</p>
-                            </div>
-                            <div>
-                                <h4>📈 Tracking & Reports</h4>
-                                <p>Weekly reports, progress tracking, custom dashboards</p>
-                            </div>
-                        </div>
-                        <button onclick="showPricingModal()" style="margin-top: 20px; padding: 15px 30px; background: linear-gradient(135deg, var(--premium), var(--premium-light)); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
-                            Upgrade to Pro - $29/month
-                        </button>
-                    </div>
-                </div>
-
-                <div id="analysisResults">
-                    <!-- Basic results for free users -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pricing Modal -->
-    <div class="modal-overlay" id="pricingModal">
-        <div class="pricing-modal">
-            <button class="modal-close" onclick="closePricingModal()">&times;</button>
-            
-            <div class="modal-header">
-                <div class="modal-title">Choose Your Plan</div>
-                <div class="modal-subtitle">Start with our free plan or unlock professional features</div>
-                
-                <div class="pricing-tabs">
-                    <button class="pricing-tab active" onclick="switchPricingTab('monthly')">Monthly</button>
-                    <button class="pricing-tab" onclick="switchPricingTab('yearly')">Yearly <span style="color: var(--secondary); font-size: 0.8rem;">(Save 20%)</span></button>
-                </div>
-            </div>
-
-            <div class="pricing-plans" id="pricingPlans">
-                <!-- Free Plan -->
-                <div class="pricing-plan">
-                    <div class="plan-name">Starter</div>
-                    <div class="plan-price">$0</div>
-                    <div class="plan-period">Forever free</div>
-                    
-                    <ul class="plan-features">
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            3 analyses per day
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Basic SEO score
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Core recommendations
-                        </li>
-                        <li class="plan-feature feature-disabled">
-                            <span class="feature-icon">✗</span>
-                            Detailed analytics
-                        </li>
-                        <li class="plan-feature feature-disabled">
-                            <span class="feature-icon">✗</span>
-                            Keyword analysis
-                        </li>
-                        <li class="plan-feature feature-disabled">
-                            <span class="feature-icon">✗</span>
-                            Weekly reports
-                        </li>
-                    </ul>
-                    
-                    <button class="plan-button btn-plan-free" onclick="selectPlan('free')">
-                        Current Plan
-                    </button>
-                </div>
-
-                <!-- Pro Plan -->
-                <div class="pricing-plan plan-popular">
-                    <div class="plan-name">Professional</div>
-                    <div class="plan-price" id="proPriceMonthly">$29</div>
-                    <div class="plan-period" id="proPeriodMonthly">per month</div>
-                    
-                    <ul class="plan-features">
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Unlimited analyses
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Advanced SEO insights
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Core Web Vitals analysis
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Keyword density analysis
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Competitor insights
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Priority email support
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            PDF report exports
-                        </li>
-                    </ul>
-                    
-                    <button class="plan-button btn-plan-pro" onclick="selectPlan('pro')">
-                        Start 7-Day Free Trial
-                    </button>
-                </div>
-
-                <!-- Agency Plan -->
-                <div class="pricing-plan plan-premium">
-                    <div class="plan-name">Agency</div>
-                    <div class="plan-price" id="agencyPriceMonthly">$99</div>
-                    <div class="plan-period" id="agencyPeriodMonthly">per month</div>
-                    
-                    <ul class="plan-features">
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Everything in Pro
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            White-label reports
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Client management dashboard
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            API access
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Weekly automated reports
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Priority phone support
-                        </li>
-                        <li class="plan-feature">
-                            <span class="feature-icon">✓</span>
-                            Custom integrations
-                        </li>
-                    </ul>
-                    
-                    <button class="plan-button btn-plan-premium" onclick="selectPlan('agency')">
-                        Start 14-Day Free Trial
-                    </button>
-                </div>
-            </div>
-
-            <!-- Payment Form -->
-            <div class="payment-form" id="paymentForm">
-                <div class="payment-header">
-                    <div class="payment-title">Complete Your Subscription</div>
-                </div>
-
-                <div class="payment-summary" id="paymentSummary">
-                    <div class="summary-item">
-                        <span>Plan:</span>
-                        <span id="selectedPlanName">Professional</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>Billing:</span>
-                        <span id="selectedBilling">Monthly</span>
-                    </div>
-                    <div class="summary-item summary-total">
-                        <span>Total:</span>
-                        <span id="totalAmount">$29.00/month</span>
-                    </div>
-                </div>
-
-                <div id="card-element" class="card-element">
-                    <!-- Stripe Elements will mount here -->
-                </div>
-
-                <button id="submit-payment" class="payment-button">
-                    <span id="payment-button-text">Start Free Trial</span>
-                </button>
-
-                <div style="text-align: center; margin-top: 20px; color: var(--gray); font-size: 0.9rem;">
-                    <p>🔒 Secure payment powered by Stripe</p>
-                    <p>Cancel anytime. No hidden fees.</p>
-                </div>
+                <!-- Results will be populated by JavaScript -->
             </div>
         </div>
     </div>
 
     <script>
-        
+        // Enhanced SEO Analysis with complete working functions
         async function startAnalysis() {
-            console.log('Button clicked!');
+            console.log('🦦 Starting SEO analysis...');
             
             const urlInput = document.getElementById('urlInput');
-            const url = urlInput.value.trim();
+            const resultsSection = document.getElementById('resultsSection');
+            const analyzeBtn = document.getElementById('analyzeBtn');
             
-            if (!url) {
-                alert('Please enter a website URL!');
+            if (!urlInput || !resultsSection) {
+                console.error('Required elements not found');
+                alert('Page setup error. Please refresh and try again.');
                 return;
             }
             
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a website URL! 🦦');
+                urlInput.focus();
+                return;
+            }
+            
+            // Add protocol if missing
             let finalUrl = url;
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
                 finalUrl = 'https://' + url;
             }
             
-            const resultsSection = document.getElementById('resultsSection');
-            resultsSection.innerHTML = `
-                <div style="text-align: center; padding: 40px; background: #f0f9ff; border: 2px solid #06b6d4; border-radius: 16px; margin-top: 20px;">
-                    <h2>🦦 Analyzing ${finalUrl}...</h2>
-                    <p>Please wait...</p>
-                </div>
-            `;
-            resultsSection.style.display = 'block';
+            // Disable button during analysis
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '🔄 Analyzing...';
+            
+            // Show enhanced loading state
+            showLoadingState(finalUrl);
             
             try {
+                console.log('Calling API for:', finalUrl);
+                
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: finalUrl })
                 });
                 
+                console.log('API response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
+                
                 const result = await response.json();
+                console.log('Analysis result:', result);
                 
-                resultsSection.innerHTML = `
-                    <div style="text-align: center; padding: 40px; background: white; border: 2px solid #4CAF50; border-radius: 16px;">
-                        <h2>✅ Analysis Complete!</h2>
-                        <div style="font-size: 3rem; margin: 20px 0; color: #4CAF50;">${result.score || 'N/A'}</div>
-                        <p><strong>Website:</strong> ${result.domain || finalUrl}</p>
-                    </div>
-                `;
+                // Display enhanced results
+                displayEnhancedResults(result, finalUrl);
                 
-                alert('Analysis complete! 🎉');
+                // Show success notification
+                showNotification('Analysis complete! 🎉', 'success');
                 
             } catch (error) {
-                console.error('Error:', error);
-                resultsSection.innerHTML = `<div style="padding: 20px; color: red;">Error: ${error.message}</div>`;
-            }
-        }
-        
-        
-        // User state management
-        let currentUser = {
-            id: null,
-            email: null,
-            plan: 'free',
-            // ... rest of existing code
-        // User state management
-        let currentUser = {
-            id: null,
-            email: null,
-            plan: 'free', // free, pro, agency
-            analysesUsed: 2,
-            analysesLimit: 3,
-            resetTime: new Date(Date.now() + 18 * 60 * 60 * 1000) // 18 hours from now
-        };
-
-        // Pricing data
-        const pricingData = {
-            monthly: {
-                pro: { price: 29, period: 'per month' },
-                agency: { price: 99, period: 'per month' }
-            },
-            yearly: {
-                pro: { price: 23, period: 'per month (billed yearly)', savings: 'Save $72/year' },
-                agency: { price: 79, period: 'per month (billed yearly)', savings: 'Save $240/year' }
-            }
-        };
-
-        let currentBillingPeriod = 'monthly';
-        let selectedPlan = null;
-
-        // Stripe setup
-        const stripe = Stripe('pk_test_your_publishable_key_here'); // Replace with your actual publishable key
-        let elements, cardElement;
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateUI();
-            updateUsageIndicator();
-            initializeStripe();
-        });
-
-        // UI Updates
-        function updateUI() {
-            const isLoggedIn = currentUser.id !== null;
-            
-            document.getElementById('guestActions').classList.toggle('hidden', isLoggedIn);
-            document.getElementById('userActions').classList.toggle('hidden', !isLoggedIn);
-            
-            if (isLoggedIn) {
-                document.getElementById('userEmail').textContent = currentUser.email;
-                document.getElementById('userPlan').textContent = `${currentUser.plan.charAt(0).toUpperCase() + currentUser.plan.slice(1)} Plan`;
-                document.getElementById('userPlan').className = `user-plan plan-${currentUser.plan}`;
-                document.getElementById('userAvatar').textContent = currentUser.email[0].toUpperCase();
-                
-                // Show/hide upgrade button
-                document.getElementById('upgradeBtn').classList.toggle('hidden', currentUser.plan !== 'free');
-            }
-        }
-
-        function updateUsageIndicator() {
-            const indicator = document.getElementById('usageIndicator');
-            const text = document.getElementById('usageText');
-            const fill = document.getElementById('usageFill');
-            const limit = document.getElementById('usageLimit');
-            
-            if (currentUser.plan === 'free') {
-                const used = currentUser.analysesUsed;
-                const total = currentUser.analysesLimit;
-                const percentage = (used / total) * 100;
-                
-                text.textContent = `${used} of ${total} free analyses used today`;
-                fill.style.width = `${percentage}%`;
-                
-                // Update styling based on usage
-                indicator.classList.remove('usage-warning', 'usage-danger');
-                if (percentage >= 100) {
-                    indicator.classList.add('usage-danger');
-                    text.textContent = 'Daily limit reached';
-                    limit.textContent = 'Upgrade for unlimited analyses';
-                    document.getElementById('upgradeBanner').style.display = 'block';
-                } else if (percentage >= 66) {
-                    indicator.classList.add('usage-warning');
-                }
-                
-                // Calculate reset time
-                const hours = Math.ceil((currentUser.resetTime - new Date()) / (1000 * 60 * 60));
-                limit.textContent = `Resets in ${hours} hours`;
-                
-                indicator.style.display = 'flex';
-            } else {
-                indicator.style.display = 'none';
-                document.getElementById('upgradeBanner').style.display = 'none';
-            }
-        }
-
-        // Authentication functions
-        function showModal(type) {
-            // Simulate authentication
-            if (type === 'login' || type === 'signup') {
-                // In real app, show login/signup form
-                currentUser = {
-                    id: 'user123',
-                    email: 'demo@example.com',
-                    plan: 'free',
-                    analysesUsed: 2,
-                    analysesLimit: 3,
-                    resetTime: new Date(Date.now() + 18 * 60 * 60 * 1000)
-                };
-                updateUI();
-                updateUsageIndicator();
-                showNotification('Welcome to SEOtter! 🦦', 'success');
-            }
-        }
-
-        function logout() {
-            currentUser = {
-                id: null,
-                email: null,
-                plan: 'free',
-                analysesUsed: 0,
-                analysesLimit: 3,
-                resetTime: new Date()
-            };
-            updateUI();
-            updateUsageIndicator();
-            showNotification('Logged out successfully', 'info');
-        }
-
-        // Pricing modal functions
-        function showPricingModal() {
-            document.getElementById('pricingModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closePricingModal() {
-            document.getElementById('pricingModal').classList.remove('active');
-            document.getElementById('paymentForm').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function switchPricingTab(period) {
-            currentBillingPeriod = period;
-            
-            // Update tab appearance
-            document.querySelectorAll('.pricing-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Update pricing
-            const proData = pricingData[period].pro;
-            const agencyData = pricingData[period].agency;
-            
-            document.getElementById('proPriceMonthly').textContent = `${proData.price}`;
-            document.getElementById('proPeriodMonthly').textContent = proData.period;
-            
-            document.getElementById('agencyPriceMonthly').textContent = `${agencyData.price}`;
-            document.getElementById('agencyPeriodMonthly').textContent = agencyData.period;
-        }
-
-        function selectPlan(plan) {
-            if (plan === 'free') {
-                closePricingModal();
-                return;
-            }
-            
-            selectedPlan = plan;
-            
-            // Update payment summary
-            const planName = plan === 'pro' ? 'Professional' : 'Agency';
-            const planData = pricingData[currentBillingPeriod][plan];
-            
-            document.getElementById('selectedPlanName').textContent = planName;
-            document.getElementById('selectedBilling').textContent = currentBillingPeriod === 'monthly' ? 'Monthly' : 'Yearly';
-            document.getElementById('totalAmount').textContent = `${planData.price}.00/${currentBillingPeriod === 'monthly' ? 'month' : 'year'}`;
-            
-            // Show payment form
-            document.getElementById('paymentForm').style.display = 'block';
-            document.getElementById('paymentForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Stripe integration
-        function initializeStripe() {
-            elements = stripe.elements();
-            
-            cardElement = elements.create('card', {
-                style: {
-                    base: {
-                        fontSize: '16px',
-                        color: '#1e293b',
-                        '::placeholder': {
-                            color: '#64748b',
-                        },
-                    },
-                },
-            });
-            
-            // Mount card element when payment form is shown
-            setTimeout(() => {
-                if (document.getElementById('card-element')) {
-                    cardElement.mount('#card-element');
-                }
-            }, 100);
-        }
-
-        async function handlePayment() {
-            const button = document.getElementById('submit-payment');
-            const buttonText = document.getElementById('payment-button-text');
-            
-            button.disabled = true;
-            buttonText.textContent = 'Processing...';
-            
-            try {
-                // Create payment method
-                const {error, paymentMethod} = await stripe.createPaymentMethod({
-                    type: 'card',
-                    card: cardElement,
-                });
-                
-                if (error) {
-                    throw error;
-                }
-                
-                // In real app, send paymentMethod.id to your backend
-                // For demo, simulate success
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Update user plan
-                currentUser.plan = selectedPlan;
-                currentUser.analysesUsed = 0;
-                currentUser.analysesLimit = selectedPlan === 'pro' ? 999999 : 999999;
-                
-                updateUI();
-                updateUsageIndicator();
-                closePricingModal();
-                
-                showNotification(`Successfully upgraded to ${selectedPlan === 'pro' ? 'Professional' : 'Agency'} plan! 🎉`, 'success');
-                
-            } catch (error) {
-                showNotification(`Payment failed: ${error.message}`, 'error');
+                console.error('Analysis failed:', error);
+                showErrorState(error.message, finalUrl);
+                showNotification(`Analysis failed: ${error.message}`, 'error');
             } finally {
-                button.disabled = false;
-                buttonText.textContent = 'Start Free Trial';
+                // Re-enable button
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '🦦 Analyze Now';
             }
         }
 
-        // Add event listener for payment button
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                const paymentButton = document.getElementById('submit-payment');
-                if (paymentButton) {
-                    paymentButton.addEventListener('click', handlePayment);
+        function showLoadingState(url) {
+            const resultsSection = document.getElementById('resultsSection');
+            
+            resultsSection.innerHTML = `
+                <div style="text-align: center; padding: 60px 40px; background: var(--surface); border-radius: 24px; margin-bottom: 40px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                    <h2 style="font-size: 2rem; margin-bottom: 10px; color: var(--text);">🦦 SEOtter is analyzing your website...</h2>
+                    <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 40px;">Analyzing ${url} - This may take 10-30 seconds</p>
+                    
+                    <div style="margin-bottom: 40px;">
+                        <div style="width: 100%; height: 12px; background: var(--surface-light); border-radius: 6px; overflow: hidden; margin-bottom: 15px;">
+                            <div style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--water-blue), var(--sea-foam)); border-radius: 6px; animation: loading 3s infinite;" id="progressFill"></div>
+                        </div>
+                        <div style="font-size: 1rem; color: var(--text-light); font-weight: 500;" id="progressText">Starting comprehensive analysis...</div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; margin: 0 auto;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 15px; background: var(--surface-light); border-radius: 12px; opacity: 0.5; transition: all 0.3s ease;" class="loading-step" id="step1">
+                            <span style="font-size: 1.5rem;">⚡</span>
+                            <span style="font-weight: 500; color: var(--text);">Performance Analysis</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 15px; background: var(--surface-light); border-radius: 12px; opacity: 0.5; transition: all 0.3s ease;" class="loading-step" id="step2">
+                            <span style="font-size: 1.5rem;">🔍</span>
+                            <span style="font-weight: 500; color: var(--text);">Content Analysis</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 15px; background: var(--surface-light); border-radius: 12px; opacity: 0.5; transition: all 0.3s ease;" class="loading-step" id="step3">
+                            <span style="font-size: 1.5rem;">🔧</span>
+                            <span style="font-weight: 500; color: var(--text);">Technical SEO</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 15px; background: var(--surface-light); border-radius: 12px; opacity: 0.5; transition: all 0.3s ease;" class="loading-step" id="step4">
+                            <span style="font-size: 1.5rem;">📱</span>
+                            <span style="font-weight: 500; color: var(--text);">Social Media</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <style>
+                @keyframes loading {
+                    0% { width: 0%; }
+                    50% { width: 70%; }
+                    100% { width: 100%; }
                 }
-            }, 100);
-        });
-
-        // Analysis functions
-        async function startAnalysis() {
-            const url = document.getElementById('urlInput').value.trim();
+                .loading-step.active {
+                    opacity: 1 !important;
+                    background: rgba(6, 182, 212, 0.1) !important;
+                    border: 2px solid var(--water-blue) !important;
+                }
+                </style>
+            `;
             
-            if (!url) {
-                showNotification('Please enter a website URL! 🦦', 'warning');
-                return;
-            }
+            resultsSection.style.display = 'block';
             
-            // Check usage limits for free users
-            if (currentUser.plan === 'free' && currentUser.analysesUsed >= currentUser.analysesLimit) {
-                showNotification('Daily limit reached! Upgrade for unlimited analyses 🚀', 'warning');
-                showPricingModal();
-                return;
-            }
-            
-            // Perform analysis
-            await performAnalysis(url);
-            
-            // Update usage for free users
-            if (currentUser.plan === 'free') {
-                currentUser.analysesUsed++;
-                updateUsageIndicator();
-            }
+            // Animate loading steps
+            animateLoadingSteps();
         }
 
-async function performAnalysis(url) {
-    // Check if URL is provided
-    if (!url) {
-        showNotification('Please enter a website URL! 🦦', 'warning');
-        return;
-    }
-    
-    // Add https:// if missing
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'https://' + url;
-    }
-    
-    // Check usage limits for free users
-    if (currentUser.plan === 'free' && currentUser.analysesUsed >= currentUser.analysesLimit) {
-        showNotification('Daily limit reached! Upgrade for unlimited analyses 🚀', 'warning');
-        showPricingModal();
-        return;
-    }
-    
-    // Show loading message
-    const resultsSection = document.getElementById('resultsSection');
-    resultsSection.innerHTML = `
-        <div style="text-align: center; padding: 60px; background: var(--surface); border-radius: 24px;">
-            <h2>🦦 Analyzing your website...</h2>
-            <p>This may take 10-30 seconds</p>
-            <div style="margin: 20px 0;">
-                <div style="width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px;">
-                    <div style="width: 0%; height: 100%; background: var(--water-blue); border-radius: 4px; transition: width 2s;" id="progressBar"></div>
-                </div>
-            </div>
-        </div>
-    `;
-    resultsSection.style.display = 'block';
-    
-    // Animate progress bar
-    setTimeout(() => {
-        document.getElementById('progressBar').style.width = '100%';
-    }, 100);
-    
-    try {
-        // Call the analysis API
-        const response = await fetch('/api/analyze', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        function animateLoadingSteps() {
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            const progressText = document.getElementById('progressText');
+            const stepTexts = [
+                'Analyzing performance metrics...',
+                'Examining page content and structure...',
+                'Checking technical SEO elements...',
+                'Reviewing social media optimization...'
+            ];
+            
+            let currentStep = 0;
+            const stepDuration = 2000; // 2 seconds per step
+            
+            const interval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    // Activate current step
+                    const stepElement = document.getElementById(steps[currentStep]);
+                    if (stepElement) {
+                        stepElement.classList.add('active');
+                    }
+                    
+                    // Update progress text
+                    if (progressText) {
+                        progressText.textContent = stepTexts[currentStep];
+                    }
+                    
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    if (progressText) {
+                        progressText.textContent = 'Finalizing analysis...';
+                    }
+                }
+            }, stepDuration);
         }
-        
-        const result = await response.json();
-        
-        // Show the enhanced results
-        displayEnhancedResults(result);
-        
-        // Update usage for free users
-        if (currentUser.plan === 'free') {
-            currentUser.analysesUsed++;
-            updateUsageIndicator();
-        }
-        
-        showNotification('Analysis complete! 🦦', 'success');
-        
-    } catch (error) {
-        console.error('Analysis error:', error);
-        showNotification(`Analysis failed: ${error.message}`, 'error');
-        
-        // Hide loading on error
-        resultsSection.style.display = 'none';
-    }
-}
-        function displayEnhancedResults(result) {
-    const resultsSection = document.getElementById('resultsSection');
-    
-    resultsSection.innerHTML = `
-        <!-- Main Score -->
-        <div class="score-hero">
-            <div class="score-display">
-                <div class="score-visual">
-                    <div class="score-circle" style="--score-angle: ${(result.score / 100) * 360}deg">
-                        <div class="score-text">${result.score}</div>
+
+        function displayEnhancedResults(result, url) {
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Helper function for score colors
+            function getScoreColor(score) {
+                if (score >= 80) return '#10b981'; // Green
+                if (score >= 60) return '#f59e0b'; // Yellow
+                return '#ef4444'; // Red
+            }
+            
+            resultsSection.innerHTML = `
+                <!-- Score Hero Section -->
+                <div class="score-hero">
+                    <div class="score-display">
+                        <div class="score-visual">
+                            <div class="score-circle" style="--score-angle: ${(result.score / 100) * 360}deg">
+                                <div class="score-text">${result.score}</div>
+                            </div>
+                        </div>
+                        <div class="score-info">
+                            <h2 style="color: ${result.grade?.color || '#10b981'}; margin-bottom: 10px;">
+                                Grade: ${result.grade?.grade || 'N/A'}
+                            </h2>
+                            <p style="opacity: 0.9; font-size: 1.2rem;">${result.grade?.description || 'Analysis Complete'}</p>
+                            <p style="opacity: 0.8; margin-top: 10px;">
+                                Analysis completed for ${result.domain || new URL(url).hostname}
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="score-info">
-                    <h2 style="color: ${result.grade.color}; margin-bottom: 10px;">
-                        Grade: ${result.grade.grade}
-                    </h2>
-                    <p style="opacity: 0.9; font-size: 1.2rem;">${result.grade.description}</p>
-                    <p style="opacity: 0.8; margin-top: 10px;">
-                        Analysis completed for ${result.domain}
+
+                ${result.breakdown ? `
+                <!-- Score Breakdown -->
+                <div class="score-breakdown">
+                    <h3 style="margin-bottom: 25px; font-size: 1.8rem; text-align: center;">📊 Detailed Score Breakdown</h3>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-card">
+                            <div class="breakdown-icon">⚡</div>
+                            <div class="breakdown-content">
+                                <div class="breakdown-title">Performance</div>
+                                <div class="breakdown-score" style="color: ${getScoreColor(result.breakdown.performance)}">${result.breakdown.performance}</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: ${result.breakdown.performance}%; background: ${getScoreColor(result.breakdown.performance)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="breakdown-card">
+                            <div class="breakdown-icon">🔧</div>
+                            <div class="breakdown-content">
+                                <div class="breakdown-title">Technical SEO</div>
+                                <div class="breakdown-score" style="color: ${getScoreColor(result.breakdown.technical)}">${result.breakdown.technical}</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: ${result.breakdown.technical}%; background: ${getScoreColor(result.breakdown.technical)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="breakdown-card">
+                            <div class="breakdown-icon">📝</div>
+                            <div class="breakdown-content">
+                                <div class="breakdown-title">Content</div>
+                                <div class="breakdown-score" style="color: ${getScoreColor(result.breakdown.content)}">${result.breakdown.content}</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: ${result.breakdown.content}%; background: ${getScoreColor(result.breakdown.content)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="breakdown-card">
+                            <div class="breakdown-icon">📱</div>
+                            <div class="breakdown-content">
+                                <div class="breakdown-title">Social</div>
+                                <div class="breakdown-score" style="color: ${getScoreColor(result.breakdown.social)}">${result.breakdown.social}</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: ${result.breakdown.social}%; background: ${getScoreColor(result.breakdown.social)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="breakdown-card">
+                            <div class="breakdown-icon">🔒</div>
+                            <div class="breakdown-content">
+                                <div class="breakdown-title">Security</div>
+                                <div class="breakdown-score" style="color: ${getScoreColor(result.breakdown.security)}">${result.breakdown.security}</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: ${result.breakdown.security}%; background: ${getScoreColor(result.breakdown.security)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                ${result.recommendations && result.recommendations.length > 0 ? `
+                <!-- Recommendations Section -->
+                <div class="recommendations-section">
+                    <h3 style="margin-bottom: 25px; font-size: 1.8rem;">🎯 Actionable Recommendations</h3>
+                    <div>
+                        ${result.recommendations.slice(0, 6).map(rec => `
+                            <div class="recommendation-card">
+                                <div class="recommendation-header">
+                                    <span class="recommendation-category">${rec.category}</span>
+                                    <span class="recommendation-priority priority-${rec.priority.toLowerCase()}">${rec.priority} Priority</span>
+                                </div>
+                                <div class="recommendation-issue">${rec.issue}</div>
+                                <div class="recommendation-solution">${rec.solution}</div>
+                                <div class="recommendation-meta">
+                                    <div class="meta-item">
+                                        <span>⏱️</span>
+                                        <span>Time: ${rec.timeToComplete}</span>
+                                    </div>
+                                    ${rec.isAI ? '<div class="meta-item"><span>🤖</span><span>AI-Generated</span></div>' : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Additional Insights -->
+                ${result.coreWebVitals ? `
+                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 30px; margin-top: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                    <h3 style="margin-bottom: 20px; color: var(--text);">⚡ Core Web Vitals</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <div style="text-align: center; padding: 15px; background: var(--surface-light); border-radius: 12px;">
+                            <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 5px;">LCP</div>
+                            <div style="font-weight: 600; color: var(--text);">${result.coreWebVitals.lcp}</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: var(--surface-light); border-radius: 12px;">
+                            <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 5px;">FID</div>
+                            <div style="font-weight: 600; color: var(--text);">${result.coreWebVitals.fid}</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: var(--surface-light); border-radius: 12px;">
+                            <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 5px;">CLS</div>
+                            <div style="font-weight: 600; color: var(--text);">${result.coreWebVitals.cls}</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: var(--surface-light); border-radius: 12px;">
+                            <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 5px;">FCP</div>
+                            <div style="font-weight: 600; color: var(--text);">${result.coreWebVitals.fcp}</div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Analysis Summary -->
+                <div style="background: linear-gradient(135deg, var(--surface-light), var(--surface)); border: 2px solid var(--border); border-radius: 16px; padding: 30px; margin-top: 30px; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                    <h3 style="margin-bottom: 15px; color: var(--text);">📋 Analysis Summary</h3>
+                    <p style="color: var(--text-light); margin-bottom: 20px;">
+                        Your website scored <strong style="color: ${getScoreColor(result.score)};">${result.score}/100</strong> 
+                        with a grade of <strong style="color: ${result.grade?.color || '#10b981'};">${result.grade?.grade || 'N/A'}</strong>.
+                        ${result.recommendations ? `We found ${result.recommendations.length} optimization opportunities.` : ''}
                     </p>
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <button onclick="analyzeAnother()" style="padding: 12px 24px; background: var(--water-blue); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                            🔄 Analyze Another Site
+                        </button>
+                        <button onclick="shareResults()" style="padding: 12px 24px; background: var(--surface); border: 2px solid var(--border); border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: var(--text);">
+                            📤 Share Results
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
+            `;
+            
+            // Animate score counters after a brief delay
+            setTimeout(() => {
+                animateScoreCounters(result);
+            }, 500);
+        }
 
-        <!-- Score Breakdown -->
-        <div style="margin-bottom: 40px;">
-            <h3 style="margin-bottom: 25px; font-size: 1.8rem; text-align: center;">📊 Detailed Score Breakdown</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;">
-                
-                <!-- Performance Card -->
-                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">⚡</div>
-                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Performance</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.performance)}; margin-bottom: 15px;">${result.breakdown.performance}</div>
-                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
-                        <div style="width: ${result.breakdown.performance}%; height: 100%; background: ${getScoreColor(result.breakdown.performance)}; border-radius: 4px;"></div>
+        function showErrorState(errorMessage, url) {
+            const resultsSection = document.getElementById('resultsSection');
+            
+            resultsSection.innerHTML = `
+                <div style="text-align: center; padding: 60px 40px; background: var(--surface); border: 2px solid var(--error); border-radius: 24px; margin-bottom: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">😕</div>
+                    <h2 style="color: var(--error); margin-bottom: 15px;">Analysis Failed</h2>
+                    <p style="color: var(--text-light); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                        We couldn't analyze <strong>${url}</strong>. This might be due to:
+                    </p>
+                    <ul style="text-align: left; max-width: 400px; margin: 20px auto; color: var(--text-light);">
+                        <li>The website is temporarily unavailable</li>
+                        <li>The URL is incorrect or doesn't exist</li>
+                        <li>The site blocks automated analysis</li>
+                        <li>Server connectivity issues</li>
+                    </ul>
+                    <div style="background: var(--surface-light); padding: 15px; border-radius: 12px; margin: 20px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--error);">
+                        Error: ${errorMessage}
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 30px;">
+                        <button onclick="retryAnalysis()" style="padding: 12px 24px; background: var(--water-blue); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                            🔄 Try Again
+                        </button>
+                        <button onclick="clearResults()" style="padding: 12px 24px; background: var(--surface-light); border: 2px solid var(--border); border-radius: 12px; font-weight: 600; cursor: pointer; color: var(--text);">
+                            ← Start Over
+                        </button>
                     </div>
                 </div>
-                
-                <!-- Technical SEO Card -->
-                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🔧</div>
-                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Technical SEO</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.technical)}; margin-bottom: 15px;">${result.breakdown.technical}</div>
-                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
-                        <div style="width: ${result.breakdown.technical}%; height: 100%; background: ${getScoreColor(result.breakdown.technical)}; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <!-- Content Card -->
-                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">📝</div>
-                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Content</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.content)}; margin-bottom: 15px;">${result.breakdown.content}</div>
-                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
-                        <div style="width: ${result.breakdown.content}%; height: 100%; background: ${getScoreColor(result.breakdown.content)}; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <!-- Social Card -->
-                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">📱</div>
-                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Social</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.social)}; margin-bottom: 15px;">${result.breakdown.social}</div>
-                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
-                        <div style="width: ${result.breakdown.social}%; height: 100%; background: ${getScoreColor(result.breakdown.social)}; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <!-- Security Card -->
-                <div style="background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 25px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🔒</div>
-                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 8px;">Security</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: ${getScoreColor(result.breakdown.security)}; margin-bottom: 15px;">${result.breakdown.security}</div>
-                    <div style="width: 100%; height: 8px; background: var(--surface-light); border-radius: 4px;">
-                        <div style="width: ${result.breakdown.security}%; height: 100%; background: ${getScoreColor(result.breakdown.security)}; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
+            `;
+            
+            resultsSection.style.display = 'block';
+        }
 
-        <!-- Recommendations -->
-        <div style="background: var(--surface); padding: 30px; border-radius: 16px; margin-top: 30px;">
-            <h3 style="margin-bottom: 20px;">🎯 Top Recommendations</h3>
-            <div>
-                ${result.recommendations.slice(0, 5).map(rec => `
-                    <div style="margin-bottom: 20px; padding: 20px; background: var(--surface-light); border-radius: 12px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <span style="background: var(--water-blue); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">${rec.category}</span>
-                            <span style="background: ${rec.priority === 'Critical' ? '#fee2e2' : rec.priority === 'High' ? '#fef3c7' : '#dbeafe'}; 
-                                         color: ${rec.priority === 'Critical' ? '#dc2626' : rec.priority === 'High' ? '#d97706' : '#2563eb'}; 
-                                         padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">${rec.priority} Priority</span>
-                        </div>
-                        <div style="font-weight: 600; margin-bottom: 8px;">${rec.issue}</div>
-                        <div style="color: var(--text-light); margin-bottom: 12px;">${rec.solution}</div>
-                        <div style="font-size: 0.9rem; color: var(--gray);">
-                            <span>⏱️ ${rec.timeToComplete}</span> • 
-                            <span>📈 ${rec.impact} Impact</span> • 
-                            <span>⚡ ${rec.difficulty} Difficulty</span>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-}
+        function animateScoreCounters(result) {
+            // Animate main score
+            const scoreElement = document.querySelector('.score-text');
+            if (scoreElement) {
+                animateCounter(scoreElement, 0, result.score, 2000);
+            }
+            
+            // Animate breakdown scores
+            if (result.breakdown) {
+                const categories = ['performance', 'technical', 'content', 'social', 'security'];
+                categories.forEach((category, index) => {
+                    setTimeout(() => {
+                        const scoreEl = document.querySelector(`.breakdown-card:nth-child(${index + 1}) .breakdown-score`);
+                        const fillEl = document.querySelector(`.breakdown-card:nth-child(${index + 1}) .breakdown-fill`);
+                        
+                        if (scoreEl && fillEl) {
+                            animateCounter(scoreEl, 0, result.breakdown[category], 1500);
+                            // Animate progress bar
+                            setTimeout(() => {
+                                fillEl.style.width = `${result.breakdown[category]}%`;
+                            }, 200);
+                        }
+                    }, index * 200);
+                });
+            }
+        }
 
-// Helper function for colors
-function getScoreColor(score) {
-    if (score >= 80) return '#10b981';  // Green
-    if (score >= 60) return '#f59e0b';  // Yellow
-    return '#ef4444';                   // Red
-}
-            showNotification('Analysis complete! 🦦', 'success');
+        function animateCounter(element, start, end, duration) {
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                const currentValue = Math.round(start + (end - start) * easeOutCubic);
+                
+                element.textContent = currentValue;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
 
-
-        // Notification system
-        function showNotification(message, type = 'info') {
+        function showNotification(message, type = 'info', duration = 4000) {
+            // Remove existing notifications
+            document.querySelectorAll('.notification').forEach(n => n.remove());
+            
             const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                warning: '#f59e0b',
+                info: '#06b6d4'
+            };
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
             notification.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
                 padding: 15px 20px;
-                background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--error)' : type === 'warning' ? 'var(--warning)' : 'var(--water-blue)'};
+                background: ${colors[type]};
                 color: white;
                 border-radius: 12px;
                 font-weight: 600;
@@ -1751,9 +956,17 @@ function getScoreColor(score) {
                 box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
                 transform: translateX(100%);
                 transition: transform 0.3s ease;
-                max-width: 300px;
+                max-width: 350px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
             `;
-            notification.textContent = message;
+            
+            notification.innerHTML = `
+                <span>${icons[type]}</span>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer; padding: 0; margin-left: auto;">×</button>
+            `;
             
             document.body.appendChild(notification);
             
@@ -1768,29 +981,81 @@ function getScoreColor(score) {
                         notification.parentNode.removeChild(notification);
                     }
                 }, 300);
-            }, 4000);
+            }, duration);
         }
 
-        // Keyboard support
-        document.getElementById('urlInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                startAnalysis();
+        // Helper functions for buttons
+        function analyzeAnother() {
+            document.getElementById('urlInput').value = '';
+            document.getElementById('urlInput').focus();
+            document.getElementById('resultsSection').style.display = 'none';
+        }
+
+        function retryAnalysis() {
+            startAnalysis();
+        }
+
+        function clearResults() {
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('urlInput').focus();
+        }
+
+        function shareResults() {
+            const url = document.getElementById('urlInput').value;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'SEO Analysis Results',
+                    text: `Check out the SEO analysis for ${url}`,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showNotification('Share link copied to clipboard! 🔗', 'success');
+                });
             }
+        }
+
+        // Enhanced keyboard support
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlInput = document.getElementById('urlInput');
+            
+            // Enter key to analyze
+            urlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startAnalysis();
+                }
+            });
+            
+            // Auto-focus on page load
+            urlInput.focus();
+            
+            // Auto-add https:// if needed
+            urlInput.addEventListener('blur', function(e) {
+                const value = e.target.value.trim();
+                if (value && !value.startsWith('http') && value.includes('.')) {
+                    e.target.value = 'https://' + value;
+                }
+            });
         });
 
-        // Close modal on escape key
+        // Handle escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closePricingModal();
+                // Close any open modals or clear results
+                const notifications = document.querySelectorAll('.notification');
+                notifications.forEach(n => n.remove());
             }
         });
 
-        // Close modal on outside click
-        document.getElementById('pricingModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePricingModal();
-            }
-        });
+        console.log('🦦 SEOtter Enhanced Analysis Tool loaded successfully!');
     </script>
 </body>
-</html>
+</html>>📈</span>
+                                        <span>Impact: ${rec.impact}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>⚡</span>
+                                        <span>Difficulty: ${rec.difficulty}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span
