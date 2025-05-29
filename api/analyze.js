@@ -1,4 +1,4 @@
-// Complete working api/analyze.js
+// Complete working api/analyze.js - FIXED VERSION
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -28,10 +28,12 @@ export default async function handler(req, res) {
       getRealTechnicalAnalysis(url),
       getRealSocialAnalysis(url)
     ]);
-// Get AI suggestions
-const aiSuggestions = await getAIContentSuggestions(pageAnalysis);
-    // Generate enhanced analysis with new scoring
-    const analysis = generateEnhancedAnalysis(url, pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis);
+
+    // Get AI suggestions AFTER we have the page analysis
+    const aiSuggestions = await getAIContentSuggestions(pageAnalysis);
+    
+    // Generate enhanced analysis with all data including AI suggestions
+    const analysis = generateEnhancedAnalysis(url, pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis, aiSuggestions);
     
     console.log(`✅ Enhanced analysis complete for ${url}, score: ${analysis.score}`);
     res.status(200).json(analysis);
@@ -48,6 +50,12 @@ async function getRealPageSpeedData(url) {
   
   try {
     console.log('🔍 Fetching REAL PageSpeed data...');
+    
+    // Check if API key is properly configured
+    if (!API_KEY || API_KEY === 'your_existing_google_key') {
+      console.warn('⚠️ Google PageSpeed API key not configured, using fallback data');
+      return getFallbackPageSpeedData();
+    }
     
     // Get comprehensive data from Google's API
     const [mobileResponse, desktopResponse] = await Promise.all([
@@ -103,35 +111,40 @@ async function getRealPageSpeedData(url) {
   } catch (error) {
     console.error('PageSpeed API error:', error);
     // Return fallback data instead of throwing
-    return {
-      mobile: {
-        performance: 75,
-        seo: 85,
-        accessibility: 80,
-        bestPractices: 78
-      },
-      desktop: {
-        performance: 85,
-        seo: 90,
-        bestPractices: 85
-      },
-      coreWebVitals: {
-        lcp: '2.1s',
-        fid: '45ms',
-        cls: '0.08',
-        fcp: '1.2s',
-        tti: '3.1s',
-        speedIndex: '2.5s'
-      },
-      realUserExperience: {
-        loading: null,
-        interactivity: null,
-        visualStability: null
-      },
-      opportunities: [],
-      dataSource: 'Fallback data (API unavailable)'
-    };
+    return getFallbackPageSpeedData();
   }
+}
+
+// Fallback data function
+function getFallbackPageSpeedData() {
+  return {
+    mobile: {
+      performance: 75,
+      seo: 85,
+      accessibility: 80,
+      bestPractices: 78
+    },
+    desktop: {
+      performance: 85,
+      seo: 90,
+      bestPractices: 85
+    },
+    coreWebVitals: {
+      lcp: '2.1s',
+      fid: '45ms',
+      cls: '0.08',
+      fcp: '1.2s',
+      tti: '3.1s',
+      speedIndex: '2.5s'
+    },
+    realUserExperience: {
+      loading: null,
+      interactivity: null,
+      visualStability: null
+    },
+    opportunities: [],
+    dataSource: 'Fallback data (API unavailable)'
+  };
 }
 
 // REAL comprehensive page analysis
@@ -188,10 +201,29 @@ async function getRealPageAnalysis(url) {
   } catch (error) {
     console.error('Real page analysis error:', error);
     // Return fallback data instead of throwing
-    return {
-      title: {
-        text: 'Sample Title',
-        length: 12,
+    return getFallbackPageAnalysis();
+  }
+}
+
+// Fallback page analysis
+function getFallbackPageAnalysis() {
+  return {
+    title: {
+      text: 'Sample Title',
+      length: 12,
+      words: 2,
+      isEmpty: false,
+      analysis: {
+        optimal: false,
+        tooShort: true,
+        tooLong: false,
+        missing: false
+      }
+    },
+    meta: {
+      description: {
+        text: 'Sample description',
+        length: 18,
         words: 2,
         isEmpty: false,
         analysis: {
@@ -201,90 +233,76 @@ async function getRealPageAnalysis(url) {
           missing: false
         }
       },
-      meta: {
-        description: {
-          text: 'Sample description',
-          length: 18,
-          words: 2,
-          isEmpty: false,
-          analysis: {
-            optimal: false,
-            tooShort: true,
-            tooLong: false,
-            missing: false
-          }
-        },
-        keywords: null,
-        author: null,
-        charset: 'utf-8',
-        viewport: 'width=device-width, initial-scale=1'
-      },
-      headers: {
-        h1: {
-          count: 1,
-          text: ['Sample H1'],
-          analysis: {
-            perfect: true,
-            missing: false,
-            multiple: false
-          }
-        },
-        h2: { count: 3, text: ['Sample H2 1', 'Sample H2 2', 'Sample H2 3'] },
-        h3: { count: 2 },
-        h4: { count: 1 },
-        h5: { count: 0 },
-        h6: { count: 0 },
-        totalHeaders: 7
-      },
-      images: {
-        total: 5,
-        withAlt: 4,
-        withoutAlt: 1,
-        emptyAlt: 0,
+      keywords: null,
+      author: null,
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1'
+    },
+    headers: {
+      h1: {
+        count: 1,
+        text: ['Sample H1'],
         analysis: {
-          allOptimized: false,
-          percentageOptimized: 80
-        },
-        details: []
-      },
-      links: {
-        total: 25,
-        internal: 18,
-        external: 5,
-        email: 1,
-        phone: 0,
-        anchor: 1,
-        analysis: {
-          hasInternalLinks: true,
-          internalLinkRatio: 72
+          perfect: true,
+          missing: false,
+          multiple: false
         }
       },
-      content: {
-        wordCount: 450,
-        characterCount: 2500,
-        readingTime: 3,
-        analysis: {
-          hasContent: true,
-          sufficientContent: true,
-          comprehensiveContent: false
-        }
+      h2: { count: 3, text: ['Sample H2 1', 'Sample H2 2', 'Sample H2 3'] },
+      h3: { count: 2 },
+      h4: { count: 1 },
+      h5: { count: 0 },
+      h6: { count: 0 },
+      totalHeaders: 7
+    },
+    images: {
+      total: 5,
+      withAlt: 4,
+      withoutAlt: 1,
+      emptyAlt: 0,
+      analysis: {
+        allOptimized: false,
+        percentageOptimized: 80
       },
-      technical: {
-        charset: 'utf-8',
-        viewport: 'width=device-width, initial-scale=1',
-        robots: null,
-        canonical: null,
-        hasCharset: true,
-        hasViewport: true,
-        hasRobots: false,
-        hasCanonical: false
-      },
-      dataSource: 'Fallback data (scraping failed)',
-      analyzedAt: new Date().toISOString(),
-      responseSize: 0,
-      responseStatus: 0
-    };
-  }
+      details: []
+    },
+    links: {
+      total: 25,
+      internal: 18,
+      external: 5,
+      email: 1,
+      phone: 0,
+      anchor: 1,
+      analysis: {
+        hasInternalLinks: true,
+        internalLinkRatio: 72
+      }
+    },
+    content: {
+      wordCount: 450,
+      characterCount: 2500,
+      readingTime: 3,
+      analysis: {
+        hasContent: true,
+        sufficientContent: true,
+        comprehensiveContent: false
+      }
+    },
+    technical: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      robots: null,
+      canonical: null,
+      hasCharset: true,
+      hasViewport: true,
+      hasRobots: false,
+      hasCanonical: false
+    },
+    dataSource: 'Fallback data (scraping failed)',
+    analyzedAt: new Date().toISOString(),
+    responseSize: 0,
+    responseStatus: 0
+  };
 }
 
 // REAL technical SEO analysis
@@ -401,7 +419,88 @@ async function getRealSocialAnalysis(url) {
   }
 }
 
-// Helper functions for REAL data extraction
+// AI FUNCTION - Fixed to handle errors properly
+async function getAIContentSuggestions(pageAnalysis) {
+  try {
+    const API_KEY = process.env.OPENAI_API_KEY;
+    
+    // Check if OpenAI API key is configured
+    if (!API_KEY || API_KEY.length < 20) {
+      console.warn('⚠️ OpenAI API key not configured, using fallback suggestions');
+      return {
+        suggestions: "• Optimize your title tag to be 50-60 characters for better search engine visibility\n• Add a compelling meta description between 140-160 characters\n• Improve page loading speed by optimizing images and minifying CSS/JS files"
+      };
+    }
+    
+    const prompt = `
+      Analyze this webpage and give 3 specific SEO improvements:
+      Title: ${pageAnalysis.title.text}
+      Meta Description: ${pageAnalysis.meta.description.text}
+      Word Count: ${pageAnalysis.content.wordCount}
+      
+      Give me 3 bullet points with specific actionable advice.
+    `;
+    
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 300
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return {
+      suggestions: data.choices[0].message.content
+    };
+  } catch (error) {
+    console.error('AI suggestion error:', error);
+    return {
+      suggestions: "• Optimize your title tag to be 50-60 characters for better search results\n• Add more descriptive meta description between 140-160 characters\n• Improve page loading speed and mobile responsiveness"
+    };
+  }
+}
+
+// FIXED: Generate enhanced analysis with proper parameter handling
+function generateEnhancedAnalysis(url, pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis, aiSuggestions) {
+  // Calculate the advanced score
+  const scoreData = calculateAdvancedSEOScore(pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis);
+  
+  // Generate detailed recommendations
+  const recommendations = generateDetailedRecommendations(scoreData, pageAnalysis);
+  
+  return {
+    score: scoreData.overall,
+    grade: scoreData.grade,
+    breakdown: scoreData.breakdown,
+    url,
+    domain: new URL(url).hostname,
+    recommendations,
+    aiSuggestions: aiSuggestions, // Now properly passed as parameter
+    coreWebVitals: pageSpeedData.coreWebVitals,
+    realDataSources: [
+      pageSpeedData.dataSource,
+      pageAnalysis.dataSource,
+      technicalAnalysis.dataSource,
+      socialAnalysis.dataSource
+    ],
+    timestamp: new Date().toISOString()
+  };
+}
+
+// ... [Include all the other helper functions from the original file]
+// [For brevity, I'm not repeating all the extraction functions, but they should remain the same]
+
+// Helper functions for REAL data extraction (keep all existing ones)
 function extractRealTitle(html) {
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
   const title = titleMatch ? titleMatch[1].trim() : '';
@@ -505,7 +604,7 @@ function extractRealImageData(html) {
       allOptimized: images.length > 0 && images.every(img => img.hasAlt || img.emptyAlt),
       percentageOptimized: images.length > 0 ? Math.round((images.filter(img => img.hasAlt).length / images.length) * 100) : 100
     },
-    details: images.slice(0, 10) // First 10 images for analysis
+    details: images.slice(0, 10)
   };
 }
 
@@ -546,7 +645,6 @@ function extractRealLinkData(html, baseUrl) {
 }
 
 function extractRealContentData(html) {
-  // Remove scripts, styles, and other non-content elements
   const cleanContent = html
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
@@ -562,7 +660,7 @@ function extractRealContentData(html) {
   return {
     wordCount: words.length,
     characterCount: cleanContent.length,
-    readingTime: Math.ceil(words.length / 200), // Average reading speed
+    readingTime: Math.ceil(words.length / 200),
     analysis: {
       hasContent: words.length > 100,
       sufficientContent: words.length > 300,
@@ -604,7 +702,7 @@ async function checkRealRobotsTxt(baseUrl) {
         exists: true,
         accessible: true,
         size: content.length,
-        content: content.substring(0, 1000), // First 1000 chars
+        content: content.substring(0, 1000),
         analysis: {
           hasUserAgent: content.toLowerCase().includes('user-agent'),
           hasDisallow: content.toLowerCase().includes('disallow'),
@@ -635,7 +733,7 @@ async function checkRealSitemaps(baseUrl) {
     `${baseUrl}/sitemap.xml`,
     `${baseUrl}/sitemap_index.xml`,
     `${baseUrl}/sitemap.txt`,
-    `${baseUrl}/wp-sitemap.xml` // WordPress default
+    `${baseUrl}/wp-sitemap.xml`
   ];
   
   const results = [];
@@ -662,7 +760,7 @@ async function checkRealSitemaps(baseUrl) {
           urlCount: isXML ? (content.match(/<url>/g) || []).length : content.split('\n').filter(line => line.trim().startsWith('http')).length
         });
         
-        break; // Found a working sitemap
+        break;
       }
     } catch (error) {
       // Continue to next sitemap
@@ -754,7 +852,6 @@ function extractRealFacebookData(html) {
 }
 
 function extractRealLinkedInData(html) {
-  // LinkedIn uses Open Graph primarily, but we can check for specific patterns
   return {
     usesOpenGraph: html.includes('og:title') && html.includes('og:description')
   };
@@ -773,7 +870,6 @@ function extractViewport(html) {
 function extractRealOpportunities(audits) {
   const opportunities = [];
   
-  // Extract actual opportunities from Lighthouse
   if (audits['unused-css-rules'] && audits['unused-css-rules'].score < 1) {
     opportunities.push({
       type: 'unused-css',
@@ -801,29 +897,20 @@ function extractRealOpportunities(audits) {
   return opportunities;
 }
 
-// NEW ENHANCED SCORING FUNCTIONS
+// SCORING FUNCTIONS (keep all existing ones)
 function calculateAdvancedSEOScore(pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis) {
   const weights = {
-    performance: 0.25,    // 25%
-    technical: 0.25,      // 25%
-    content: 0.30,        // 30%
-    social: 0.10,         // 10%
-    security: 0.10        // 10%
+    performance: 0.25,
+    technical: 0.25,
+    content: 0.30,
+    social: 0.10,
+    security: 0.10
   };
 
-  // Performance Score (0-100)
   const performanceScore = calculatePerformanceScore(pageSpeedData);
-  
-  // Technical Score (0-100)
   const technicalScore = calculateTechnicalScore(pageAnalysis, technicalAnalysis);
-  
-  // Content Score (0-100)
   const contentScore = calculateContentScore(pageAnalysis);
-  
-  // Social Score (0-100)
   const socialScore = calculateSocialScore(socialAnalysis);
-  
-  // Security Score (0-100)
   const securityScore = calculateSecurityScore(technicalAnalysis);
 
   const finalScore = Math.round(
@@ -851,7 +938,6 @@ function calculatePerformanceScore(pageSpeedData) {
   const mobile = pageSpeedData.mobile;
   const desktop = pageSpeedData.desktop;
   
-  // Weight mobile more heavily (60/40 split)
   const mobileWeight = 0.6;
   const desktopWeight = 0.4;
   
@@ -864,7 +950,6 @@ function calculatePerformanceScore(pageSpeedData) {
 function calculateTechnicalScore(pageAnalysis, technicalAnalysis) {
   let score = 100;
 
-  // Title analysis
   if (pageAnalysis.title.analysis.missing) {
     score -= 15;
   } else if (pageAnalysis.title.analysis.tooShort) {
@@ -873,26 +958,22 @@ function calculateTechnicalScore(pageAnalysis, technicalAnalysis) {
     score -= 5;
   }
 
-  // Meta description
   if (pageAnalysis.meta.description.analysis.missing) {
     score -= 10;
   } else if (pageAnalysis.meta.description.analysis.tooShort) {
     score -= 5;
   }
 
-  // H1 tags
   if (pageAnalysis.headers.h1.analysis.missing) {
     score -= 12;
   } else if (pageAnalysis.headers.h1.analysis.multiple) {
     score -= 6;
   }
 
-  // Images
   if (pageAnalysis.images.analysis.percentageOptimized < 80) {
     score -= 8;
   }
 
-  // Technical elements
   if (!pageAnalysis.technical.hasViewport) {
     score -= 5;
   }
@@ -907,19 +988,16 @@ function calculateTechnicalScore(pageAnalysis, technicalAnalysis) {
 function calculateContentScore(pageAnalysis) {
   let score = 100;
 
-  // Content length
   if (!pageAnalysis.content.analysis.hasContent) {
     score -= 20;
   } else if (!pageAnalysis.content.analysis.sufficientContent) {
     score -= 10;
   }
 
-  // Header structure
   if (pageAnalysis.headers.h2.count === 0) {
     score -= 8;
   }
 
-  // Internal linking
   if (!pageAnalysis.links.analysis.hasInternalLinks) {
     score -= 5;
   }
@@ -928,7 +1006,7 @@ function calculateContentScore(pageAnalysis) {
 }
 
 function calculateSocialScore(socialAnalysis) {
-  let score = 50; // Start at 50 for neutral
+  let score = 50;
 
   if (socialAnalysis.openGraph.analysis.complete) {
     score += 25;
@@ -965,7 +1043,6 @@ function getScoreGrade(score) {
 function generateDetailedRecommendations(scoreData, pageAnalysis) {
   const recommendations = [];
 
-  // Performance recommendations
   if (scoreData.breakdown.performance < 80) {
     recommendations.push({
       category: 'Performance',
@@ -978,7 +1055,6 @@ function generateDetailedRecommendations(scoreData, pageAnalysis) {
     });
   }
 
-  // Technical SEO recommendations
   if (pageAnalysis.title.analysis.missing) {
     recommendations.push({
       category: 'Technical SEO',
@@ -1015,7 +1091,6 @@ function generateDetailedRecommendations(scoreData, pageAnalysis) {
     });
   }
 
-  // Content recommendations
   if (!pageAnalysis.content.analysis.sufficientContent) {
     recommendations.push({
       category: 'Content',
@@ -1028,7 +1103,6 @@ function generateDetailedRecommendations(scoreData, pageAnalysis) {
     });
   }
 
-  // Image optimization
   if (pageAnalysis.images.analysis.percentageOptimized < 80) {
     recommendations.push({
       category: 'Technical SEO',
@@ -1041,7 +1115,6 @@ function generateDetailedRecommendations(scoreData, pageAnalysis) {
     });
   }
 
-  // Security recommendations
   if (!pageAnalysis.technical.hasViewport) {
     recommendations.push({
       category: 'Technical SEO',
@@ -1054,71 +1127,8 @@ function generateDetailedRecommendations(scoreData, pageAnalysis) {
     });
   }
 
-  // Sort by priority
   const priorityOrder = { 'Critical': 4, 'High': 3, 'Medium': 2, 'Low': 1 };
   recommendations.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
 
   return recommendations;
-}
-
-// Generate enhanced analysis using REAL data
-function generateEnhancedAnalysis(url, pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis) {
-  // Calculate the advanced score
-  const scoreData = calculateAdvancedSEOScore(pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis);
-  
-  // Generate detailed recommendations
-  const recommendations = generateDetailedRecommendations(scoreData, pageAnalysis);
-  
-return {
-  score: scoreData.overall,
-  grade: scoreData.grade,
-  breakdown: scoreData.breakdown,
-  url,
-  domain: new URL(url).hostname,
-  recommendations,
-  aiSuggestions: aiSuggestions, // ADD THIS LINE
-  coreWebVitals: pageSpeedData.coreWebVitals,
-    realDataSources: [
-      pageSpeedData.dataSource,
-      pageAnalysis.dataSource,
-      technicalAnalysis.dataSource,
-      socialAnalysis.dataSource
-    ],
-    timestamp: new Date().toISOString()
-  };
-}// NEW AI FUNCTION - Add this at the bottom of analyze.js
-async function getAIContentSuggestions(pageAnalysis) {
-  try {
-    const prompt = `
-      Analyze this webpage and give 3 specific SEO improvements:
-      Title: ${pageAnalysis.title.text}
-      Meta Description: ${pageAnalysis.meta.description.text}
-      Word Count: ${pageAnalysis.content.wordCount}
-      
-      Give me 3 bullet points with specific actionable advice.
-    `;
-    
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: 300
-      })
-    });
-    
-    const data = await response.json();
-    return {
-      suggestions: data.choices[0].message.content
-    };
-  } catch (error) {
-    console.error('AI suggestion error:', error);
-    return {
-      suggestions: "• Optimize your title tag to be 50-60 characters\n• Add more descriptive meta description\n• Improve page loading speed"
-    };
-  }
 }
