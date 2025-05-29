@@ -906,6 +906,19 @@
                         `).join('')}
                     </div>
                 </div>
+${result.aiSuggestions ? `
+                <!-- AI Suggestions -->
+                <div style="background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-radius: 20px; padding: 30px; margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 20px;">🤖 AI-Powered Recommendations</h3>
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; backdrop-filter: blur(10px);">
+                        <div style="white-space: pre-line; line-height: 1.6;">${result.aiSuggestions.suggestions}</div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button onclick="getMoreAISuggestions()" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                            🔄 Get More AI Suggestions
+                        </button>
+                    </div>
+                </div>
                 ` : ''}
 
                 <!-- Additional Insights -->
