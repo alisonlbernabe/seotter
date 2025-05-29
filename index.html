@@ -659,16 +659,23 @@
                 urlInput.focus();
                 return;
             }
-            
-            // Disable button during analysis
-            analyzeBtn.disabled = true;
-            analyzeBtn.textContent = '🔄 Analyzing...';
-            
-            // Show enhanced loading state
-            showLoadingState(finalUrl);
+         // Check usage limit FIRST
+if (!checkUsageLimit()) {
+    showUpgradeModal();
+    analyzeBtn.disabled = false;
+    analyzeBtn.textContent = '🦦 Analyze Now';
+    return;
+}
+
+// Show loading
+analyzeBtn.disabled = true;
+analyzeBtn.textContent = '🔄 Analyzing...';
+
+// Show enhanced loading state
+showLoadingState(finalUrl);
             
             try {
-                console.log('Calling API for:', finalUrl);
+                console.log('ing API for:', finalUrl);
                 
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
@@ -1175,6 +1182,49 @@ ${result.aiSuggestions ? `
 function getMoreAISuggestions() {
             showNotification('🤖 Getting more AI suggestions...', 'info');
             // You can expand this later
+        }
+function checkUsageLimit() {
+            const usage = JSON.parse(localStorage.getItem('seotter_usage') || '{"count": 0, "date": ""}');
+            const today = new Date().toDateString();
+            
+            if (usage.date !== today) {
+                usage.count = 0;
+                usage.date = today;
+            }
+            
+            if (usage.count >= 3) {
+                return false; // Limit reached
+            }
+            
+            usage.count++;
+            localStorage.setItem('seotter_usage', JSON.stringify(usage));
+            return true;
+        }
+        
+        function showUpgradeModal() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px;">
+                        <h2>🦦 Daily Limit Reached!</h2>
+                        <p>You've used your 3 free analyses today.</p>
+                        <p style="font-size: 1.5rem; color: #06b6d4; margin: 20px 0;"><strong>Upgrade to Pro: $29/month</strong></p>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button onclick="this.closest('div').parentElement.parentElement.remove()" style="padding: 10px 20px; background: #e5e7eb; border: none; border-radius: 8px;">
+                                Maybe Later
+                            </button>
+                            <button onclick="upgradeToPro()" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 8px;">
+                                Upgrade Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function upgradeToPro() {
+            showNotification('Upgrade feature coming soon! 🚀', 'info');
         }
     </script>
 </body>
