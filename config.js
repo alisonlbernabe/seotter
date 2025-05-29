@@ -25,6 +25,12 @@ window.ENV = {
         RATE_LIMITING: true,
         CACHING: true,
         DEBUG_MODE: false // Set to true for development
+
+// Usage Tracking
+    USAGE: {
+        FREE_LIMIT: 3,
+        CURRENT_USAGE: 0,
+        RESET_DATE: new Date().toDateString()
     },
     
     // UI Configuration
