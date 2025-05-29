@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,6 @@
     
     <style>
         :root {
-            /* Light Purple Theme */
             --primary: #8b5cf6;
             --primary-dark: #7c3aed;
             --primary-light: #a78bfa;
@@ -21,50 +20,16 @@
             --success: #10b981;
             --warning: #f59e0b;
             --error: #ef4444;
-            
-            /* Purple Background System */
             --bg-primary: #faf5ff;
             --bg-secondary: #f3e8ff;
-            --bg-tertiary: #e9d5ff;
-            --purple-50: #faf5ff;
-            --purple-100: #f3e8ff;
-            --purple-200: #e9d5ff;
-            --purple-300: #d8b4fe;
-            --purple-400: #c084fc;
-            --purple-500: #a855f7;
-            --purple-600: #9333ea;
-            --purple-700: #7c3aed;
-            --purple-800: #6b21a8;
-            --purple-900: #581c87;
-            
-            /* Surface Colors */
             --surface: rgba(255, 255, 255, 0.95);
-            --surface-elevated: rgba(255, 255, 255, 0.98);
-            --surface-glass: rgba(255, 255, 255, 0.1);
+            --surface-glass: rgba(255, 255, 255, 0.25);
             --border: rgba(139, 92, 246, 0.2);
-            --border-light: rgba(139, 92, 246, 0.1);
-            
-            /* Text Colors */
             --text: #1e1b4b;
             --text-light: #475569;
             --text-purple: #6b21a8;
-            --text-on-purple: #ffffff;
-            
-            /* Glass Effects */
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(139, 92, 246, 0.3);
             --glass-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 2px 0 rgba(139, 92, 246, 0.05);
-            --shadow: 0 1px 3px 0 rgba(139, 92, 246, 0.1), 0 1px 2px -1px rgba(139, 92, 246, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(139, 92, 246, 0.1), 0 2px 4px -2px rgba(139, 92, 246, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(139, 92, 246, 0.1), 0 4px 6px -4px rgba(139, 92, 246, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(139, 92, 246, 0.1), 0 8px 10px -6px rgba(139, 92, 246, 0.1);
-            
-            /* Transitions */
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -74,16 +39,14 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, var(--purple-100) 0%, var(--purple-200) 25%, var(--purple-300) 50%, var(--purple-200) 75%, var(--purple-100) 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 25%, #e9d5ff 50%, #f3e8ff 75%, #faf5ff 100%);
             color: var(--text);
             min-height: 100vh;
             line-height: 1.6;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* Animated background */
         body::before {
             content: '';
             position: fixed;
@@ -92,9 +55,9 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
             animation: morphBg 20s ease-in-out infinite;
             z-index: -1;
         }
@@ -106,25 +69,24 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
             z-index: 1;
         }
 
-        /* Enhanced Navigation */
         .nav-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 30px;
             margin-bottom: 40px;
-            background: var(--glass-bg);
+            background: var(--surface-glass);
             backdrop-filter: blur(20px);
             border-radius: 20px;
             box-shadow: var(--glass-shadow);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
         }
 
         .nav-logo {
@@ -142,22 +104,8 @@
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            box-shadow: 
-                0 20px 40px rgba(139, 92, 246, 0.4),
-                inset 0 1px 0 rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
             animation: float 6s ease-in-out infinite;
-            position: relative;
-        }
-
-        .nav-logo-icon::before {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-            border-radius: 14px;
         }
 
         @keyframes float {
@@ -181,13 +129,13 @@
         }
 
         .usage-display {
-            background: var(--glass-bg);
+            background: var(--surface-glass);
             padding: 10px 18px;
             border-radius: 25px;
             font-size: 0.9rem;
             font-weight: 600;
             backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
             color: var(--text-purple);
         }
 
@@ -226,7 +174,6 @@
             background: var(--primary);
             color: white;
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
         }
 
         .auth-btn.primary {
@@ -234,17 +181,10 @@
             color: white;
         }
 
-        .auth-btn.primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Main Input Section */
         .input-section {
             backdrop-filter: blur(20px);
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            background: var(--surface-glass);
+            border: 1px solid var(--border);
             border-radius: 28px;
             box-shadow: var(--glass-shadow);
             padding: 60px 40px;
@@ -299,8 +239,8 @@
         .url-input {
             width: 100%;
             padding: 24px 200px 24px 24px;
-            background: var(--glass-bg);
-            border: 2px solid var(--glass-border);
+            background: var(--surface-glass);
+            border: 2px solid var(--border);
             border-radius: 50px;
             backdrop-filter: blur(10px);
             color: var(--text);
@@ -335,13 +275,13 @@
             color: white;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 10px 15px rgba(139, 92, 246, 0.3);
             white-space: nowrap;
         }
 
         .analyze-btn:hover:not(:disabled) {
             transform: translateY(-50%) scale(1.05);
-            box-shadow: var(--shadow-xl);
+            box-shadow: 0 20px 25px rgba(139, 92, 246, 0.4);
         }
 
         .analyze-btn:disabled {
@@ -350,7 +290,6 @@
             transform: translateY(-50%);
         }
 
-        /* Results Section */
         .results {
             display: none;
             animation: fadeInUp 0.8s ease-out;
@@ -361,7 +300,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Score Hero */
         .score-hero {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border-radius: 28px;
@@ -371,18 +309,7 @@
             color: white;
             position: relative;
             overflow: hidden;
-            box-shadow: var(--shadow-xl);
-        }
-
-        .score-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="wave" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 Q5,0 10,10 T20,10" stroke="rgba(255,255,255,0.1)" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23wave)"/></svg>');
-            opacity: 0.3;
+            box-shadow: 0 20px 25px rgba(139, 92, 246, 0.2);
         }
 
         .score-display {
@@ -443,7 +370,6 @@
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        /* Score Breakdown */
         .breakdown-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -452,8 +378,8 @@
         }
 
         .breakdown-card {
-            background: var(--glass-bg);
-            border: 2px solid var(--glass-border);
+            background: var(--surface-glass);
+            border: 2px solid var(--border);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
@@ -463,34 +389,15 @@
             overflow: hidden;
         }
 
-        .breakdown-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            transform: scaleX(0);
-            transition: transform 0.6s ease;
-            transform-origin: left;
-        }
-
         .breakdown-card:hover {
             transform: translateY(-8px);
             background: var(--surface);
             border-color: var(--primary);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .breakdown-card:hover::before {
-            transform: scaleX(1);
         }
 
         .breakdown-icon {
             font-size: 3rem;
             margin-bottom: 20px;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
         }
 
         .breakdown-title {
@@ -508,7 +415,6 @@
             margin-bottom: 20px;
             font-family: 'JetBrains Mono', monospace;
             color: var(--text);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .breakdown-bar {
@@ -517,7 +423,6 @@
             background: var(--bg-secondary);
             border-radius: 5px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .breakdown-fill {
@@ -528,7 +433,6 @@
             background: linear-gradient(90deg, var(--primary), var(--primary-light));
         }
 
-        /* Sections */
         .section-header {
             text-align: center;
             margin-bottom: 30px;
@@ -546,11 +450,6 @@
             font-size: 1.1rem;
         }
 
-        /* Recommendations */
-        .recommendations-section {
-            margin-bottom: 40px;
-        }
-
         .recommendation-card {
             background: var(--surface);
             border: 2px solid var(--border);
@@ -558,12 +457,11 @@
             padding: 30px;
             margin-bottom: 24px;
             transition: var(--transition);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 6px rgba(139, 92, 246, 0.1);
         }
 
         .recommendation-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
             border-color: var(--primary);
         }
 
@@ -584,7 +482,6 @@
             font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .recommendation-priority {
@@ -593,7 +490,6 @@
             font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .priority-critical { 
@@ -614,25 +510,17 @@
             border: 2px solid var(--secondary);
         }
 
-        .priority-low { 
-            background: rgba(16, 185, 129, 0.1); 
-            color: var(--success); 
-            border: 2px solid var(--success);
-        }
-
         .recommendation-issue {
             font-size: 1.2rem;
             font-weight: 700;
             color: var(--text);
             margin-bottom: 15px;
-            line-height: 1.4;
         }
 
         .recommendation-solution {
             color: var(--text-light);
             margin-bottom: 25px;
             line-height: 1.6;
-            font-size: 1rem;
         }
 
         .recommendation-meta {
@@ -651,7 +539,7 @@
             padding: 8px 15px;
             border-radius: 12px;
             border: 1px solid var(--border);
-            transition: var(--transition-fast);
+            transition: var(--transition);
         }
 
         .meta-item:hover {
@@ -660,7 +548,6 @@
             transform: scale(1.05);
         }
 
-        /* AI Suggestions */
         .ai-suggestions {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
@@ -669,7 +556,7 @@
             margin-bottom: 40px;
             position: relative;
             overflow: hidden;
-            box-shadow: var(--shadow-xl);
+            box-shadow: 0 20px 25px rgba(139, 92, 246, 0.2);
         }
 
         .ai-content {
@@ -678,8 +565,6 @@
             padding: 25px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            z-index: 1;
         }
 
         .ai-text {
@@ -688,60 +573,13 @@
             font-size: 1.05rem;
         }
 
-        /* Competitor Analysis */
-        .competitor-analysis {
-            margin-bottom: 40px;
-        }
-
-        .competitor-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .competitor-card {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            padding: 25px;
-            backdrop-filter: blur(15px);
-            transition: var(--transition);
-        }
-
-        .competitor-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .competitor-card h4 {
-            color: var(--text);
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-
-        .competitor-card ul {
-            list-style: none;
-            color: var(--text-light);
-        }
-
-        .competitor-card li {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .competitor-card li:last-child {
-            border-bottom: none;
-        }
-
-        /* Summary Actions */
         .analysis-summary {
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: 24px;
             padding: 40px;
             text-align: center;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 6px rgba(139, 92, 246, 0.1);
             margin-bottom: 40px;
         }
 
@@ -770,12 +608,12 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);
         }
 
         .summary-btn.primary:hover {
             transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 10px 15px rgba(139, 92, 246, 0.4);
         }
 
         .summary-btn.secondary {
@@ -787,17 +625,15 @@
         .summary-btn.secondary:hover {
             border-color: var(--primary);
             transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
         }
 
-        /* Loading States */
         .loading-container {
             text-align: center;
             padding: 60px 40px;
             background: var(--surface);
             border-radius: 24px;
             margin-bottom: 40px;
-            box-shadow: var(--shadow-xl);
+            box-shadow: 0 20px 25px rgba(139, 92, 246, 0.1);
         }
 
         .loading-title {
@@ -820,7 +656,6 @@
             border-radius: 6px;
             overflow: hidden;
             margin-bottom: 20px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .progress-fill {
@@ -829,7 +664,6 @@
             background: linear-gradient(90deg, var(--primary), var(--primary-light));
             border-radius: 6px;
             animation: loading 3s infinite;
-            position: relative;
         }
 
         @keyframes loading {
@@ -865,16 +699,6 @@
             transform: scale(1.02);
         }
 
-        .step-icon {
-            font-size: 1.8rem;
-        }
-
-        .step-text {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        /* Upgrade Modal */
         .upgrade-modal-overlay {
             position: fixed;
             top: 0;
@@ -971,10 +795,6 @@
             font-weight: 700;
         }
 
-        .price {
-            margin: 20px 0;
-        }
-
         .price-amount {
             font-size: 3rem;
             font-weight: 800;
@@ -1018,169 +838,15 @@
         .upgrade-btn.primary:hover {
             background: #059669;
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
         }
 
-        .social-proof {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 20px;
-            font-style: italic;
-        }
-
-        /* AI Chat Widget */
-        .ai-chat-widget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 350px;
-            max-height: 500px;
-            background: var(--surface-elevated);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: var(--shadow-xl);
-            z-index: 1000;
-            overflow: hidden;
-            transition: var(--transition);
-            border: 2px solid var(--border);
-        }
-
-        .chat-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chat-icon {
-            font-size: 1.5rem;
-        }
-
-        .chat-title {
-            flex: 1;
-            font-weight: 600;
-        }
-
-        .chat-toggle {
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .ai-chat-widget.collapsed .chat-toggle {
-            transform: rotate(180deg);
-        }
-
-        .ai-chat-widget.collapsed .chat-body {
-            display: none;
-        }
-
-        .chat-body {
-            height: 350px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            max-height: 250px;
-        }
-
-        .ai-message, .user-message {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            align-items: flex-start;
-        }
-
-        .user-message {
-            flex-direction: row-reverse;
-        }
-
-        .ai-avatar, .user-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .ai-avatar {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-
-        .user-avatar {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-        }
-
-        .message-content {
-            background: var(--bg-secondary);
-            padding: 10px 15px;
-            border-radius: 12px;
-            max-width: 80%;
-            line-height: 1.4;
-            color: var(--text);
-        }
-
-        .user-message .message-content {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-        }
-
-        .chat-input-container {
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input-container input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .chat-input-container input:focus {
-            border-color: var(--primary);
-        }
-
-        .send-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Error States */
         .error-container {
             text-align: center;
             padding: 50px 30px;
             background: var(--surface);
             border: 2px solid var(--error);
             border-radius: 20px;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.1);
         }
 
         .error-icon {
@@ -1212,14 +878,53 @@
             word-break: break-word;
         }
 
-        .error-actions {
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 18px 25px;
+            border-radius: 16px;
+            font-weight: 600;
+            z-index: 10001;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 400px;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid;
         }
 
-        /* Responsive Design */
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .notification.error {
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border-color: var(--error);
+        }
+
+        .notification.warning {
+            background: rgba(245, 158, 11, 0.9);
+            color: white;
+            border-color: var(--warning);
+        }
+
+        .notification.info {
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+            border-color: var(--primary);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -1298,12 +1003,6 @@
                 margin: 15px;
                 padding: 30px 25px;
             }
-
-            .ai-chat-widget {
-                width: calc(100vw - 40px);
-                right: 20px;
-                left: 20px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1334,142 +1033,55 @@
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-
-            .competitor-content {
-                grid-template-columns: 1fr;
-            }
         }
 
-        /* Utility Classes */
         .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-        .font-bold { font-weight: 700; }
-
-        /* Notification Styles */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 18px 25px;
-            border-radius: 16px;
-            font-weight: 600;
-            z-index: 10001;
-            box-shadow: var(--shadow-xl);
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            max-width: 400px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background: rgba(16, 185, 129, 0.9);
-            color: white;
-            border-color: var(--success);
-        }
-
-        .notification.error {
-            background: rgba(239, 68, 68, 0.9);
-            color: white;
-            border-color: var(--error);
-        }
-
-        .notification.warning {
-            background: rgba(245, 158, 11, 0.9);
-            color: white;
-            border-color: var(--warning);
-        }
-
-        .notification.info {
-            background: rgba(139, 92, 246, 0.9);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            color: inherit;
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 0;
-            margin-left: auto;
-            opacity: 0.8;
-            transition: var(--transition-fast);
-        }
-
-        .notification-close:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Enhanced Navigation -->
-        <nav class="nav-header" role="navigation" aria-label="Main navigation">
+        <nav class="nav-header">
             <div class="nav-logo">
-                <div class="nav-logo-icon" role="img" aria-label="SEOtter logo">🦦</div>
+                <div class="nav-logo-icon">🦦</div>
                 <div class="nav-logo-text">SEOtter</div>
             </div>
             
             <div class="auth-section">
                 <div class="usage-display" id="usageDisplay">0/3 free analyses used today</div>
-                <button class="auth-btn" onclick="showLogin()" aria-label="Login to your account">
-                    <span>Login</span>
-                </button>
-                <button class="auth-btn primary" onclick="showSignup()" aria-label="Create new account">
-                    <span>Sign Up</span>
-                </button>
+                <button class="auth-btn" onclick="showLogin()">Login</button>
+                <button class="auth-btn primary" onclick="showSignup()">Sign Up</button>
             </div>
         </nav>
 
-        <!-- Main Analysis Section -->
-        <main class="analysis-card" role="main">
+        <main>
             <div class="input-section">
-                <header class="input-header">
-                    <h1 class="input-title">Professional SEO Analysis</h1>
-                    <p class="input-subtitle">Enter any website URL and get comprehensive SEO insights with actionable AI-powered recommendations</p>
-                </header>
+                <h1 class="input-title">Professional SEO Analysis</h1>
+                <p class="input-subtitle">Enter any website URL and get comprehensive SEO insights with actionable AI-powered recommendations</p>
                 
                 <div class="url-container">
                     <input 
                         type="url" 
                         class="url-input" 
                         placeholder="yourwebsite.com" 
-                        id="urlInput" 
-                        aria-label="Website URL to analyze"
-                        autocomplete="url"
-                        spellcheck="false"
+                        id="urlInput"
                     >
                     <button 
                         class="analyze-btn" 
                         onclick="startAnalysis()" 
-                        id="analyzeBtn" 
-                        aria-label="Start SEO analysis"
-                        type="button"
+                        id="analyzeBtn"
                     >
                         🦦 Analyze Now
                     </button>
                 </div>
             </div>
 
-            <!-- Results Section -->
-            <section class="results" id="resultsSection" role="region" aria-label="Analysis results">
+            <section class="results" id="resultsSection">
                 <!-- Results will be populated by JavaScript -->
             </section>
         </main>
     </div>
 
-    <!-- Upgrade Modal (hidden by default) -->
+    <!-- Upgrade Modal -->
     <div id="upgrade-modal" class="upgrade-modal-overlay" style="display: none;">
         <div class="upgrade-modal-content">
             <button class="close-btn" onclick="closeUpgradeModal()">×</button>
@@ -1480,101 +1092,63 @@
                 <p>Upgrade to Pro for unlimited analyses and advanced AI features</p>
             </div>
 
-            <div class="pricing-cards">
-                <div class="pricing-card recommended">
-                    <div class="recommended-badge">Most Popular</div>
-                    <h3>Pro Plan</h3>
-                    <div class="price">
-                        <span class="price-amount">$29</span>
-                        <span class="price-period">/month</span>
-                    </div>
-                    <ul class="feature-list">
-                        <li>✅ Unlimited website analyses</li>
-                        <li>✅ AI competitor analysis</li>
-                        <li>✅ Advanced keyword research</li>
-                        <li>✅ Historical tracking</li>
-                        <li>✅ Priority support</li>
-                    </ul>
-                    <button class="upgrade-btn primary" onclick="upgradeToPro()">
-                        Start Free Trial
-                    </button>
-                    <div class="money-back">30-day money-back guarantee</div>
+            <div class="pricing-card recommended" style="position: relative;">
+                <div class="recommended-badge">Most Popular</div>
+                <h3>Pro Plan</h3>
+                <div style="margin: 20px 0;">
+                    <span class="price-amount">$29</span>
+                    <span class="price-period">/month</span>
                 </div>
+                <ul class="feature-list">
+                    <li>✅ Unlimited website analyses</li>
+                    <li>✅ AI competitor analysis</li>
+                    <li>✅ Advanced keyword research</li>
+                    <li>✅ Historical tracking</li>
+                    <li>✅ Priority support</li>
+                </ul>
+                <button class="upgrade-btn primary" onclick="upgradeToPro()">
+                    Start Free Trial
+                </button>
+                <div style="font-size: 0.9rem; opacity: 0.8;">30-day money-back guarantee</div>
             </div>
 
-            <div class="social-proof">
+            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px; margin-top: 20px; font-style: italic;">
                 "SEOtter Pro helped us increase organic traffic by 150% in 3 months!" 
                 <br><small>- Sarah Chen, Marketing Director</small>
             </div>
         </div>
     </div>
 
-    <!-- AI Chat Assistant -->
-    <div id="ai-chat-widget" class="ai-chat-widget collapsed">
-        <div class="chat-header" onclick="toggleChat()">
-            <span class="chat-icon">🤖</span>
-            <span class="chat-title">AI Assistant</span>
-            <span class="chat-toggle">−</span>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <div class="chat-messages" id="chatMessages">
-                <div class="ai-message">
-                    <span class="ai-avatar">🤖</span>
-                    <div class="message-content">
-                        Hi! I'm your SEO assistant. Ask me anything about your analysis results or SEO in general!
-                    </div>
-                </div>
-            </div>
-            <div class="chat-input-container">
-                <input type="text" id="chatInput" placeholder="Ask me about SEO..." onkeypress="handleChatKeypress(event)">
-                <button onclick="sendChatMessage()" class="send-btn">Send</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Global state management
+        // Global state
         const AppState = {
             isAnalyzing: false,
             currentUrl: null,
-            analysisData: null,
-            usageData: { count: 0, date: new Date().toDateString() }
+            analysisData: null
         };
 
-        // Usage Management System
+        // Usage Management
         const UsageManager = {
-            // Get current usage data
             getUsage() {
                 try {
                     const stored = localStorage.getItem('seotter_usage');
                     return stored ? JSON.parse(stored) : { count: 0, date: new Date().toDateString() };
-                } catch (error) {
-                    console.warn('Failed to read usage data:', error);
+                } catch {
                     return { count: 0, date: new Date().toDateString() };
                 }
             },
 
-            // Check if user can analyze
             canAnalyze() {
-                const featureGate = new FeatureGate();
-                
-                // Pro users have unlimited analyses
-                if (featureGate.isPro()) {
-                    return true;
-                }
-                
-                // Free users limited to 3 per day
                 const usage = this.getUsage();
                 const today = new Date().toDateString();
                 
                 if (usage.date !== today) {
-                    return true; // New day, reset count
+                    return true;
                 }
                 
                 return usage.count < 3;
             },
 
-            // Update usage count
             incrementUsage() {
                 try {
                     const usage = this.getUsage();
@@ -1588,88 +1162,29 @@
                     usage.count++;
                     localStorage.setItem('seotter_usage', JSON.stringify(usage));
                     this.updateDisplay();
-                    return true;
                 } catch (error) {
                     console.warn('Failed to update usage:', error);
-                    return true;
                 }
             },
 
-            // Update usage display in navigation
             updateDisplay() {
                 const display = document.getElementById('usageDisplay');
                 if (display) {
-                    const featureGate = new FeatureGate();
+                    const usage = this.getUsage();
+                    const remaining = 3 - usage.count;
+                    display.textContent = `${usage.count}/3 free analyses used today`;
                     
-                    if (featureGate.isPro()) {
-                        display.textContent = '💎 Pro: Unlimited analyses';
-                        display.className = 'usage-display pro';
+                    if (remaining <= 1) {
+                        display.classList.add('warning');
                     } else {
-                        const usage = this.getUsage();
-                        const remaining = 3 - usage.count;
-                        display.textContent = `${usage.count}/3 free analyses used today`;
-                        
-                        if (remaining <= 1) {
-                            display.classList.add('warning');
-                        } else {
-                            display.classList.remove('warning');
-                        }
+                        display.classList.remove('warning');
                     }
                 }
             }
         };
 
-        // Enhanced Feature Gate for Pro Users
-        class FeatureGate {
-            constructor() {
-                this.userTier = this.getUserTier();
-                this.features = {
-                    'unlimited-analyses': ['pro', 'enterprise'],
-                    'ai-competitor-analysis': ['pro', 'enterprise'], 
-                    'keyword-research': ['pro', 'enterprise'],
-                    'historical-tracking': ['pro', 'enterprise'],
-                    'code-examples': ['pro', 'enterprise'],
-                    'priority-support': ['pro', 'enterprise']
-                };
-            }
-
-            canAccess(feature) {
-                return this.features[feature]?.includes(this.userTier) || false;
-            }
-
-            getUserTier() {
-                // Check for Pro subscription
-                const isSubscriptionActive = localStorage.getItem('subscriptionActive') === 'true';
-                const storedTier = localStorage.getItem('userTier');
-                
-                if (isSubscriptionActive && storedTier === 'pro') {
-                    return 'pro';
-                }
-                
-                return 'free';
-            }
-
-            isPro() {
-                return this.getUserTier() === 'pro';
-            }
-        }
-
-        // Utility functions
+        // Utilities
         const Utils = {
-            // Debounce function for input handling
-            debounce(func, wait) {
-                let timeout;
-                return function executedFunction(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            },
-
-            // Validate URL format
             isValidUrl(string) {
                 try {
                     const url = new URL(string.startsWith('http') ? string : `https://${string}`);
@@ -1679,41 +1194,26 @@
                 }
             },
 
-            // Sanitize HTML content
             sanitizeHtml(str) {
                 const div = document.createElement('div');
                 div.textContent = str;
                 return div.innerHTML;
             },
 
-            // Get score color based on value
             getScoreColor(score) {
-                if (score >= 80) return '#10b981'; // Green
-                if (score >= 60) return '#f59e0b'; // Yellow
-                return '#ef4444'; // Red
-            },
-
-            // Announce to screen readers
-            announceToScreenReader(message) {
-                const announcer = document.getElementById('srAnnouncements');
-                if (announcer) {
-                    announcer.textContent = message;
-                    setTimeout(() => announcer.textContent = '', 1000);
-                }
+                if (score >= 80) return '#10b981';
+                if (score >= 60) return '#f59e0b';
+                return '#ef4444';
             }
         };
 
-        // Notification system
+        // Notifications
         const NotificationManager = {
-            // Show notification
             show(message, type = 'info', duration = 4000) {
-                // Remove existing notifications
                 document.querySelectorAll('.notification').forEach(n => n.remove());
                 
                 const notification = document.createElement('div');
                 notification.className = `notification ${type}`;
-                notification.setAttribute('role', 'alert');
-                notification.setAttribute('aria-live', 'polite');
                 
                 const icons = {
                     success: '✅',
@@ -1723,19 +1223,17 @@
                 };
                 
                 notification.innerHTML = `
-                    <span class="notification-icon" aria-hidden="true">${icons[type]}</span>
+                    <span>${icons[type]}</span>
                     <span>${Utils.sanitizeHtml(message)}</span>
-                    <button class="notification-close" onclick="this.parentElement.remove()" aria-label="Close notification">×</button>
+                    <button onclick="this.parentElement.remove()" style="background: none; border: none; color: inherit; font-size: 1.3rem; cursor: pointer; margin-left: auto;">×</button>
                 `;
                 
                 document.body.appendChild(notification);
                 
-                // Show notification
                 requestAnimationFrame(() => {
                     notification.classList.add('show');
                 });
                 
-                // Auto-hide notification
                 setTimeout(() => {
                     notification.classList.remove('show');
                     setTimeout(() => {
@@ -1744,9 +1242,6 @@
                         }
                     }, 300);
                 }, duration);
-                
-                // Announce to screen readers
-                Utils.announceToScreenReader(message);
             }
         };
 
@@ -1754,13 +1249,11 @@
         async function startAnalysis() {
             console.log('🦦 Starting SEO analysis...');
             
-            // CHECK USAGE FIRST
             if (!UsageManager.canAnalyze()) {
                 showUpgradeModal();
                 return;
             }
             
-            // Prevent multiple simultaneous analyses
             if (AppState.isAnalyzing) {
                 NotificationManager.show('Analysis already in progress. Please wait...', 'warning');
                 return;
@@ -1770,101 +1263,70 @@
             const resultsSection = document.getElementById('resultsSection');
             const analyzeBtn = document.getElementById('analyzeBtn');
             
-            // Validate elements exist
-            if (!urlInput || !resultsSection || !analyzeBtn) {
-                console.error('Required DOM elements not found');
-                NotificationManager.show('Page setup error. Please refresh and try again.', 'error');
-                return;
-            }
-            
             const url = urlInput.value.trim();
             
-            // Validate URL input
             if (!url) {
                 NotificationManager.show('Please enter a website URL! 🦦', 'warning');
                 urlInput.focus();
                 return;
             }
             
-            // Normalize URL
             let finalUrl = url;
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
                 finalUrl = 'https://' + url;
             }
             
-            // Validate URL format
             if (!Utils.isValidUrl(finalUrl)) {
                 NotificationManager.show('Please enter a valid URL (e.g., google.com)', 'error');
                 urlInput.focus();
                 return;
             }
             
-            // Set loading state
             AppState.isAnalyzing = true;
             AppState.currentUrl = finalUrl;
             analyzeBtn.disabled = true;
             analyzeBtn.textContent = '🔄 Analyzing...';
-            analyzeBtn.setAttribute('aria-label', 'Analysis in progress');
             
-            // Show loading state
             showLoadingState(finalUrl);
             
             try {
                 console.log('Calling API for:', finalUrl);
-                Utils.announceToScreenReader('Starting website analysis');
                 
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ url: finalUrl })
                 });
                 
-                console.log('API response status:', response.status);
-                
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.error || `Server error: ${response.status} ${response.statusText}`);
+                    throw new Error(errorData.error || `Server error: ${response.status}`);
                 }
                 
                 const result = await response.json();
-                console.log('Analysis result:', result);
                 
-                // Validate result structure
                 if (!result || typeof result.score === 'undefined') {
                     throw new Error('Invalid response from server');
                 }
                 
-                // Store analysis data
                 AppState.analysisData = result;
-                
-                // Update usage
                 UsageManager.incrementUsage();
-                
-                // Display results
-                displayEnhancedResults(result, finalUrl);
-                
-                // Success notification and announcement
+                displayResults(result, finalUrl);
                 NotificationManager.show('Analysis complete! 🎉', 'success');
-                Utils.announceToScreenReader(`Analysis complete. Your website scored ${result.score} out of 100.`);
                 
             } catch (error) {
                 console.error('Analysis failed:', error);
                 showErrorState(error.message, finalUrl);
                 NotificationManager.show(`Analysis failed: ${error.message}`, 'error');
-                Utils.announceToScreenReader('Analysis failed. Please try again.');
             } finally {
-                // Reset button state
                 AppState.isAnalyzing = false;
                 analyzeBtn.disabled = false;
                 analyzeBtn.textContent = '🦦 Analyze Now';
-                analyzeBtn.setAttribute('aria-label', 'Start SEO analysis');
             }
         }
 
-        // Show loading state with enhanced animations
         function showLoadingState(url) {
             const resultsSection = document.getElementById('resultsSection');
             const domain = new URL(url).hostname;
@@ -1874,84 +1336,42 @@
                     <h2 class="loading-title">🦦 SEOtter is analyzing your website...</h2>
                     <p class="loading-subtitle">Analyzing ${Utils.sanitizeHtml(domain)} - This may take 10-30 seconds</p>
                     
-                    <div class="progress-container">
-                        <div class="progress-bar" role="progressbar" aria-label="Analysis progress">
-                            <div class="progress-fill" id="progressFill"></div>
+                    <div style="margin: 40px 0;">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
                         </div>
-                        <div class="progress-text" id="progressText">Starting comprehensive analysis...</div>
+                        <div style="color: var(--text-light); font-weight: 600;">Starting comprehensive analysis...</div>
                     </div>
                     
                     <div class="loading-steps">
-                        <div class="loading-step" id="step1">
-                            <span class="step-icon">⚡</span>
-                            <span class="step-text">Performance Analysis</span>
+                        <div class="loading-step active">
+                            <span style="font-size: 1.8rem;">⚡</span>
+                            <span style="font-weight: 600; color: var(--text);">Performance Analysis</span>
                         </div>
-                        <div class="loading-step" id="step2">
-                            <span class="step-icon">🔍</span>
-                            <span class="step-text">Content Analysis</span>
+                        <div class="loading-step">
+                            <span style="font-size: 1.8rem;">🔍</span>
+                            <span style="font-weight: 600; color: var(--text);">Content Analysis</span>
                         </div>
-                        <div class="loading-step" id="step3">
-                            <span class="step-icon">🔧</span>
-                            <span class="step-text">Technical SEO</span>
+                        <div class="loading-step">
+                            <span style="font-size: 1.8rem;">🔧</span>
+                            <span style="font-weight: 600; color: var(--text);">Technical SEO</span>
                         </div>
-                        <div class="loading-step" id="step4">
-                            <span class="step-icon">📱</span>
-                            <span class="step-text">Social Media</span>
+                        <div class="loading-step">
+                            <span style="font-size: 1.8rem;">📱</span>
+                            <span style="font-weight: 600; color: var(--text);">Social Media</span>
                         </div>
                     </div>
                 </div>
             `;
             
             resultsSection.style.display = 'block';
-            resultsSection.setAttribute('aria-live', 'polite');
-            
-            // Animate loading steps
-            animateLoadingSteps();
         }
 
-        // Animate loading steps
-        function animateLoadingSteps() {
-            const steps = ['step1', 'step2', 'step3', 'step4'];
-            const progressText = document.getElementById('progressText');
-            const stepTexts = [
-                'Analyzing performance metrics and Core Web Vitals...',
-                'Examining page content and structure...',
-                'Checking technical SEO elements...',
-                'Reviewing social media optimization...'
-            ];
-            
-            let currentStep = 0;
-            const stepDuration = 2500;
-            
-            const stepInterval = setInterval(() => {
-                if (currentStep < steps.length) {
-                    const stepElement = document.getElementById(steps[currentStep]);
-                    if (stepElement) {
-                        stepElement.classList.add('active');
-                        stepElement.setAttribute('aria-label', `${stepTexts[currentStep]} - In progress`);
-                    }
-                    
-                    if (progressText) {
-                        progressText.textContent = stepTexts[currentStep];
-                    }
-                    
-                    currentStep++;
-                } else {
-                    clearInterval(stepInterval);
-                    if (progressText) {
-                        progressText.textContent = 'Finalizing analysis and generating recommendations...';
-                    }
-                }
-            }, stepDuration);
-        }
-
-        // Display comprehensive results
-        function displayEnhancedResults(result, url) {
+        function displayResults(result, url) {
             const resultsSection = document.getElementById('resultsSection');
             const domain = result.domain || new URL(url).hostname;
             
             resultsSection.innerHTML = `
-                <!-- Score Hero Section -->
                 <div class="score-hero">
                     <div class="score-display">
                         <div class="score-visual">
@@ -1959,7 +1379,7 @@
                                 <div class="score-text" id="mainScore">0</div>
                             </div>
                         </div>
-                        <div class="score-info">
+                        <div>
                             <h2 style="color: white; margin-bottom: 15px; font-size: 2.2rem;">
                                 Grade: ${result.grade?.grade || 'N/A'}
                             </h2>
@@ -1972,8 +1392,7 @@
                 </div>
 
                 ${result.breakdown ? `
-                <!-- Score Breakdown -->
-                <section class="score-breakdown">
+                <section style="margin-bottom: 40px;">
                     <div class="section-header">
                         <h3 class="section-title">📊 Detailed Score Breakdown</h3>
                         <p class="section-subtitle">See how your website performs across key SEO metrics</p>
@@ -2028,15 +1447,14 @@
                 ` : ''}
 
                 ${result.recommendations && result.recommendations.length > 0 ? `
-                <!-- Recommendations Section -->
-                <section class="recommendations-section">
+                <section style="margin-bottom: 40px;">
                     <div class="section-header">
                         <h3 class="section-title">🎯 Actionable Recommendations</h3>
                         <p class="section-subtitle">Priority-ordered improvements to boost your SEO performance</p>
                     </div>
                     <div>
-                        ${result.recommendations.slice(0, 8).map((rec, index) => `
-                            <div class="recommendation-card" style="animation-delay: ${index * 100}ms">
+                        ${result.recommendations.slice(0, 5).map(rec => `
+                            <div class="recommendation-card">
                                 <div class="recommendation-header">
                                     <span class="recommendation-category">${Utils.sanitizeHtml(rec.category)}</span>
                                     <span class="recommendation-priority priority-${rec.priority.toLowerCase()}">${Utils.sanitizeHtml(rec.priority)} Priority</span>
@@ -2064,7 +1482,6 @@
                 ` : ''}
 
                 ${result.aiSuggestions ? `
-                <!-- AI Suggestions -->
                 <section class="ai-suggestions">
                     <div class="section-header">
                         <h3 class="section-title" style="color: white; margin-bottom: 0;">🤖 AI-Powered Recommendations</h3>
@@ -2075,7 +1492,6 @@
                 </section>
                 ` : ''}
 
-                <!-- Analysis Summary -->
                 <section class="analysis-summary">
                     <div class="section-header">
                         <h3 class="section-title">📋 Analysis Summary</h3>
@@ -2087,28 +1503,21 @@
                         ${result.recommendations ? `We identified <strong>${result.recommendations.length}</strong> optimization opportunities to improve your rankings.` : ''}
                     </p>
                     <div class="summary-actions">
-                        <button class="summary-btn primary" onclick="analyzeAnother()" type="button">
+                        <button class="summary-btn primary" onclick="analyzeAnother()">
                             🔄 Analyze Another Site
                         </button>
-                        <button class="summary-btn secondary" onclick="shareResults()" type="button">
+                        <button class="summary-btn secondary" onclick="shareResults()">
                             📤 Share Results
-                        </button>
-                        <button class="summary-btn secondary" onclick="downloadReport()" type="button">
-                            📊 Download Report
                         </button>
                     </div>
                 </section>
             `;
             
-            resultsSection.removeAttribute('aria-live');
-            
-            // Animate score counters
             setTimeout(() => {
                 animateScoreCounters(result);
             }, 500);
         }
 
-        // Show error state
         function showErrorState(error, url) {
             const resultsSection = document.getElementById('resultsSection');
             const domain = new URL(url).hostname;
@@ -2124,11 +1533,11 @@
                     <div class="error-details">
                         ${Utils.sanitizeHtml(error)}
                     </div>
-                    <div class="error-actions">
-                        <button class="summary-btn primary" onclick="startAnalysis()" type="button">
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <button class="summary-btn primary" onclick="startAnalysis()">
                             🔄 Try Again
                         </button>
-                        <button class="summary-btn secondary" onclick="analyzeAnother()" type="button">
+                        <button class="summary-btn secondary" onclick="analyzeAnother()">
                             ← Start Over
                         </button>
                     </div>
@@ -2138,15 +1547,12 @@
             resultsSection.style.display = 'block';
         }
 
-        // Animate score counters with easing
         function animateScoreCounters(result) {
-            // Animate main score
             const mainScore = document.getElementById('mainScore');
             if (mainScore) {
                 animateCounter(mainScore, 0, result.score, 2000);
             }
             
-            // Animate breakdown scores
             if (result.breakdown) {
                 document.querySelectorAll('[data-score]').forEach((element, index) => {
                     const targetScore = parseInt(element.getAttribute('data-score'));
@@ -2155,7 +1561,6 @@
                     }, index * 200);
                 });
                 
-                // Animate progress bars
                 document.querySelectorAll('[data-width]').forEach((element, index) => {
                     const targetWidth = parseInt(element.getAttribute('data-width'));
                     setTimeout(() => {
@@ -2165,7 +1570,6 @@
             }
         }
 
-        // Enhanced counter animation with easing
         function animateCounter(element, start, end, duration) {
             const startTime = performance.now();
             
@@ -2173,7 +1577,6 @@
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Smooth easing function
                 const easeOutCubic = 1 - Math.pow(1 - progress, 3);
                 const currentValue = Math.round(start + (end - start) * easeOutCubic);
                 
@@ -2182,7 +1585,6 @@
                 if (progress < 1) {
                     requestAnimationFrame(updateCounter);
                 } else {
-                    // Ensure final value is set
                     element.textContent = end;
                 }
             }
@@ -2190,24 +1592,12 @@
             requestAnimationFrame(updateCounter);
         }
 
-        // Helper functions for user actions
         function analyzeAnother() {
-            const urlInput = document.getElementById('urlInput');
-            const resultsSection = document.getElementById('resultsSection');
-            
-            if (urlInput) {
-                urlInput.value = '';
-                urlInput.focus();
-            }
-            
-            if (resultsSection) {
-                resultsSection.style.display = 'none';
-            }
-            
+            document.getElementById('urlInput').value = '';
+            document.getElementById('urlInput').focus();
+            document.getElementById('resultsSection').style.display = 'none';
             AppState.currentUrl = null;
             AppState.analysisData = null;
-            
-            Utils.announceToScreenReader('Ready for new analysis');
         }
 
         function shareResults() {
@@ -2219,24 +1609,7 @@
                 return;
             }
             
-            const shareData = {
-                title: `SEO Analysis Results - ${new URL(url).hostname}`,
-                text: `Check out the SEO analysis for ${url}${score ? ` (Score: ${score}/100)` : ''}`,
-                url: window.location.href
-            };
-            
-            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
-                navigator.share(shareData).catch(err => {
-                    console.log('Share failed:', err);
-                    fallbackShare(shareData);
-                });
-            } else {
-                fallbackShare(shareData);
-            }
-        }
-
-        function fallbackShare(shareData) {
-            const shareText = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
+            const shareText = `SEO Analysis Results - ${new URL(url).hostname}${score ? ` (Score: ${score}/100)` : ''}\n${window.location.href}`;
             
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(shareText).then(() => {
@@ -2249,79 +1622,23 @@
             }
         }
 
-        function downloadReport() {
-            if (!AppState.analysisData) {
-                NotificationManager.show('No analysis data to download', 'warning');
-                return;
-            }
-            
-            const data = AppState.analysisData;
-            const domain = new URL(AppState.currentUrl).hostname;
-            const timestamp = new Date().toLocaleString();
-            
-            const reportContent = `
-SEOtter Analysis Report
-=======================
-
-Website: ${domain}
-Analyzed: ${timestamp}
-Overall Score: ${data.score}/100
-Grade: ${data.grade?.grade || 'N/A'}
-
-Score Breakdown:
-${data.breakdown ? Object.entries(data.breakdown)
-    .map(([key, value]) => `- ${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}/100`)
-    .join('\n') : 'No breakdown available'}
-
-Recommendations:
-${data.recommendations ? data.recommendations
-    .map((rec, i) => `${i + 1}. [${rec.priority}] ${rec.issue}\n   Solution: ${rec.solution}\n   Time: ${rec.timeToComplete} | Impact: ${rec.impact} | Difficulty: ${rec.difficulty}`)
-    .join('\n\n') : 'No recommendations available'}
-
-${data.aiSuggestions ? `
-AI Suggestions:
-${data.aiSuggestions.suggestions}
-` : ''}
-
-Generated by SEOtter - Professional SEO Analysis Tool
-Visit: ${window.location.origin}
-            `.trim();
-            
-            const blob = new Blob([reportContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `seotter-analysis-${domain}-${new Date().toISOString().split('T')[0]}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            NotificationManager.show('Report downloaded! 📊', 'success');
-        }
-
-        // Modal and upgrade functions
         function showUpgradeModal() {
             const modal = document.getElementById('upgrade-modal');
             modal.style.display = 'flex';
-            modal.classList.add('show');
+            setTimeout(() => modal.classList.add('show'), 10);
         }
 
         function closeUpgradeModal() {
             const modal = document.getElementById('upgrade-modal');
             modal.classList.remove('show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
+            setTimeout(() => modal.style.display = 'none', 300);
         }
 
         function upgradeToPro() {
-            // For now, just show a message - you'll add Stripe later
-            NotificationManager.show('Upgrade feature coming soon! 🚀\n\nFor now, refresh the page to reset your usage.', 'info', 6000);
+            NotificationManager.show('Upgrade feature coming soon! 🚀', 'info', 6000);
             closeUpgradeModal();
         }
 
-        // Auth functions (placeholder implementations)
         function showLogin() {
             NotificationManager.show('Login functionality coming soon! 🔐', 'info');
         }
@@ -2330,182 +1647,23 @@ Visit: ${window.location.origin}
             NotificationManager.show('Sign up functionality coming soon! 📝', 'info');
         }
 
-        // AI Chat Assistant
-        let chatHistory = [];
-
-        function toggleChat() {
-            const widget = document.getElementById('ai-chat-widget');
-            widget.classList.toggle('collapsed');
-        }
-
-        function handleChatKeypress(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
-        }
-
-        async function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            UsageManager.updateDisplay();
             
-            if (!message) return;
-            
-            // Add user message to chat
-            addMessageToChat(message, 'user');
-            input.value = '';
-            
-            // Add loading indicator
-            addMessageToChat('Thinking...', 'ai', true);
-            
-            try {
-                // Get AI response
-                const response = await getAIResponse(message);
-                
-                // Remove loading indicator and add real response
-                removeLastMessage();
-                addMessageToChat(response, 'ai');
-                
-            } catch (error) {
-                removeLastMessage();
-                addMessageToChat("Sorry, I'm having trouble right now. Please try again!", 'ai');
-            }
-        }
-
-        function addMessageToChat(message, sender, isLoading = false) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `${sender}-message${isLoading ? ' loading' : ''}`;
-            
-            const avatar = sender === 'ai' ? '🤖' : '👤';
-            
-            messageDiv.innerHTML = `
-                <span class="${sender}-avatar">${avatar}</span>
-                <div class="message-content">${message}</div>
-            `;
-            
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function removeLastMessage() {
-            const messagesContainer = document.getElementById('chatMessages');
-            const lastMessage = messagesContainer.lastElementChild;
-            if (lastMessage) {
-                messagesContainer.removeChild(lastMessage);
-            }
-        }
-
-        async function getAIResponse(userMessage) {
-            // Simple responses for now
-            const responses = {
-                'hello': 'Hi there! How can I help you with SEO today?',
-                'title': 'For title tags, aim for 50-60 characters and include your main keyword near the beginning.',
-                'meta description': 'Meta descriptions should be 140-160 characters and compel users to click. Include your target keyword naturally.',
-                'keywords': 'Focus on 1-2 primary keywords per page. Use them in your title, headings, and naturally throughout your content.',
-                'speed': 'Page speed is crucial for SEO. Optimize images, minify CSS/JS, and use a good hosting provider.',
-                'content': 'Create comprehensive, valuable content that answers user questions. Aim for 300+ words minimum.',
-                'links': 'Internal linking helps search engines understand your site structure. Link to related pages using descriptive anchor text.'
-            };
-            
-            // Simple keyword matching
-            const lowerMessage = userMessage.toLowerCase();
-            for (const [keyword, response] of Object.entries(responses)) {
-                if (lowerMessage.includes(keyword)) {
-                    return response;
-                }
-            }
-            
-            return "That's a great question! SEO involves many factors like content quality, technical optimization, and user experience. What specific aspect would you like to know more about?";
-        }
-
-        // Enhanced keyboard and accessibility support
-        function initializeAccessibility() {
-            // Enhanced keyboard navigation
-            document.addEventListener('keydown', function(e) {
-                // Escape key handling
-                if (e.key === 'Escape') {
-                    // Close notifications
-                    document.querySelectorAll('.notification').forEach(n => n.remove());
-                    
-                    // Close modals
-                    closeUpgradeModal();
-                    
-                    // If analyzing, focus should stay on button
-                    if (!AppState.isAnalyzing) {
-                        const urlInput = document.getElementById('urlInput');
-                        if (urlInput) urlInput.focus();
-                    }
-                }
-                
-                // Ctrl/Cmd + Enter to analyze
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                    if (!AppState.isAnalyzing) {
-                        startAnalysis();
-                    }
-                }
-            });
-
-            // Focus management
             const urlInput = document.getElementById('urlInput');
             if (urlInput) {
-                // Enter key to analyze
                 urlInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter' && !AppState.isAnalyzing) {
                         startAnalysis();
                     }
                 });
                 
-                // Auto-focus on page load
                 setTimeout(() => urlInput.focus(), 100);
-                
-                // Smart URL formatting
-                const debouncedFormat = Utils.debounce(function(e) {
-                    const value = e.target.value.trim();
-                    if (value && !value.startsWith('http') && value.includes('.') && !value.includes(' ')) {
-                        if (value.endsWith('.com') || value.endsWith('.org') || value.endsWith('.net')) {
-                            e.target.title = `Will analyze: https://${value}`;
-                        }
-                    }
-                }, 500);
-                
-                urlInput.addEventListener('input', debouncedFormat);
-                
-                // Final formatting on blur
-                urlInput.addEventListener('blur', function(e) {
-                    const value = e.target.value.trim();
-                    if (value && !value.startsWith('http') && value.includes('.')) {
-                        e.target.value = `https://${value}`;
-                    }
-                    e.target.title = '';
-                });
             }
-        }
-
-        // Initialize application
-        function initializeApp() {
-            console.log('🦦 SEOtter Enhanced Analysis Tool initializing...');
             
-            // Initialize usage tracking
-            UsageManager.updateDisplay();
-            
-            // Initialize accessibility features
-            initializeAccessibility();
-            
-            // Set up error handling
-            window.addEventListener('error', function(e) {
-                console.error('Global error:', e.error);
-                NotificationManager.show('An unexpected error occurred. Please refresh the page.', 'error');
-            });
-            
-            console.log('✅ SEOtter initialization complete!');
-        }
-
-        // Start the application when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeApp);
-        } else {
-            initializeApp();
-        }
+            console.log('✅ SEOtter initialized successfully!');
+        });
     </script>
 </body>
 </html>
