@@ -1,0 +1,56 @@
+{
+  "name": "seotter-seo-analysis",
+  "version": "2.0.0",
+  "description": "Professional SEO analysis tool with actionable insights",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "start": "vercel dev",
+    "deploy": "vercel --prod",
+    "test": "echo 'Tests coming soon'",
+    "lint": "echo 'Linting coming soon'",
+    "debug": "node debug-api.js"
+  },
+  "keywords": [
+    "seo",
+    "analysis",
+    "website",
+    "optimization",
+    "performance",
+    "lighthouse"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/seotter"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/seotter/issues"
+  },
+  "homepage": "https://seotter.vercel.app",
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^28.15.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "vercel": {
+    "functions": {
+      "api/analyze.js": {
+        "maxDuration": 30
+      }
+    },
+    "env": {
+      "OPENAI_API_KEY": "@openai-api-key",
+      "GOOGLE_PAGESPEED_API_KEY": "@google-pagespeed-api-key"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
