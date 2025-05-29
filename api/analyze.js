@@ -28,7 +28,8 @@ export default async function handler(req, res) {
       getRealTechnicalAnalysis(url),
       getRealSocialAnalysis(url)
     ]);
-
+// Get AI suggestions
+const aiSuggestions = await getAIContentSuggestions(pageAnalysis);
     // Generate enhanced analysis with new scoring
     const analysis = generateEnhancedAnalysis(url, pageSpeedData, pageAnalysis, technicalAnalysis, socialAnalysis);
     
@@ -1068,14 +1069,15 @@ function generateEnhancedAnalysis(url, pageSpeedData, pageAnalysis, technicalAna
   // Generate detailed recommendations
   const recommendations = generateDetailedRecommendations(scoreData, pageAnalysis);
   
-  return {
-    score: scoreData.overall,
-    grade: scoreData.grade,
-    breakdown: scoreData.breakdown,
-    url,
-    domain: new URL(url).hostname,
-    recommendations,
-    coreWebVitals: pageSpeedData.coreWebVitals,
+return {
+  score: scoreData.overall,
+  grade: scoreData.grade,
+  breakdown: scoreData.breakdown,
+  url,
+  domain: new URL(url).hostname,
+  recommendations,
+  aiSuggestions: aiSuggestions, // ADD THIS LINE
+  coreWebVitals: pageSpeedData.coreWebVitals,
     realDataSources: [
       pageSpeedData.dataSource,
       pageAnalysis.dataSource,
@@ -1084,4 +1086,39 @@ function generateEnhancedAnalysis(url, pageSpeedData, pageAnalysis, technicalAna
     ],
     timestamp: new Date().toISOString()
   };
+}// NEW AI FUNCTION - Add this at the bottom of analyze.js
+async function getAIContentSuggestions(pageAnalysis) {
+  try {
+    const prompt = `
+      Analyze this webpage and give 3 specific SEO improvements:
+      Title: ${pageAnalysis.title.text}
+      Meta Description: ${pageAnalysis.meta.description.text}
+      Word Count: ${pageAnalysis.content.wordCount}
+      
+      Give me 3 bullet points with specific actionable advice.
+    `;
+    
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 300
+      })
+    });
+    
+    const data = await response.json();
+    return {
+      suggestions: data.choices[0].message.content
+    };
+  } catch (error) {
+    console.error('AI suggestion error:', error);
+    return {
+      suggestions: "• Optimize your title tag to be 50-60 characters\n• Add more descriptive meta description\n• Improve page loading speed"
+    };
+  }
 }
