@@ -1,26 +1,5 @@
 {
   "version": 2,
-  "name": "seotter",
-  "builds": [
-    {
-      "src": "api/analyze.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/analyze",
-      "dest": "/api/analyze.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
   "functions": {
     "api/analyze.js": {
       "maxDuration": 30,
@@ -45,9 +24,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "OPENAI_API_KEY": "@openai-api-key",
-    "GOOGLE_PAGESPEED_API_KEY": "@google-pagespeed-api-key"
-  }
+  ]
 }
